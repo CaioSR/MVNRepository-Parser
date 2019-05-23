@@ -45,32 +45,13 @@ def getSoup(link):
 
     return soup
 
-def getModuleName(soup):
-    for link in soup.find_all('a'):
-        if 'repos/' in link.get('href'):
-            return previous[:previous.find('/')]
+def getVersion(soup):
 
-        previous = link.get('href')
-
-def getLatestVersion(soup):
     for link in soup.find_all('a'):
         if 'repos/' in link.get('href'):
             return previous
 
         previous = link.get('href')
-
-def getLatestVersionUsages(soup):
-    next = 0
-
-    for link in soup.find_all('a'):
-        if next == 1:
-            if 'usages' in link.get('href'):
-                return link.get('href')[link.get('href').find('/'):]
-            else:
-                return 0
-
-        if 'repos/' in link.get('href'):
-            next = 1
 
 #essa função verifica se o atual link é de uma versão ou não
 def isVersion(href):
@@ -136,17 +117,7 @@ def getDependencies(soup):
             scope = 1
 
     return dependencies
-"""
-def getUsagesLink(soup):
 
-    for link in soup.find_all('a'):
-        if 'usages' in link.get('href'):
-            usages_link = link.get('href')
-
-
-    usages_link = "https://mvnrepository.com/"+usages_link
-    return usages_link
-"""
 def getUsages(module, root_usages, soup):
 
     usages = []
@@ -169,17 +140,15 @@ def getUsages(module, root_usages, soup):
 
                     previous = link.get('href')
 
-                if '?p=' in link.get('href'):
+                elif '?p=' in link.get('href'):
                     next_page = int(link.get('href')[3:])
 
                     if next_page > current_page:
                         scope = 0
                         usages_page_link = root_usages + link.get('href')
                         soup = getSoup(usages_page_link)
-                        #print(usages_page_link)
-                        #time.sleep(10)
+                        print(usages_page_link)
                         current_page = int(link.get('href')[3:])
-
                         break
 
                 elif '/tags' in link.get('href'):
