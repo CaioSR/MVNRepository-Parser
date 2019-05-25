@@ -1,14 +1,6 @@
-"""
-        for usage in usages:
-            if usage != []:
-                if usage[10:] in graph:
-                    graph[usage[10:]].append(module_link)
-                else:
-                    graph.update({usage[10:] : [module_link]})
-                    """
-
-
 import MVNparser
+import csv
+import save
 
 graph = dict()
 
@@ -28,7 +20,22 @@ def parser(root_link,max_depth,depth, target_version = None):
     version = version[version.find('/'):]
     print(version)
 
-    if module_link not in graph:
+    try:
+        with open('nodes.csv', 'r') as readFile:
+            reader = csv.reader(readFile)
+            nodes = list(reader)
+
+        readFile.close()
+    except:
+        nodes = []
+
+    if [module_name] not in nodes:
+
+        with open('nodes.csv', 'a', newline='') as writeFile:
+            writer = csv.writer(writeFile)
+            writer.writerow([module_name])
+
+        writeFile.close()
 
         soup_version = MVNparser.getSoup(root_link+version)
         dependencies_full = MVNparser.getDependencies(soup_version)
@@ -42,13 +49,22 @@ def parser(root_link,max_depth,depth, target_version = None):
 
         print('There are {} dependencies in the module {}' .format(len(dependencies_full), module_link))
 
-        graph.update({module_link : dependencies_names})
+        link = [module_link]
+        for dependency in dependencies_names:
+            link.append(dependency)
+
+        with open('links.csv', 'a', newline='') as writeFile:
+            writer = csv.writer(writeFile)
+            writer.writerow(link)
+
+        writeFile.close()
 
         depth+=1
         if depth < max_depth:
 
             usages_link = root_link+version+'/usages'
             usages_soup = MVNparser.getSoup(usages_link)
+            save.saveCurrentPage(module_name, 1)
             usages = MVNparser.getUsages(module_name, usages_link, usages_soup)
 
             print('There are {} usages in the module {}' .format(len(usages),module_link))
@@ -61,8 +77,30 @@ def parser(root_link,max_depth,depth, target_version = None):
             for usage in usages:
                 print('Opening', usage)
                 parser("https://mvnrepository.com"+usage,max_depth,depth)
+
         else:
             print("Depth too high")
+
+    if [module_name] in nodes:
+
+        try:
+            with open('inProgress.csv', 'r') as readFile:
+                reader = csv.reader(readFile)
+                node = list(reader)
+
+            page = node[0][1]
+
+            usages_link = root_link+version+'/usages'
+            usages_soup = MVNparser.getSoup(usages_link)
+            usages = MVNparser.getUsages(module_name, usages_link, usages_soup, page=page)
+
+            print('Found {} more usages for the module {}' .format(len(usages), module_link))
+
+            for usage in usages:
+                print('Opening', usage)
+                parser("https://mvnrepository.com"+usage,max_depth,depth)
+        except:
+            pass
 
 root = "https://mvnrepository.com/artifact/org.apache.jclouds/jclouds-compute"
 

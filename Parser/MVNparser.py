@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup #biblioteca para realizar o parse
 import re #biblioteca para processar expressões regulares
 import time
 import json
+import save
 
 def writeJson(dict):
     nodes = []
@@ -118,7 +119,8 @@ def getDependencies(soup):
 
     return dependencies
 
-def getUsages(module, root_usages, soup):
+def getUsages(module, root_usages, soup, page=None):
+
 
     usages = []
     previous = ''
@@ -130,6 +132,14 @@ def getUsages(module, root_usages, soup):
     while not end:
 
         for link in soup.find_all('a'):
+
+            if page:
+                usages_page_link = root_usages + '?p=' + page
+                print("Continued on page " + page)
+                soup = getSoup(usages_page_link)
+                current_page = int(page)
+                save.saveCurrentPage(module, page)
+                page = None
 
             if scope == 1:
 
@@ -149,11 +159,15 @@ def getUsages(module, root_usages, soup):
                         soup = getSoup(usages_page_link)
                         print(usages_page_link)
                         current_page = int(link.get('href')[3:])
+                        save.saveCurrentPage(module, current_page)
                         break
 
                 elif '/tags' in link.get('href'):
                     end = 1
                     scope = 0
+
+                    save.doneUsage()
+
                     break
 
             if module in link.get('href'):
