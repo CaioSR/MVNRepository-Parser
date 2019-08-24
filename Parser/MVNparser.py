@@ -58,7 +58,9 @@ def getVersion(soup):
 def isVersion(href):
     return re.compile('/[0-9]').search(href) #procura por números no link
 
-def getDependencies(soup):
+def getDependencies(module, soup):
+
+    save.setState(module, 'Getting Dependencies')
 
     dependency = [] #lista para salvar vários links de uma mesma dependencia (página principal, de versão específica, etc
     dependencies = [] #lista com todas as listas de dependencias
@@ -77,6 +79,9 @@ def getDependencies(soup):
                         #acrescenta a lista da dependência na lista de dependências
                         if dependency not in dependencies:
                             dependencies.append(dependency)
+
+                            save.setDependency(module, dependency)
+
                         #zera a lista da dependência
                         dependency = []
 
@@ -89,6 +94,8 @@ def getDependencies(soup):
                             #acrescenta a lista da dependência na lista de dependências
                             if dependency not in dependencies:
                                 dependencies.append(dependency)
+
+                                save.setDependency(module, dependency)
                             #zera a lista da dependência
                             dependency = []
                             #acrescenta o link na lista da dependência
@@ -108,6 +115,9 @@ def getDependencies(soup):
                 if 'twitter' in link.get('href'):
                     if dependency not in dependencies and dependency != []:
                         dependencies.append(dependency)
+
+                        save.setDependency(module, dependency)
+
                     scope = 0
                     break
 
@@ -117,10 +127,17 @@ def getDependencies(soup):
         if '#buildr' in link.get('href'):
             scope = 1
 
+    save.setState(module, 'Done dependencies')
     return dependencies
 
 def getUsages(module, root_usages, soup, page=None):
 
+    aux = module[module.find('/'):][1:]
+    version = aux[aux.find('/'):][1:]
+    module_link = module[:module.find(version)-1]
+
+    save.setState(module, 'Getting Usages')
+    print('Page 1')
 
     usages = []
     previous = ''
@@ -138,7 +155,7 @@ def getUsages(module, root_usages, soup, page=None):
                 print("Continued on page " + page)
                 soup = getSoup(usages_page_link)
                 current_page = int(page)
-                save.saveCurrentPage(module, page)
+                save.setCurrentPage(module, page)
                 page = None
 
             if scope == 1:
@@ -147,6 +164,7 @@ def getUsages(module, root_usages, soup, page=None):
                     if link.get('href') == previous:
                         if link.get('href') not in usages:
                             usages.append(link.get('href'))
+                            save.setUsage(module,link.get('href'))
 
                     previous = link.get('href')
 
@@ -157,19 +175,19 @@ def getUsages(module, root_usages, soup, page=None):
                         scope = 0
                         usages_page_link = root_usages + link.get('href')
                         soup = getSoup(usages_page_link)
-                        print(usages_page_link)
                         current_page = int(link.get('href')[3:])
-                        save.saveCurrentPage(module, current_page)
+                        print('Page',current_page)
+                        save.setCurrentPage(module, current_page)
                         break
 
                 elif '/tags' in link.get('href'):
                     end = 1
                     scope = 0
 
-                    save.doneUsage()
-
                     break
 
-            if module in link.get('href'):
+            if module_link in link.get('href'):
                 scope = 1
+
+    save.setState(module, 'Done Usages')
     return usages

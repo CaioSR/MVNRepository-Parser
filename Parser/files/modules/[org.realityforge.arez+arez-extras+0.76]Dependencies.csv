@@ -1,0 +1,8 @@
+org.realityforge.arez/arez-component/0.76
+com.beust/jcommander/1.27
+org.hamcrest/hamcrest-core/1.1
+org.hamcrest/hamcrest-library/1.1
+org.jmock/jmock/2.5.1
+org.jmock/jmock-junit4/2.5.1
+org.realityforge.guiceyloops/guiceyloops/0.92
+org.testng/testng/6.11

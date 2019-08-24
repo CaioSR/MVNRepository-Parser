@@ -1,0 +1,6 @@
+com.google.auto.service/auto-service/1.0-rc3
+org.apache.jclouds/jclouds-compute/2.1.2
+com.squareup.okhttp/mockwebserver/2.2.0
+org.apache.jclouds/jclouds-core/2.1.2
+org.apache.jclouds.driver/jclouds-log4j/2.1.2
+org.apache.jclouds.driver/jclouds-sshj/2.1.2
