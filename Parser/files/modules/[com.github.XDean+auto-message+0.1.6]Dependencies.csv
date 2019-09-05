@@ -1,0 +1,5 @@
+com.github.XDean/AnnotationProcessorToolkit,com.github.XDean/AnnotationProcessorToolkit/0.2.0
+com.squareup/javapoet,com.squareup/javapoet/1.10.0
+com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3
+com.github.XDean/compile-testing,com.github.XDean/compile-testing/1.0.3
+com.google.guava/guava,com.google.guava/guava/23.1-jre

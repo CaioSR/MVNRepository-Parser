@@ -1,0 +1,14 @@
+com.datadoghq/dd-trace-api,com.datadoghq/dd-trace-api/0.32.0
+com.fasterxml.jackson.core/jackson-databind,com.fasterxml.jackson.core/jackson-databind/2.9.9.3
+com.github.jnr/jnr-unixsocket,com.github.jnr/jnr-unixsocket/0.22
+com.lmax/disruptor,com.lmax/disruptor/3.4.2
+com.squareup.okhttp3/okhttp,com.squareup.okhttp3/okhttp/3.11.0
+io.opentracing/opentracing-api,io.opentracing/opentracing-api/0.31.0
+io.opentracing/opentracing-noop,io.opentracing/opentracing-noop/0.31.0
+io.opentracing/opentracing-util,io.opentracing/opentracing-util/0.31.0
+io.opentracing.contrib/opentracing-tracerresolver,io.opentracing.contrib/opentracing-tracerresolver/0.1.0
+org.msgpack/jackson-dataformat-msgpack,org.msgpack/jackson-dataformat-msgpack/0.8.17
+org.slf4j/slf4j-api,org.slf4j/slf4j-api/1.7.25
+com.google.auto/auto-common,com.google.auto/auto-common/0.8
+com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3
+com.google.guava/guava,com.google.guava/guava/20.0

@@ -1,0 +1,13 @@
+com.beust/jcommander,com.beust/jcommander/1.48
+com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3
+commons-cli/commons-cli,commons-cli/commons-cli/1.2
+commons-codec/commons-codec,commons-codec/commons-codec/1.4
+commons-configuration/commons-configuration,commons-configuration/commons-configuration/1.6
+jline/jline,jline/jline/2.11
+log4j/log4j,log4j/log4j/1.2.17
+org.apache.accumulo/accumulo-core,org.apache.accumulo/accumulo-core/1.9.3
+org.apache.accumulo/accumulo-fate,org.apache.accumulo/accumulo-fate/1.9.3
+org.apache.accumulo/accumulo-shell,org.apache.accumulo/accumulo-shell/1.9.3
+org.apache.accumulo/accumulo-tracer,org.apache.accumulo/accumulo-tracer/1.9.3
+org.apache.htrace/htrace-core,org.apache.htrace/htrace-core/3.1.0-incubating
+junit/junit,junit/junit/4.12

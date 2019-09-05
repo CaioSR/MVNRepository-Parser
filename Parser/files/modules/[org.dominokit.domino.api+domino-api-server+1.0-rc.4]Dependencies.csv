@@ -1,0 +1,15 @@
+com.google.guava/guava,com.google.guava/guava/23.4-jre
+io.vertx/vertx-web,io.vertx/vertx-web/3.6.3
+io.vertx/vertx-config,io.vertx/vertx-config/3.6.3
+io.vertx/vertx-rx-java,io.vertx/vertx-rx-java/3.6.3
+io.vertx/vertx-rx-java2,io.vertx/vertx-rx-java2/3.6.3
+io.vertx/vertx-auth-jwt,io.vertx/vertx-auth-jwt/3.6.3
+io.vertx/vertx-auth-oauth2,io.vertx/vertx-auth-oauth2/3.6.3
+javax.validation/validation-api,javax.validation/validation-api/2.0.1.Final
+org.dominokit.domino/domino-service-discovery,org.dominokit.domino/domino-service-discovery/1.0-rc.4
+org.dominokit.domino.api/domino-api-shared,org.dominokit.domino.api/domino-api-shared/1.0-rc.4
+org.jboss.resteasy/resteasy-vertx,org.jboss.resteasy/resteasy-vertx/4.0.0.Beta5
+org.jboss.resteasy/resteasy-jackson-provider,org.jboss.resteasy/resteasy-jackson-provider/4.0.0.Beta5
+org.jboss.resteasy/resteasy-multipart-provider,org.jboss.resteasy/resteasy-multipart-provider/4.0.0.Beta5
+com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc4
+io.vertx/vertx-unit,io.vertx/vertx-unit/3.6.3

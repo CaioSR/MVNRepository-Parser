@@ -1,0 +1,11 @@
+com.fasterxml.jackson.core/jackson-databind,com.fasterxml.jackson.core/jackson-databind/2.8.7
+com.fasterxml.jackson.dataformat/jackson-dataformat-yaml,com.fasterxml.jackson.dataformat/jackson-dataformat-yaml/2.8.7
+com.google.auto/auto-common,com.google.auto/auto-common/0.3
+com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3
+com.google.guava/guava,com.google.guava/guava/19.0
+io.opentracing/opentracing-api,io.opentracing/opentracing-api/0.30.0
+io.opentracing/opentracing-noop,io.opentracing/opentracing-noop/0.30.0
+io.opentracing/opentracing-util,io.opentracing/opentracing-util/0.30.0
+io.opentracing.contrib/opentracing-tracerresolver,io.opentracing.contrib/opentracing-tracerresolver/0.1.0
+org.msgpack/jackson-dataformat-msgpack,org.msgpack/jackson-dataformat-msgpack/0.8.13
+org.slf4j/slf4j-api,org.slf4j/slf4j-api/1.7.25

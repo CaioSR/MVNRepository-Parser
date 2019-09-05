@@ -1,0 +1,15 @@
+com.beust/jcommander,com.beust/jcommander/1.72
+com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc5
+com.google.guava/guava,com.google.guava/guava/28.0-jre
+org.apache.accumulo/accumulo-core,org.apache.accumulo/accumulo-core/2.0.0
+org.apache.accumulo/accumulo-server-base,org.apache.accumulo/accumulo-server-base/2.0.0
+org.apache.accumulo/accumulo-start,org.apache.accumulo/accumulo-start/2.0.0
+org.apache.hadoop/hadoop-client-api,org.apache.hadoop/hadoop-client-api/3.1.1
+org.apache.htrace/htrace-core,org.apache.htrace/htrace-core/3.2.0-incubating
+org.apache.thrift/libthrift,org.apache.thrift/libthrift/0.12.0
+org.apache.zookeeper/zookeeper,org.apache.zookeeper/zookeeper/3.4.14
+org.slf4j/slf4j-api,org.slf4j/slf4j-api/1.7.26
+org.apache.hadoop/hadoop-client-runtime,org.apache.hadoop/hadoop-client-runtime/3.1.1
+junit/junit,junit/junit/4.12
+org.easymock/easymock,org.easymock/easymock/4.0.2
+org.slf4j/slf4j-log4j12,org.slf4j/slf4j-log4j12/1.7.26

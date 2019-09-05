@@ -1,0 +1,6 @@
+com.spotify/flo-workflow,com.spotify/flo-workflow/0.5.8
+com.spotify/flo-freezer,com.spotify/flo-freezer/0.5.8
+com.typesafe/config,com.typesafe/config/1.3.1
+org.apache.commons/commons-lang3,org.apache.commons/commons-lang3/3.7
+org.slf4j/slf4j-api,org.slf4j/slf4j-api/1.7.25
+com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3

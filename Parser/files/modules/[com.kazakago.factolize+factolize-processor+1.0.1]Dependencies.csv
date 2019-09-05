@@ -1,0 +1,5 @@
+com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3
+com.kazakago.factolize/factolize-annotation,com.kazakago.factolize/factolize-annotation/1.0.1
+com.squareup/javapoet,com.squareup/javapoet/1.9.0
+org.apache.commons/commons-lang3,org.apache.commons/commons-lang3/3.7
+org.jetbrains.kotlin/kotlin-stdlib-jre7,org.jetbrains.kotlin/kotlin-stdlib-jre7/1.2.0

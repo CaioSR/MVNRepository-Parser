@@ -1,0 +1,7 @@
+com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3
+org.apache.jclouds/jclouds-core,org.apache.jclouds/jclouds-core/2.1.2
+org.apache.jclouds.api/openstack-cinder,org.apache.jclouds.api/openstack-cinder/2.1.2
+org.apache.jclouds.api/openstack-keystone,org.apache.jclouds.api/openstack-keystone/2.1.2
+org.apache.jclouds.api/rackspace-cloudidentity,org.apache.jclouds.api/rackspace-cloudidentity/2.1.2
+ch.qos.logback/logback-classic,ch.qos.logback/logback-classic/1.1.2
+org.apache.jclouds.driver/jclouds-slf4j,org.apache.jclouds.driver/jclouds-slf4j/2.1.2

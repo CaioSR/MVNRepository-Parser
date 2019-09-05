@@ -1,0 +1,6 @@
+com.fasterxml.jackson.core/jackson-annotations,com.fasterxml.jackson.core/jackson-annotations/2.8.0
+com.fasterxml.jackson.core/jackson-databind,com.fasterxml.jackson.core/jackson-databind/2.8.10
+com.fasterxml.jackson.dataformat/jackson-dataformat-yaml,com.fasterxml.jackson.dataformat/jackson-dataformat-yaml/2.8.10
+com.fasterxml.jackson.datatype/jackson-datatype-jdk8,com.fasterxml.jackson.datatype/jackson-datatype-jdk8/2.8.10
+com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3
+org.slf4j/slf4j-api,ch.qos.logback

@@ -1,0 +1,4 @@
+com.google.testing.compile/compile-testing,com.google.testing.compile/compile-testing/0.7
+com.google.truth/truth,com.google.truth/truth/0.27
+javax.inject/javax.inject,javax.inject/javax.inject/1
+junit/junit,junit/junit/4.12

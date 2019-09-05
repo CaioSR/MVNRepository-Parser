@@ -1,7 +1,0 @@
-com.amazonaws/aws-java-sdk-core/1.11.166
-com.amazonaws/aws-java-sdk-kms/1.11.166
-com.google.api-client/google-api-client/1.22.0
-com.google.apis/google-api-services-cloudkms/v1-rev9-1.22.0
-com.google.guava/guava/25.0-jre
-com.google.protobuf/protobuf-java/3.6.0
-org.json/json/20170516

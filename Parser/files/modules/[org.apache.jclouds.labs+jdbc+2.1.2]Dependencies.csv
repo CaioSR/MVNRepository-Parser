@@ -1,0 +1,11 @@
+com.google.inject.extensions/guice-persist,com.google.inject.extensions/guice-persist/4.0
+org.apache.jclouds/jclouds-blobstore,org.apache.jclouds/jclouds-blobstore/2.1.2
+org.hibernate.javax.persistence/hibernate-jpa-2.1-api,org.hibernate.javax.persistence/hibernate-jpa-2.1-api/1.0.0.Final
+com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3
+com.h2database/h2,com.h2database/h2/1.4.187
+org.apache.jclouds/jclouds-core,org.apache.jclouds/jclouds-core/2.1.2
+org.apache.jclouds.driver/jclouds-log4j,org.apache.jclouds.driver/jclouds-log4j/2.1.2
+org.assertj/assertj-core,org.assertj/assertj-core/1.7.0
+org.eclipse.persistence/eclipselink,org.eclipse.persistence/eclipselink/2.6.0
+org.hibernate/hibernate-entitymanager,org.hibernate/hibernate-entitymanager/4.3.9.Final
+org.hsqldb/hsqldb,org.hsqldb/hsqldb/2.3.2

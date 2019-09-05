@@ -1,0 +1,7 @@
+android.arch.lifecycle/extensions,android.arch.lifecycle/extensions/1.0.0-alpha9-1
+com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3
+com.google.guava/guava,com.google.guava/guava/23.1-jre
+com.jzallas/lifecycleaware,com.jzallas/lifecycleaware/0.1.0
+com.squareup/javapoet,com.squareup/javapoet/1.9.0
+junit/junit,junit/junit/4.12
+org.mockito/mockito-core,org.mockito/mockito-core/2.10.0

@@ -1,5 +1,5 @@
-com.google.guava/guava/18.0
-com.google.guava/guava-testlib/18.0
-com.google.testing.compile/compile-testing/0.6
-com.google.truth/truth/0.24
-junit/junit/4.11
+com.google.guava/guava,com.google.guava/guava/18.0
+com.google.guava/guava-testlib,com.google.guava/guava-testlib/18.0
+com.google.testing.compile/compile-testing,com.google.testing.compile/compile-testing/0.6
+com.google.truth/truth,com.google.truth/truth/0.24
+junit/junit,junit/junit/4.11

@@ -5,7 +5,7 @@ def addLinks(module, dependencies):
 
     modules = [module]
     for dependency in dependencies:
-        modules.append(dependency[2][10:])
+        modules.append(dependency[2])
 
     with open('files/Links.csv', 'a', newline='') as writeFile:
         writer = csv.writer(writeFile)
@@ -13,17 +13,35 @@ def addLinks(module, dependencies):
 
     writeFile.close()
 
-def addModule(module,depth):
+def addModule(module):
+    
+    try:
+        with open('files/Nodes.csv', 'r', newline='') as readFile:
+            reader = csv.reader(readFile)
+            nodes = list(reader)
 
-    with open('files/Nodes.csv', 'a', newline='') as writeFile:
-        writer  = csv.writer(writeFile)
-        writer.writerow([module])
+        readFile.close()
 
-    writeFile.close()
+        if [module] not in nodes:
+            with open('files/Nodes.csv', 'a', newline='') as writeFile:
+                writer  = csv.writer(writeFile)
+                writer.writerow([module])
+
+            writeFile.close()
+    except:
+
+        with open('files/Nodes.csv', 'w', newline='') as writeFile:
+            writer  = csv.writer(writeFile)
+            writer.writerow([module])
+
+        writeFile.close()
+
+
+def initialize(module,depth):
 
     with open('files/Progress.csv', 'a', newline='') as writeFile:
         writer = csv.writer(writeFile)
-        writer.writerow([depth,module,'Initialized','Null'])
+        writer.writerow([depth,module,'Initialized','Null','open'])
 
     writeFile.close()
 
@@ -91,29 +109,59 @@ def setCurrent(module, relation, current):
 
 def setUsage(module, usage):
 
-    usage = usage[10:]
-
     file = module.replace('/','+')
     file = 'files/modules/['+file+']Usages.csv'
 
-    with open(file, 'a', newline='') as writeFile:
-        writer = csv.writer(writeFile)
-        writer.writerow([usage])
+    try:
+        with open(file, 'r') as readFile:
+            reader = csv.reader(readFile)
+            us = list(reader)
 
-    writeFile.close()
+        readFile.close()
+
+        if [usage] not in us:
+            with open(file, 'a', newline='') as writeFile:
+                writer = csv.writer(writeFile)
+                writer.writerow([usage])
+
+            writeFile.close()
+
+    except:
+        with open(file, 'w', newline='') as writeFile:
+            writer = csv.writer(writeFile)
+            writer.writerow([usage])
+
+        writeFile.close()
 
 def setDependency(module, dependency):
 
-    dependency = dependency[2][10:]
+    dependency = [dependency[1],dependency[2]]
 
     file = module.replace('/','+')
     file = 'files/modules/['+file+']Dependencies.csv'
 
-    with open(file, 'a', newline='') as writeFile:
-        writer = csv.writer(writeFile)
-        writer.writerow([dependency])
+    try:
+        with open(file, 'r') as readFile:
+            reader = csv.reader(readFile)
+            dep = list(reader)
+        readFile.close()
 
-    writeFile.close()
+        if dependency not in dep:
+            with open(file, 'a', newline='') as writeFile:
+                writer = csv.writer(writeFile)
+                writer.writerow(dependency)
+
+            writeFile.close()
+
+    except:
+        with open(file, 'w', newline='') as writeFile:
+            writer = csv.writer(writeFile)
+            writer.writerow(dependency)
+
+        writeFile.close()
+
+
+
 """
 def delFile(module):
 
@@ -130,18 +178,94 @@ def checkUsages(module):
 def getLastPage():
     pass
 
-def getModules():
+def getAllProgress():
 
-    with open('files/Nodes.csv', 'r') as readFile:
+    try:
+        with open('files/Progress.csv', 'r') as readFile:
+            reader = csv.reader(readFile)
+            allProgress = list(reader)
+
+        readFile.close()
+
+        nodes = []
+        for mod in allProgress:
+            nodes.append(mod[1])
+
+        return nodes
+
+    except:
+        return []
+
+def getProgress(module):
+    with open('files/Progress.csv', 'r') as readFile:
         reader = csv.reader(readFile)
-        nodes = list(reader)
+        modules = list(reader)
 
     readFile.close()
 
-    return nodes
+    for mod in modules:
+        if mod[1] == module:
+            return mod
 
-def getDependencies():
-    pass
+def getDependencies(module):
+    file = module.replace('/','+')
+    file = 'files/modules/['+file+']Dependencies.csv'
 
-def getUsages():
-    pass
+    with open(file, 'r') as readFile:
+        reader = csv.reader(readFile)
+        dependencies = list(reader)
+
+    readFile.close()
+
+    return dependencies
+
+def getUsages(module):
+
+    file = module.replace('/','+')
+    file = 'files/modules/['+file+']Usages.csv'
+
+    with open(file, 'r') as readFile:
+        reader = csv.reader(readFile)
+        usages = list(reader)
+
+    readFile.close()
+
+    return usages
+
+def switchStatus(module):
+
+    with open('files/Progress.csv', 'r') as readFile:
+        reader = csv.reader(readFile)
+        modules = list(reader)
+
+    readFile.close()
+
+    for mod in modules:
+        if mod[1] == module:
+            if mod[4] == 'closed':
+                mod[4] = 'open'
+            else:
+                mod[4] = 'closed'
+
+    with open('files/Progress.csv', 'w', newline='') as writeFile:
+        writer = csv.writer(writeFile)
+        writer.writerows(modules)
+
+    writeFile.close()
+
+def defaultStatus():
+
+    with open('files/Progress.csv', 'r') as readFile:
+        reader = csv.reader(readFile)
+        modules = list(reader)
+
+    readFile.close()
+
+    for mod in modules:
+        mod[4] = 'closed'
+
+    with open('files/Progress.csv', 'w', newline='') as writeFile:
+        writer = csv.writer(writeFile)
+        writer.writerows(modules)
+
+    writeFile.close()

@@ -1,0 +1,6 @@
+com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc4
+de.greenrobot/java-common,de.greenrobot/java-common/2.3.1
+io.virtdata/metagen-api,io.virtdata/metagen-api/1.2.1
+org.apache.commons,org.slf4j
+org.assertj/assertj-core-java8,org.assertj/assertj-core-java8/1.0.0m1
+org.testng/testng,org.testng/testng/6.13.1
