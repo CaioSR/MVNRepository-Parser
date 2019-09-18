@@ -1,0 +1,5 @@
+org.codehaus.groovy/groovy,org.codehaus.groovy/groovy/2.4.12
+org.grails/grails-plugin-domain-class,org.grails/grails-plugin-domain-class/3.3.0
+org.grails/grails-datastore-gorm-test,org.grails/grails-datastore-gorm-test/6.1.6.RELEASE
+org.grails/grails-testing-support,org.grails/grails-testing-support/1.1.4
+org.slf4j/slf4j-api,org.slf4j/slf4j-api/1.7.22

@@ -1,0 +1,10 @@
+org.apereo.inspektr/inspektr-audit,org.apereo.inspektr/inspektr-audit/1.8.5.GA
+org.apereo.inspektr/inspektr-error,org.apereo.inspektr/inspektr-error/1.8.5.GA
+org.apereo.inspektr/inspektr-common,org.apereo.inspektr/inspektr-common/1.8.5.GA
+org.springframework/spring-web,org.springframework/spring-web/4.3.13.RELEASE
+org.springframework/spring-webmvc,org.springframework/spring-webmvc/4.3.13.RELEASE
+org.springframework/spring-tx,org.springframework/spring-tx/4.3.13.RELEASE
+org.springframework/spring-jdbc,org.springframework/spring-jdbc/4.3.13.RELEASE
+org.springframework/spring-beans,org.springframework/spring-beans/4.3.13.RELEASE
+org.springframework.security/spring-security-core,org.springframework.security/spring-security-core/4.0.1.RELEASE
+javax.servlet/javax.servlet-api,javax.servlet/javax.servlet-api/3.1.0

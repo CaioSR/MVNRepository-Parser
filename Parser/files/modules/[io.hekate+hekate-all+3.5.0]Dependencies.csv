@@ -1,0 +1,11 @@
+io.hekate/hekate-core,io.hekate/hekate-core/3.5.0
+io.hekate/hekate-spring,io.hekate/hekate-spring/3.5.0
+io.hekate/hekate-spring-boot,io.hekate/hekate-spring-boot/3.5.0
+io.hekate/hekate-codec-kryo,io.hekate/hekate-codec-kryo/3.5.0
+io.hekate/hekate-etcd,io.hekate/hekate-etcd/3.5.0
+io.hekate/hekate-consul,io.hekate/hekate-consul/3.5.0
+io.hekate/hekate-codec-fst,io.hekate/hekate-codec-fst/3.5.0
+io.hekate/hekate-zookeeper,io.hekate/hekate-zookeeper/3.5.0
+io.hekate/hekate-kubernetes,io.hekate/hekate-kubernetes/3.5.0
+io.hekate/hekate-jclouds-core,io.hekate/hekate-jclouds-core/3.5.0
+io.hekate/hekate-jclouds-aws,io.hekate/hekate-jclouds-aws/3.5.0

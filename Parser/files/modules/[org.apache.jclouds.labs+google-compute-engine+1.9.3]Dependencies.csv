@@ -1,0 +1,11 @@
+org.apache.jclouds/jclouds-core,org.apache.jclouds/jclouds-core/1.9.3
+org.apache.jclouds/jclouds-compute,org.apache.jclouds/jclouds-compute/1.9.3
+org.apache.jclouds.labs/googlecloud,org.apache.jclouds.labs/googlecloud/1.9.3
+com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc2
+com.google.auto.value/auto-value,com.google.auto.value/auto-value/1.1
+ch.qos.logback/logback-classic,ch.qos.logback/logback-classic/1.1.2
+com.squareup.okhttp/mockwebserver,com.squareup.okhttp/mockwebserver/2.2.0
+org.apache.jclouds.driver/jclouds-slf4j,org.apache.jclouds.driver/jclouds-slf4j/1.9.3
+org.apache.jclouds.driver/jclouds-sshj,org.apache.jclouds.driver/jclouds-sshj/1.9.3
+org.apache.jclouds.driver/jclouds-okhttp,org.apache.jclouds.driver/jclouds-okhttp/1.9.3
+org.apache.jclouds.driver/jclouds-bouncycastle,org.apache.jclouds.driver/jclouds-bouncycastle/1.9.3

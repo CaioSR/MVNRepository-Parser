@@ -1,0 +1,9 @@
+com.fasterxml.jackson.core/jackson-core,com.fasterxml.jackson.core/jackson-core/2.9.9
+com.fasterxml.jackson.core/jackson-annotations,com.fasterxml.jackson.core/jackson-annotations/2.9.0
+com.fasterxml.jackson.core/jackson-databind,com.fasterxml.jackson.core/jackson-databind/2.9.9
+com.fasterxml.jackson.module/jackson-module-jaxb-annotations,com.fasterxml.jackson.module/jackson-module-jaxb-annotations/2.9.9
+com.fasterxml.woodstox/woodstox-core,com.fasterxml.woodstox/woodstox-core/5.1.0
+org.codehaus.woodstox/stax2-api,org.codehaus.woodstox/stax2-api/3.1.4
+javax.xml.stream/stax-api,javax.xml.stream/stax-api/1.0-2
+javax.xml.bind/jaxb-api,javax.xml.bind/jaxb-api/2.3.0
+junit/junit,junit/junit/4.12

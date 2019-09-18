@@ -1,0 +1,4 @@
+com.google.auto/auto-common,com.google.auto/auto-common/0.8
+com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3
+com.squareup/javapoet,com.squareup/javapoet/1.8.0
+com.tmtron.enums/enum-mapper-lib,com.tmtron.enums/enum-mapper-lib/1.0.3

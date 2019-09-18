@@ -1,0 +1,16 @@
+cglib/cglib,cglib/cglib/2.2.2
+javax.servlet/javax.servlet-api,javax.servlet/javax.servlet-api/3.1.0
+junit/junit,junit/junit/4.12
+org.codehaus.groovy/groovy,org.codehaus.groovy/groovy/2.4.11
+org.grails/grails-web-jsp,org.grails/grails-web-jsp/3.3.0
+org.grails/grails-test,org.grails/grails-test/3.3.0
+org.grails/grails-datastore-gorm-test,org.grails/grails-datastore-gorm-test/6.1.6.RELEASE
+org.grails/grails-logging,org.grails/grails-logging/3.3.0
+org.grails.plugins/async,org.grails.plugins/async/3.3.0
+org.slf4j/slf4j-api,org.slf4j/slf4j-api/1.7.22
+org.spockframework/spock-spring,org.spockframework/spock-spring/1.1-groovy-2.4
+org.spockframework/spock-core,org.spockframework/spock-core/1.1-groovy-2.4
+org.springframework/spring-test,org.springframework/spring-test/4.3.9.RELEASE
+org.springframework.boot/spring-boot-starter-test,org.springframework.boot/spring-boot-starter-test/1.5.6.RELEASE
+org.grails/grails-bom,org.grails/grails-bom/3.3.0
+org.grails.plugins/events,org.grails.plugins/events/3.3.0

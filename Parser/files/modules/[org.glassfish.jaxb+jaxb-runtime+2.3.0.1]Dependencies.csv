@@ -1,0 +1,4 @@
+com.sun.xml.fastinfoset/FastInfoset,com.sun.xml.fastinfoset/FastInfoset/1.2.13
+org.glassfish.jaxb/jaxb-core,org.glassfish.jaxb/jaxb-core/2.3.0.1
+org.jvnet.staxex/stax-ex,org.jvnet.staxex/stax-ex/1.7.8
+junit/junit,junit/junit/4.12

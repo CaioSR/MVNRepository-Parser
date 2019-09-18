@@ -1,0 +1,4 @@
+com.mchange/c3p0,com.mchange/c3p0/0.9.5.3
+com.mchange/mchange-commons-java,com.mchange/mchange-commons-java/0.2.15
+com.zaxxer/HikariCP-java7,com.zaxxer/HikariCP-java7/2.4.13
+org.slf4j/slf4j-api,org.slf4j/slf4j-api/1.7.7

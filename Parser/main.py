@@ -3,23 +3,49 @@ import csv
 import save
 import os
 
-def parser(root_link,max_depth,depth, target_version = None):
+root = "https://mvnrepository.com/artifact/org.apache.jclouds/jclouds-compute"
+version = "org.apache.jclouds/jclouds-compute/2.1.2"
+max_depth = 3
+
+
+def parser(root_link,max_depth,depth, target_version = None, lookForDependency = None):
 
     root_html = MVNparser.getSoup(root_link)
 
-    module_link = root_link[root_link.find('/artifact'):][10:]
-    #module_name = module_link[module_link.find('/'):][1:]
+    module_root = root_link[root_link.find('/artifact'):][10:]
+    #module_name = module_root[module_root.find('/'):][1:]
 
     if not target_version:
-        version = MVNparser.getVersion(root_html)
-    else:
-        target_version = target_version[target_version.find(module_link):]
-        version = target_version[target_version.find('/'):][1:]
+        print("Looking for correct usage version")
 
-    version = version[version.find('/'):]
+        try:
+            version = None
+            versions = MVNparser.getVersions(root_html)
+            for v in versions:
+                v = v[v.find('/'):]
+                print("Currently on {}" .format(v))
+                module = module_root + v
+                result = MVNparser.searchDependency(module, lookForDependency)
+                if result:
+                    print("Correct version is {}" .format(v))
+                    version = v
+                    break
+            if not version:
+                return
+
+        except Exception as e:
+            save.initialize(module_root,depth)
+            print("---------ERRO--------\n",e,"\n---------------------\nSetting {} to Error Status" .format(module_root))
+            save.setState(module_root, 'Error')
+            return
+
+    else:
+        version = target_version[target_version.find('/'):][1:]
+        version = version[version.find('/'):]
+
     print(version)
 
-    module = module_link+version
+    module = module_root+version
     print("Current module:", module)
 
     nodes = save.getAllProgress()
@@ -59,16 +85,12 @@ def parser(root_link,max_depth,depth, target_version = None):
                 save.setCurrent(module, 'd', dependency[2])
                 parser("https://mvnrepository.com/artifact/"+dependency[1],max_depth,depth,target_version = dependency[2])
                 print('Returned to', module)
-                if dependency[2] == "com.raybritton.inspector/inspector_lib/1.2.0":
-                    exit()
 
             for usage in usages: #status verifying usage
                 print('Opening', usage)
                 save.setCurrent(module, 'u', usage)
-                parser("https://mvnrepository.com/artifact/"+usage,max_depth,depth)
+                parser("https://mvnrepository.com/artifact/"+usage,max_depth,depth,lookForDependency = module)
                 print('Returned to', module)
-                if usage == "com.raybritton.inspector/inspector_lib":
-                    exit()
 
         else:
             print("Depth too high")
@@ -122,7 +144,7 @@ def parser(root_link,max_depth,depth, target_version = None):
                         for usage in usages: #status verifying usage
                             print('Opening', usage)
                             save.setCurrent(module, 'u', usage)
-                            parser("https://mvnrepository.com/artifact"+usage,max_depth,depth)
+                            parser("https://mvnrepository.com/artifact"+usage,max_depth,depth,lookForDependency = module)
                             print('Returned to', module)
 
                     else:
@@ -164,7 +186,7 @@ def parser(root_link,max_depth,depth, target_version = None):
                             usage = usage[0]
                             print('Opening', usage)
                             save.setCurrent(module, 'u', usage)
-                            parser("https://mvnrepository.com/artifact/"+usage,max_depth,depth)
+                            parser("https://mvnrepository.com/artifact/"+usage,max_depth,depth,lookForDependency = module)
                             print('Returned to', module)
 
                     else:
@@ -200,7 +222,7 @@ def parser(root_link,max_depth,depth, target_version = None):
                             usage = usage[0]
                             print('Opening', usage)
                             save.setCurrent(module, 'u', usage)
-                            parser("https://mvnrepository.com/artifact/"+usage,max_depth,depth)
+                            parser("https://mvnrepository.com/artifact/"+usage,max_depth,depth,lookForDependency = module)
                             print('Returned to', module)
 
                     else:
@@ -226,7 +248,7 @@ def parser(root_link,max_depth,depth, target_version = None):
 
                             print('Opening', usage)
                             save.setCurrent(module, 'u', usage)
-                            parser("https://mvnrepository.com/artifact/"+usage,max_depth,depth)
+                            parser("https://mvnrepository.com/artifact/"+usage,max_depth,depth,lookForDependency = module)
                             print('Returned to', module)
 
                     else:
@@ -241,23 +263,6 @@ def parser(root_link,max_depth,depth, target_version = None):
         else:
             print(module,'Already Veryfied')
 
-
-            """
-            usages = []
-
-            lastPage = save.getLastPage()
-            existentUsages = save.getUsages(module_link)
-            usage = existentUsages
-
-            usages_link = root_link+version+'/usages'
-            usages_html = MVNparser.getSoup(usages_link)
-
-            newUsages = MVNparser.getUsages(module_link, usages_link, usages_html, page=lastPage)
-
-            for usage in newUsages:
-                if usage not in existentUsages:
-                    usages.append(usage)
-            """
 try:
     save.defaultStatus()
     print('All status to closed')
@@ -266,5 +271,4 @@ except:
     os.mkdir('files')
     os.mkdir('files/modules')
 
-root = "https://mvnrepository.com/artifact/org.apache.jclouds/jclouds-compute"
-parser(root,3,0)
+parser(root,max_depth,0,target_version=version)

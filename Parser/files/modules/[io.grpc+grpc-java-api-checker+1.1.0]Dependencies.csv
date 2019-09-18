@@ -1,0 +1,5 @@
+com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3
+com.google.guava/guava,com.google.guava/guava/23.0
+com.google.errorprone/error_prone_core,com.google.errorprone/error_prone_core/2.2.0
+com.google.errorprone/error_prone_test_helpers,com.google.errorprone/error_prone_test_helpers/2.2.0
+junit/junit,junit/junit/4.12

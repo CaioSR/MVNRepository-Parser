@@ -1,0 +1,5 @@
+javax.mail/mail,javax.mail/mail/1.4.3
+org.apache.geronimo.specs/geronimo-jms_1.1_spec,org.apache.geronimo.specs/geronimo-jms_1.1_spec/1.0
+org.apache.openejb/javaee-api,org.apache.openejb/javaee-api/5.0-2
+junit/junit,junit/junit/3.8.2
+oro/oro,oro/oro/2.0.8

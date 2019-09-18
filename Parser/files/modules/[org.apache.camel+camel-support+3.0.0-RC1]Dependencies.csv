@@ -1,0 +1,7 @@
+org.apache.camel/spi-annotations,org.apache.camel/spi-annotations/3.0.0-RC1
+org.apache.camel/meta-annotations,org.apache.camel/meta-annotations/3.0.0-RC1
+org.apache.camel/camel-api,org.apache.camel/camel-api/3.0.0-RC1
+org.apache.camel/camel-management-api,org.apache.camel/camel-management-api/3.0.0-RC1
+org.apache.camel/camel-util,org.apache.camel/camel-util/3.0.0-RC1
+org.apache.camel/camel-util-json,org.apache.camel/camel-util-json/3.0.0-RC1
+org.slf4j/slf4j-api,org.slf4j/slf4j-api/1.7.28

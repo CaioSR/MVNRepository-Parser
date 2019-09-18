@@ -1,0 +1,3 @@
+org.apache.jclouds.karaf/services
+org.apache.jclouds.karaf/commands
+org.apache.jclouds.api/servermanager

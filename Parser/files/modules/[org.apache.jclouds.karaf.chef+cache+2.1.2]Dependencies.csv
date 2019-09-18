@@ -1,0 +1,6 @@
+com.google.guava/guava,com.google.guava/guava/18.0
+org.apache.jclouds.api/chef,org.apache.jclouds.api/chef/2.1.2
+org.apache.jclouds.karaf/cache,org.apache.jclouds.karaf/cache/2.1.2
+org.osgi/org.osgi.core,org.osgi/org.osgi.core/6.0.0
+org.osgi/osgi.cmpn,org.osgi/osgi.cmpn/6.0.0
+org.slf4j/slf4j-api,org.slf4j/slf4j-api/1.5.8

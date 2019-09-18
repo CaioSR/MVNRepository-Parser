@@ -1,0 +1,4 @@
+com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3
+com.google.dagger/dagger,com.google.dagger/dagger/2.11
+com.google.guava/guava,com.google.guava/guava/21.0
+com.squareup/javapoet,com.squareup/javapoet/1.9.0

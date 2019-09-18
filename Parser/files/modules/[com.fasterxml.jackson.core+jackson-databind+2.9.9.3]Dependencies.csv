@@ -1,0 +1,5 @@
+com.fasterxml.jackson.core/jackson-annotations,com.fasterxml.jackson.core/jackson-annotations/2.9.0
+com.fasterxml.jackson.core/jackson-core,com.fasterxml.jackson.core/jackson-core/2.9.9
+javax.measure/jsr-275,javax.measure/jsr-275/1.0.0
+org.powermock/powermock-module-junit4,org.powermock/powermock-module-junit4/1.7.4
+org.powermock/powermock-api-mockito,org.powermock/powermock-api-mockito/1.7.4

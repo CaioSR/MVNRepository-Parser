@@ -1,0 +1,10 @@
+com.google.gwt.gwtmockito/gwtmockito,com.google.gwt.gwtmockito/gwtmockito/1.1.6
+commons-collections/commons-collections,commons-collections/commons-collections/3.2.2
+io.vertx/vertx-unit,io.vertx/vertx-unit/3.6.2
+org.dominokit.domino.api/domino-api-client,org.dominokit.domino.api/domino-api-client/1.0-rc.3-3
+org.dominokit.domino.api/domino-api-shared,org.dominokit.domino.api/domino-api-shared/1.0-rc.3-3
+org.dominokit.domino.api/domino-api-server,org.dominokit.domino.api/domino-api-server/1.0-rc.3-3
+org.dominokit.domino.impl/domino-gwt,org.dominokit.domino.impl/domino-gwt/1.0-rc.3-3
+org.dominokit.domino.test/domino-server-test,org.dominokit.domino.test/domino-server-test/1.0-rc.3-3
+org.easymock/easymock,org.easymock/easymock/3.4
+com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3

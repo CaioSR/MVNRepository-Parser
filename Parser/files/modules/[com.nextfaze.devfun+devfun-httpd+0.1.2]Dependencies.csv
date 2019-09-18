@@ -1,0 +1,6 @@
+com.nextfaze.devfun/devfun,com.nextfaze.devfun/devfun/0.1.2
+org.jetbrains.kotlin/kotlin-stdlib-jre7,org.jetbrains.kotlin/kotlin-stdlib-jre7/1.1.2-3
+org.jetbrains.kotlin/kotlin-reflect,org.jetbrains.kotlin/kotlin-reflect/1.1.2-3
+org.nanohttpd/nanohttpd,org.nanohttpd/nanohttpd/2.3.1
+org.nanohttpd/nanohttpd-nanolets,org.nanohttpd/nanohttpd-nanolets/2.3.1
+com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3

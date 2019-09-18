@@ -1,0 +1,9 @@
+com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3
+com.google.auto.value/auto-value,com.google.auto.value/auto-value/1.5.3
+com.google.guava/guava,com.google.guava/guava/23.6-jre
+com.techshroom/lettar,com.techshroom/lettar/0.3.0
+io.netty/netty-all,io.netty/netty-all/4.1.17.Final
+org.slf4j/slf4j-api,org.slf4j/slf4j-api/1.7.25
+ch.qos.logback/logback-classic,ch.qos.logback/logback-classic/1.2.3
+ch.qos.logback/logback-core,ch.qos.logback/logback-core/1.2.3
+junit/junit,junit/junit/4.12

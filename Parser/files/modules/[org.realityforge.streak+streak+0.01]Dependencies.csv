@@ -1,0 +1,15 @@
+com.google.auto/auto-common,com.google.auto/auto-common/0.10
+com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3
+com.google.guava/guava,com.google.guava/guava/25.0-jre
+com.google.jsinterop/jsinterop-annotations,com.google.jsinterop/jsinterop-annotations/1.0.2
+com.google.jsinterop/base,com.google.jsinterop/base/1.0.0-RC1
+com.squareup/javapoet,com.squareup/javapoet/1.11.1
+org.glassfish/javax.json,org.glassfish/javax.json/1.1
+org.realityforge.braincheck/braincheck,org.realityforge.braincheck/braincheck/1.12.0
+org.realityforge.javax.annotation/javax.annotation,org.realityforge.javax.annotation/javax.annotation/1.0.0
+com.beust/jcommander,com.beust/jcommander/1.27
+org.hamcrest/hamcrest-core,org.hamcrest/hamcrest-core/1.1
+org.hamcrest/hamcrest-library,org.hamcrest/hamcrest-library/1.1
+org.jmock/jmock,org.jmock/jmock/2.5.1
+org.jmock/jmock-junit4,org.jmock/jmock-junit4/2.5.1
+org.testng/testng,org.testng/testng/6.11

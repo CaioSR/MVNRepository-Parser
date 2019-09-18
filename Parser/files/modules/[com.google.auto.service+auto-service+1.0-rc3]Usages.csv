@@ -16,10 +16,10 @@ org.apache.jclouds.provider/aws-s3
 org.apache.accumulo/accumulo-test
 org.apache.jclouds.api/sts
 org.apache.jclouds.api/elasticstack
+com.google.cloud/google-cloud-nio
 org.apache.jclouds.api/ec2
 org.apache.jclouds.api/openstack-swift
 org.apache.jclouds.api/openstack-cinder
-com.google.cloud/google-cloud-nio
 com.progressoft.brix.domino.api/domino-api-server
 org.realityforge.arez/arez-processor
 org.apache.accumulo/accumulo-server-base
@@ -30,9 +30,9 @@ org.realityforge.arez/arez-browser-extras
 com.coreos/jetcd-core
 org.apache.jclouds.provider/rackspace-cloudservers-us
 org.apache.jclouds.provider/rackspace-cloudservers-uk
+org.apache.jclouds.api/s3
 io.engineblock/eb-api
 org.testng.testng-remote/testng-remote
-org.apache.jclouds.api/s3
 org.dominokit.domino.api/domino-api-server
 net.vergien.bau/bean-auto-utils
 org.apache.jclouds.api/cloudstack
@@ -49,6 +49,7 @@ org.apache.jclouds.api/openstack-trove
 com.github.bumptech.glide/compiler
 org.apache.jclouds.api/docker
 org.apache.jclouds.labs/azurecompute
+com.datadoghq/dd-trace-ot
 com.raybritton.inspector/inspector_lib
 org.apache.accumulo/accumulo-shell
 org.apache.jclouds.provider/rackspace-cloudfiles-us
@@ -59,7 +60,6 @@ org.apache.jclouds.provider/rackspace-cloudblockstorage-us
 org.apache.jclouds.api/route53
 org.apache.jclouds.provider/rackspace-cloudblockstorage-uk
 org.apache.jclouds.api/openstack-neutron
-com.datadoghq/dd-trace-ot
 org.apache.jclouds.api/byon
 org.apache.accumulo/accumulo-tserver
 org.apache.jclouds.provider/azureblob
@@ -69,16 +69,16 @@ org.apache.jclouds.provider/aws-cloudwatch
 org.apache.jclouds.provider/google-compute-engine
 org.apache.jclouds.provider/rackspace-clouddatabases-uk
 org.apache.jclouds.provider/rackspace-clouddatabases-us
-org.apache.accumulo/accumulo-gc
 com.nlocketz.plugins/easy-plugins
+org.apache.accumulo/accumulo-gc
 org.apache.jclouds.provider/rackspace-clouddns-uk
 org.apache.accumulo/accumulo-monitor
 org.apache.accumulo/accumulo-master
 org.apache.jclouds.provider/rackspace-clouddns-us
 net.je2sh/core
 org.jboss.hal/hal-processors
-io.engineblock/eb-core
 com.datadoghq/dd-trace
+io.engineblock/eb-core
 org.apache.jclouds.provider/rackspace-cloudloadbalancers-us
 org.apache.jclouds.provider/rackspace-cloudloadbalancers-uk
 com.techshroom/lettar
@@ -88,6 +88,7 @@ org.apache.jclouds.provider/softlayer
 org.apache.jclouds.provider/aws-sts
 org.realityforge.react4j/react4j-processor
 io.virtdata/metagen-lib-composer
+org.apache.jclouds.provider/google-cloud-storage
 org.apache.jclouds.labs/openstack-poppy
 com.github.dynodao/dynodao-processor
 org.apache.jclouds.labs/rackspace-cloudqueues-us
@@ -102,6 +103,7 @@ org.apache.jclouds.labs/rackspace-autoscale
 org.apache.jclouds.labs/rackspace-autoscale-us
 org.apache.jclouds.api/rackspace-cloudloadbalancers
 io.engineblock/at-basics
+org.apache.jclouds.labs/profitbricks-rest
 org.realityforge.spritz/spritz-core
 org.apache.jclouds.provider/elastichosts-lon-p
 org.apache.jclouds.provider/b2
@@ -109,7 +111,6 @@ org.apache.jclouds.labs/jdbc
 io.virtdata/metagen-lib-curves4
 com.github.peckb1/autojackson-processor
 com.github.aizuzi/fastadapter_processor
-org.apache.jclouds.provider/google-cloud-storage
 org.testng.testng-remote/testng-remote6_0
 org.broadinstitute/google-cloud-nio-GATK4-custom-patch
 com.github.XDean/auto-spring-factories
@@ -137,6 +138,7 @@ org.testng.testng-remote/testng-remote6_9_10
 com.winning.marsx_compile/marsx-compile
 org.apache.jclouds.provider/elastichosts-sat-p
 org.apache.jclouds.labs/joyent-cloudapi
+org.apache.jclouds.labs/oneandone
 io.virtdata/metagen-lib-random
 io.engineblock/eb-extensions
 org.apache.jclouds.provider/skalicloud-sdg-my
@@ -322,8 +324,6 @@ org.apache.jclouds.labs/cloudsigma2-zrh
 org.apache.jclouds.labs/dimensiondata-cloudcontrol
 org.apache.jclouds.labs/h2-jdbc
 org.apache.jclouds.labs/joyentcloud
-org.apache.jclouds.labs/oneandone
-org.apache.jclouds.labs/profitbricks-rest
 org.apache.jclouds.labs/rackspace-autoscale-uk
 org.apache.jclouds.labs/rackspace-cdn-uk
 org.apache.jclouds.labs/rackspace-cdn-us

@@ -1,0 +1,7 @@
+com.android.support/appcompat-v7,com.android.support/appcompat-v7/25.3.1
+com.android.support/recyclerview-v7,com.android.support/recyclerview-v7/25.3.1
+com.android.support.constraint/constraint-layout,com.android.support.constraint/constraint-layout/1.0.2
+com.nextfaze.devfun/devfun,com.nextfaze.devfun/devfun/0.1.2
+org.jetbrains.kotlin/kotlin-stdlib-jre7,org.jetbrains.kotlin/kotlin-stdlib-jre7/1.1.2-3
+org.jetbrains.kotlin/kotlin-reflect,org.jetbrains.kotlin/kotlin-reflect/1.1.2-3
+com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3

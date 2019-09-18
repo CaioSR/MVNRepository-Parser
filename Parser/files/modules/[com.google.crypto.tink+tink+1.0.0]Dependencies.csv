@@ -1,0 +1,15 @@
+com.amazonaws/aws-java-sdk-core,com.amazonaws/aws-java-sdk-core/1.11.166
+com.amazonaws/aws-java-sdk-kms,com.amazonaws/aws-java-sdk-kms/1.11.166
+com.google.api-client/google-api-client,com.google.api-client/google-api-client/1.22.0
+com.google.apis/google-api-services-cloudkms,com.google.apis/google-api-services-cloudkms/v1-rev9-1.22.0
+com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3
+com.google.code.findbugs/jsr305,com.google.code.findbugs/jsr305/3.0.1
+com.google.code.gson/gson,com.google.code.gson/gson/2.8.0
+com.google.errorprone/error_prone_annotations,com.google.errorprone/error_prone_annotations/2.0.19
+com.google.guava/guava,com.google.guava/guava/21.0
+com.google.protobuf/protobuf-java,com.google.protobuf/protobuf-java/3.3.0
+com.google.protobuf/protobuf-java-util,com.google.protobuf/protobuf-java-util/3.3.0
+org.json/json,org.json/json/20170516
+com.google.truth/truth,com.google.truth/truth/0.32
+junit/junit,junit/junit/4.12
+org.mockito/mockito-core,org.mockito/mockito-core/2.8.47

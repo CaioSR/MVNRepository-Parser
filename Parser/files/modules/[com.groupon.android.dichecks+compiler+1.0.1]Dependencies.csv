@@ -1,0 +1,6 @@
+com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3
+javax.inject/javax.inject,javax.inject/javax.inject/1
+org.jetbrains/annotations,org.jetbrains/annotations/15.0
+com.google.testing.compile/compile-testing,com.google.testing.compile/compile-testing/0.7
+com.google.truth/truth,com.google.truth/truth/0.27
+junit/junit,junit/junit/4.12

@@ -1,6 +1,0 @@
-com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc4
-io.engineblock/eb-api,io.engineblock/eb-api/2.11.04
-org.slf4j/slf4j-api,org.slf4j/slf4j-api/1.7.25
-org.assertj/assertj-core-java8,org.assertj/assertj-core-java8/1.0.0m1
-org.mockito/mockito-all,org.mockito/mockito-all/2.0.2-beta
-org.testng/testng,org.testng/testng/6.13.1

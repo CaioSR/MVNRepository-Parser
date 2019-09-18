@@ -1,0 +1,11 @@
+ch.qos.logback/logback-classic,ch.qos.logback/logback-classic/1.2.3
+com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3
+com.google.guava/guava,com.google.guava/guava/20.0
+io.dropwizard.metrics/metrics-core,io.dropwizard.metrics/metrics-core/3.2.2
+io.dropwizard.metrics/metrics-graphite,io.dropwizard.metrics/metrics-graphite/3.2.2
+io.engineblock/eb-api,io.engineblock/eb-api/2.0.56
+org.apache.commons/commons-lang3,org.apache.commons/commons-lang3/3.6
+org.mpierce.metrics.reservoir/hdrhistogram-metrics-reservoir,org.mpierce.metrics.reservoir/hdrhistogram-metrics-reservoir/1.1.0
+org.assertj/assertj-core-java8,org.assertj/assertj-core-java8/1.0.0m1
+org.mockito/mockito-all,org.mockito/mockito-all/2.0.2-beta
+org.testng/testng,org.testng/testng/6.11

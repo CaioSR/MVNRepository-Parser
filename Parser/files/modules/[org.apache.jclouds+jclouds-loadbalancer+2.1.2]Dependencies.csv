@@ -1,0 +1,4 @@
+org.apache.jclouds/jclouds-core,org.apache.jclouds/jclouds-core/2.1.2
+org.apache.jclouds/jclouds-compute,org.apache.jclouds/jclouds-compute/2.1.2
+log4j/log4j,log4j/log4j/1.2.17
+org.apache.jclouds.driver/jclouds-log4j,org.apache.jclouds.driver/jclouds-log4j/2.1.2

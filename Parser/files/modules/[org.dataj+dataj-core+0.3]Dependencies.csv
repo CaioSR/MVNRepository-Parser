@@ -1,0 +1,9 @@
+com.google.guava/guava,com.google.guava/guava/22.0
+com.squareup/javapoet,com.squareup/javapoet/1.9.0
+com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3
+com.github.javaparser/javaparser-core,com.github.javaparser/javaparser-core/3.3.4
+com.google.code.findbugs/jsr305,com.google.code.findbugs/jsr305/3.0.2
+com.google.testing.compile/compile-testing,com.google.testing.compile/compile-testing/0.12
+org.junit.jupiter/junit-jupiter-api,org.junit.jupiter/junit-jupiter-api/5.0.0
+org.junit.jupiter/junit-jupiter-engine,org.junit.jupiter/junit-jupiter-engine/5.0.0
+org.junit.platform/junit-platform-launcher,org.junit.platform/junit-platform-launcher/1.0.0

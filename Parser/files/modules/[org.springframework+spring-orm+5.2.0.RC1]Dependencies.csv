@@ -1,0 +1,4 @@
+org.springframework/spring-beans,org.springframework/spring-beans/5.2.0.RC1
+org.springframework/spring-core,org.springframework/spring-core/5.2.0.RC1
+org.springframework/spring-jdbc,org.springframework/spring-jdbc/5.2.0.RC1
+org.springframework/spring-tx,org.springframework/spring-tx/5.2.0.RC1

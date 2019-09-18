@@ -1,0 +1,15 @@
+com.fasterxml.jackson.core/jackson-databind,com.fasterxml.jackson.core/jackson-databind/2.9.9.1
+net.sf.ehcache/ehcache,net.sf.ehcache/ehcache/2.10.6
+org.jasig.cas.client/cas-client-core,org.jasig.cas.client/cas-client-core/3.5.1
+org.springframework/spring-beans,org.springframework/spring-beans/5.2.0.RC1
+org.springframework/spring-context,org.springframework/spring-context/5.2.0.RC1
+org.springframework/spring-core,org.springframework/spring-core/5.2.0.RC1
+org.springframework/spring-web,org.springframework/spring-web/5.2.0.RC1
+org.springframework.security/spring-security-core,org.springframework.security/spring-security-core/5.2.0.M4
+org.springframework.security/spring-security-web,org.springframework.security/spring-security-web/5.2.0.M4
+javax.servlet/javax.servlet-api,javax.servlet/javax.servlet-api/4.0.1
+junit/junit,junit/junit/4.12
+org.assertj/assertj-core,org.assertj/assertj-core/3.12.2
+org.mockito/mockito-core,org.mockito/mockito-core/3.0.0
+org.skyscreamer/jsonassert,org.skyscreamer/jsonassert/1.5.0
+org.springframework/spring-test,org.springframework/spring-test/5.2.0.RC1

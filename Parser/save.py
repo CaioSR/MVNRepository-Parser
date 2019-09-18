@@ -14,7 +14,7 @@ def addLinks(module, dependencies):
     writeFile.close()
 
 def addModule(module):
-    
+
     try:
         with open('files/Nodes.csv', 'r', newline='') as readFile:
             reader = csv.reader(readFile)

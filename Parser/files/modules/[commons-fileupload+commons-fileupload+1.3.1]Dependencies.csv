@@ -1,0 +1,4 @@
+commons-io/commons-io,commons-io/commons-io/2.2
+javax.servlet/servlet-api,javax.servlet/servlet-api/2.4
+portlet-api/portlet-api,portlet-api/portlet-api/1.0
+junit/junit,junit/junit/4.11

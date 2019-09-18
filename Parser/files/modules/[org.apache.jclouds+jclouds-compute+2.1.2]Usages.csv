@@ -3,8 +3,8 @@ org.apache.jclouds.provider/aws-ec2
 org.apache.jclouds.api/openstack-nova
 org.apache.jclouds.api/elasticstack
 org.apache.jclouds.api/ec2
-org.apache.jclouds.provider/rackspace-cloudservers-us
 org.apache.jclouds.driver/jclouds-jsch
+org.apache.jclouds.provider/rackspace-cloudservers-us
 org.apache.jclouds.provider/rackspace-cloudservers-uk
 org.apache.camel/camel-jclouds
 org.apache.jclouds.api/cloudstack
@@ -22,6 +22,7 @@ io.hekate/hekate-jclouds-core
 org.apache.jclouds.provider/azurecompute-arm
 org.apache.jclouds.labs/abiquo
 org.apache.jclouds.karaf/commands
+org.apache.jclouds.labs/profitbricks-rest
 org.apache.jclouds.provider/elastichosts-lon-p
 org.apache.jclouds.provider/go2cloud-jhb1
 org.apache.jclouds.provider/gogrid
@@ -32,6 +33,7 @@ org.apache.jclouds.provider/digitalocean2
 org.apache.jclouds.provider/packet
 org.apache.jclouds.provider/elastichosts-sat-p
 org.apache.jclouds.labs/joyent-cloudapi
+org.apache.jclouds.labs/oneandone
 org.apache.jclouds.provider/skalicloud-sdg-my
 org.apache.jclouds.api/openstack-nova-ec2
 org.apache.jclouds.provider/elastichosts-lon-b
@@ -50,8 +52,6 @@ org.apache.jclouds.labs/cloudsigma2-wdc
 org.apache.jclouds.labs/cloudsigma2-zrh
 org.apache.jclouds.labs/dimensiondata-cloudcontrol
 org.apache.jclouds.labs/joyentcloud
-org.apache.jclouds.labs/oneandone
-org.apache.jclouds.labs/profitbricks-rest
 org.apache.jclouds.labs/vagrant
 org.apache.jclouds.provider/elastichosts-ams-e
 org.apache.jclouds.provider/elastichosts-dal-a

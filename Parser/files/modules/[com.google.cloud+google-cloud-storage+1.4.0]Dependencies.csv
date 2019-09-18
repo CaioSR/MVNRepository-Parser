@@ -1,0 +1,6 @@
+com.google.apis/google-api-services-storage,com.google.apis/google-api-services-storage/v1-rev108-1.22.0
+com.google.cloud/google-cloud-core,com.google.cloud/google-cloud-core/1.4.0
+com.google.cloud/google-cloud-core-http,com.google.cloud/google-cloud-core-http/1.4.0
+junit/junit,junit/junit/4.12
+org.easymock/easymock,org.easymock/easymock/3.4
+org.objenesis/objenesis,org.objenesis/objenesis/2.6

@@ -1,0 +1,3 @@
+org.apache.jclouds.karaf/commands
+org.apache.jclouds.karaf.chef/cache
+org.apache.jclouds.karaf.chef/commands

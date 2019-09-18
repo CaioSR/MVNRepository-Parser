@@ -1,0 +1,8 @@
+name.neykov/vagrant-java-bindings,name.neykov/vagrant-java-bindings/0.2.0
+org.apache.jclouds/jclouds-compute,org.apache.jclouds/jclouds-compute/2.1.2
+com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3
+com.google.auto.value/auto-value,com.google.auto.value/auto-value/1.4.1
+ch.qos.logback/logback-classic,ch.qos.logback/logback-classic/1.1.2
+org.apache.jclouds/jclouds-core,org.apache.jclouds/jclouds-core/2.1.2
+org.apache.jclouds.driver/jclouds-slf4j,org.apache.jclouds.driver/jclouds-slf4j/2.1.2
+org.apache.jclouds.driver/jclouds-sshj,org.apache.jclouds.driver/jclouds-sshj/2.1.2

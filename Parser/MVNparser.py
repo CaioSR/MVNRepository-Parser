@@ -5,54 +5,34 @@ import time
 import json
 import save
 
-def writeJson(dict):
-    nodes = []
-    links = []
-    for key in dict:
-        node_found = 0
-        for node in nodes:
-            if node['id'] == key:
-                source_id = node['id']
-                node_found = 1
-                break
-        if node_found == 0:
-            source_id = key
-            nodes.append({'name' : '', 'id' : key})
-
-        for value in dict[key]:
-            node_found = 0
-            for node in nodes:
-                if node['id'] == value:
-                    target_id = node['id']
-                    node_found = 1
-                    break
-            if node_found == 0:
-                nodes.append({'name' : '', 'id' : value})
-                links.append({'source' : source_id, 'target' : value})
-            else:
-                links.append({'source' : source_id, 'target' : target_id})
-
-    data = {'nodes' : nodes, 'links' : links}
-
-    with open('grafo.json', 'w') as fp:
-        json.dump(data, fp)
-
 def getSoup(link):
     page = urlopen(link)
-    time.sleep(10)
+    time.sleep(2)
     html = page.read()
 
     soup = BeautifulSoup(html,'html.parser')
 
     return soup
 
-def getVersion(soup):
+def getVersions(soup):
+
+    versions = []
 
     for link in soup.find_all('a'):
         if 'repos/' in link.get('href'):
-            return previous
+            versions.append(previous)
 
         previous = link.get('href')
+
+    return versions
+
+def searchDependency(module, dependency):
+    link = "https://mvnrepository.com/artifact/"+module
+    soup = getSoup(link)
+    for link in soup.find_all('a'):
+        if link.get('href')[10:] == dependency:
+            return True
+    return False
 
 #essa função verifica se o atual link é de uma versão ou não
 def isVersion(href):
@@ -98,6 +78,7 @@ def getDependencies(module, soup):
                             #acrescenta a lista da dependência na lista de dependências
                             if dependency not in dependencies:
                                 dependencies.append(dependency)
+
                                 save.setDependency(module, dependency)
                             #zera a lista da dependência
                             dependency = []

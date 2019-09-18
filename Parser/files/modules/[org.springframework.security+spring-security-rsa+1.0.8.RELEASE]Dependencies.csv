@@ -1,0 +1,5 @@
+org.bouncycastle/bcpkix-jdk15on,org.bouncycastle/bcpkix-jdk15on/1.60
+org.springframework/spring-core,org.springframework/spring-core/4.1.9.RELEASE
+org.springframework.security/spring-security-crypto,org.springframework.security/spring-security-crypto/3.2.8.RELEASE
+junit/junit,junit/junit/4.12
+org.mockito/mockito-all,org.mockito/mockito-all/1.9.5

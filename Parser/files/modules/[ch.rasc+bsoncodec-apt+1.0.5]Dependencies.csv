@@ -1,0 +1,9 @@
+ch.rasc/bsoncodec-annotations,ch.rasc/bsoncodec-annotations/1.0.5
+com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3
+com.google.code.findbugs/jsr305,com.google.code.findbugs/jsr305/3.0.2
+com.google.guava/guava,com.google.guava/guava/23.5-jre
+com.squareup/javapoet,com.squareup/javapoet/1.9.0
+org.immutables/value,org.immutables/value/2.5.6
+org.mongodb/bson,org.mongodb/bson/3.6.0
+com.google.testing.compile/compile-testing,com.google.testing.compile/compile-testing/0.14
+junit/junit,junit/junit/4.12

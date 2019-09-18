@@ -1,0 +1,5 @@
+com.amazonaws/aws-java-sdk-core,com.amazonaws/aws-java-sdk-core/1.11.587
+io.hekate/hekate-jclouds-core,io.hekate/hekate-jclouds-core/3.5.0
+org.apache.jclouds.provider/aws-ec2,org.apache.jclouds.provider/aws-ec2/2.1.2
+org.apache.jclouds.provider/aws-s3,org.apache.jclouds.provider/aws-s3/2.1.2
+org.slf4j/jcl-over-slf4j,org.slf4j/jcl-over-slf4j/1.7.26

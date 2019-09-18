@@ -1,0 +1,9 @@
+com.google.guava/guava,com.google.guava/guava/18.0
+com.google.inject/guice,com.google.inject/guice/3.0
+org.apache.jclouds/jclouds-core,org.apache.jclouds/jclouds-core/2.1.2
+org.apache.jclouds/jclouds-compute,org.apache.jclouds/jclouds-compute/2.1.2
+org.apache.jclouds/jclouds-blobstore,org.apache.jclouds/jclouds-blobstore/2.1.2
+org.apache.jclouds/jclouds-scriptbuilder,org.apache.jclouds/jclouds-scriptbuilder/2.1.2
+org.osgi/org.osgi.core,org.osgi/org.osgi.core/6.0.0
+org.osgi/osgi.cmpn,org.osgi/osgi.cmpn/6.0.0
+org.slf4j/slf4j-api,org.slf4j/slf4j-api/1.5.8
