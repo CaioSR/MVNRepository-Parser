@@ -3,94 +3,162 @@ import csv
 import save
 import os
 
-root = "https://mvnrepository.com/artifact/org.apache.jclouds/jclouds-compute"
-version = "org.apache.jclouds/jclouds-compute/2.1.2"
+#root = "https://mvnrepository.com/artifact/org.springframework.security/spring-security-web"
+#version = "/5.1.6.RELEASE"
+root = "https://mvnrepository.com/artifact/org.apache.shiro/shiro-web"
+version = "/1.4.1"
 max_depth = 3
 
+MVNp = MVNparser.MVNrepo()
 
-def parser(root_link,max_depth,depth, target_version = None, lookForDependency = None):
+def verifyFiles():
+    try:
+        save.defaultStatus()
+        print('All status to closed')
+    except:
+        print('First Run')
+        os.mkdir('files')
+        os.mkdir('files/modules')
 
-    root_html = MVNparser.getSoup(root_link)
+def getUsageVersion(MVNp, root_link, target_version, lookForDependency):
+    root_html = MVNp.getHtml(root_link)
+    module_root = root_link[root_link.find('/artifact'):][10:]
+
+    version = None
+    versions = MVNp.getVersions(root_html)
+    del root_html
+    for vers in versions:
+
+        vers = vers[vers.find('/'):]
+        print("Currently on {}" .format(vers))
+        module = module_root + vers
+        result = MVNp.searchDependency("https://mvnrepository.com/artifact/"+module, lookForDependency)
+
+        if result:
+            print("Correct version is {}" .format(vers))
+            return vers
+
+    return None
+
+def saveDependencies(module, dependencies):
+        save.addModule(module)
+        for dependency in dependencies:
+            save.addModule(dependency[2])
+        save.addLinks(module, dependencies)
+        save.setState(module, 'Done Dependencies')
+
+        print('Updated nodes ans links')
+
+def getDependencies(MVNp, module, link):
+    dependencies = MVNp.getDependencies(module, link)
+
+    if len(dependencies) == 0:
+        save.setDependency(module, 'None')
+
+    print('There are {} dependencies in the module {}' .format(len(dependencies), module))
+
+    saveDependencies(module, dependencies)
+
+def getUsages(MVNp, module, link, page = None):
+
+    usages = MVNp.getUsages(module, link)
+
+    if len(usages) == 0:
+        save.setUsage(module, 'None')
+
+    print('There are {} usages in the module {}' .format(len(usages), module))
+
+def verifyDependencies(MVNp, module, max_depth, depth, current = None):
+
+    if not current:
+        for dependency in save.getDependencies(module):
+            if dependency != 'None':
+                print('Opening dependency:', dependency)
+                save.setCurrent(module, 'd', dependency)
+                dep_link = 'https://mvnrepository.com/artifact/' + dependency
+                dep_root, dep_version = MVNp.separateV(dep_link)
+                parser(MVNp, dep_root,max_depth,depth,target_version = dep_version)
+                print('Returned to', module)
+    else:
+        toDo = False
+        for dependency in save.getDependencies(module):
+            if dependency != 'None':
+                if dependency == current:
+                    toDo = True
+                if toDo:
+                    print('Opening dependency:', dependency)
+                    save.setCurrent(module, 'd', dependency)
+                    dep_link = 'https://mvnrepository.com/artifact/' + dependency
+                    dep_root, dep_version = MVNp.separateV(dep_link)
+                    parser(MVNp,dep_root,max_depth,depth,target_version = dep_version)
+                    print('Returned to', module)
+
+
+def verifyUsages(MVNp, module, max_depth, depth, current = None):
+
+    if not current:
+        for usage in save.getUsages(module):
+            if usage != 'None':
+                print('Opening usage:', usage)
+                save.setCurrent(module, 'u', usage)
+                parser(MVNp,'https://mvnrepository.com/artifact/' + usage,max_depth,depth,lookForDependency = module)
+                print('Returned to', module)
+    else:
+        toDo = False
+        for usage in save.getUsages(module):
+            if usage != 'None':
+                if usage == current:
+                    toDo = True
+                if toDo:
+                    print('Opening usage:', usage)
+                    save.setCurrent(module, 'u', usage)
+                    parser(MVNp, 'https://mvnrepository.com/artifact/' + usage,max_depth,depth,lookForDependency = module)
+                    print('Returned to', module)
+
+def parser(MVNp, root_link,max_depth,depth, target_version = None, lookForDependency = None):
+
+    if target_version:
+        version = target_version
 
     module_root = root_link[root_link.find('/artifact'):][10:]
-    #module_name = module_root[module_root.find('/'):][1:]
 
     if not target_version:
         print("Looking for correct usage version")
 
         try:
-            version = None
-            versions = MVNparser.getVersions(root_html)
-            for v in versions:
-                v = v[v.find('/'):]
-                print("Currently on {}" .format(v))
-                module = module_root + v
-                result = MVNparser.searchDependency(module, lookForDependency)
-                if result:
-                    print("Correct version is {}" .format(v))
-                    version = v
-                    break
-            if not version:
-                return
-
+            version = getUsageVersion(MVNp, root_link, target_version, lookForDependency)
         except Exception as e:
             save.initialize(module_root,depth)
             print("---------ERRO--------\n",e,"\n---------------------\nSetting {} to Error Status" .format(module_root))
             save.setState(module_root, 'Error')
             return
 
-    else:
-        version = target_version[target_version.find('/'):][1:]
-        version = version[version.find('/'):]
-
-    print(version)
+        if not version:
+            return
 
     module = module_root+version
     print("Current module:", module)
 
-    nodes = save.getAllProgress()
+    inProgress = save.checkProgress(module)
 
-    if module not in nodes:
+    if not inProgress:
+        print('New module')
 
         save.initialize(module,depth) #Status Initialized !! MUDAR !!!
 
         try:
-            module_html = MVNparser.getSoup(root_link+version)
-            dependencies = MVNparser.getDependencies(module, module_html) #status getting dependencies
-            print('There are {} dependencies in the module {}' .format(len(dependencies), module))
+            getDependencies(MVNp, module, root_link+version)
         except Exception as e:
             print("---------ERRO--------\n",e,"\n---------------------\nSetting {} to Error Status" .format(module))
             save.setState(module, 'Error')
             return
 
-        save.addModule(module)
-        for dependency in dependencies:
-            save.addModule(dependency[2])
-        save.addLinks(module, dependencies)
-        print('Updated nodes ans links')
-        save.setState(module, 'Done Dependencies')
-
         depth+=1
         if depth < max_depth:
 
-            usages_link = root_link+version+'/usages'
-            usages_html = MVNparser.getSoup(usages_link)
-            usages = MVNparser.getUsages(module, usages_link, usages_html) #status getting usages
-
-            print('There are {} usages in the module {}' .format(len(usages), module))
-            #if len(usages) >= 50: usages = usages[:50]
-
-            for dependency in dependencies: #status verifying dependency
-                print('Opening', dependency[1])
-                save.setCurrent(module, 'd', dependency[2])
-                parser("https://mvnrepository.com/artifact/"+dependency[1],max_depth,depth,target_version = dependency[2])
-                print('Returned to', module)
-
-            for usage in usages: #status verifying usage
-                print('Opening', usage)
-                save.setCurrent(module, 'u', usage)
-                parser("https://mvnrepository.com/artifact/"+usage,max_depth,depth,lookForDependency = module)
-                print('Returned to', module)
+            getUsages(MVNp, module,  root_link+version+'/usages')
+            verifyDependencies(MVNp, module, max_depth, depth)
+            verifyUsages(MVNp, module, max_depth, depth)
 
         else:
             print("Depth too high")
@@ -98,7 +166,8 @@ def parser(root_link,max_depth,depth, target_version = None, lookForDependency =
         save.setState(module, 'Complete')
         return
 
-    elif module in nodes:
+    elif inProgress:
+        print('Module in progress')
 
         mod = save.getProgress(module)
         progress = mod[2]
@@ -113,39 +182,14 @@ def parser(root_link,max_depth,depth, target_version = None, lookForDependency =
                 if progress == 'Getting dependencies' or progress == 'Initialized':
                     print('Returned to get dependencies')
 
-                    module_html = MVNparser.getSoup(root_link+version)
-                    dependencies = MVNparser.getDependencies(module, module_html) #status getting dependencies
-
-                    print('There are {} dependencies in the module {}' .format(len(dependencies), module))
-
-                    save.addModule(module)
-                    for dependency in dependencies:
-                        save.addModule(dependency[2])
-                    save.addLinks(module, dependencies)
-                    print('Updated nodes ans links')
-                    save.setState(module, 'Done dependencies')
+                    getDependencies(MVNp, module, root_link+version)
 
                     depth+=1
                     if depth < max_depth:
 
-                        usages_link = root_link+version+'/usages'
-                        usages_html = MVNparser.getSoup(usages_link)
-                        usages = MVNparser.getUsages(module, usages_link, usages_html) #status getting usages
-
-                        print('There are {} usages in the module {}' .format(len(usages), module))
-                        #if len(usages) >= 50: usages = usages[:50]
-
-                        for dependency in dependencies: #status verifying dependency
-                            print('Opening', dependency[1])
-                            save.setCurrent(module, 'd', dependency[2])
-                            parser("https://mvnrepository.com/artifact/"+dependency[1],max_depth,depth,target_version = dependency[2])
-                            print('Returned to', module)
-
-                        for usage in usages: #status verifying usage
-                            print('Opening', usage)
-                            save.setCurrent(module, 'u', usage)
-                            parser("https://mvnrepository.com/artifact"+usage,max_depth,depth,lookForDependency = module)
-                            print('Returned to', module)
+                        getUsages(MVNp, module,  root_link+version+'/usages')
+                        verifyDependencies(MVNp, module, max_depth, depth)
+                        verifyUsages(MVNp, module, max_depth, depth)
 
                     else:
                         print("Depth too high")
@@ -165,29 +209,9 @@ def parser(root_link,max_depth,depth, target_version = None, lookForDependency =
                         else:
                             print('Current usage page: {}' .format(currentPage))
 
-                        usages_link = root_link+version+'/usages'
-                        usages_html = MVNparser.getSoup(usages_link)
-                        usages = MVNparser.getUsages(module, usages_link, usages_html, page=currentPage) #status getting usages
-
-                        print('There are {} usages in the module {}' .format(len(usages), module))
-                        #if len(usages) >= 50: usages = usages[:50]
-
-                        dependencies = save.getDependencies(module)
-
-                        for dependency in dependencies: #status verifying dependency
-                            print('Opening', dependency[0])
-                            save.setCurrent(module, 'd', dependency[1])
-                            parser("https://mvnrepository.com/artifact/"+dependency[0],max_depth,depth,target_version = dependency[1])
-                            print('Returned to', module)
-
-                        usages = save.getUsages(module)
-
-                        for usage in usages: #status verifying usage
-                            usage = usage[0]
-                            print('Opening', usage)
-                            save.setCurrent(module, 'u', usage)
-                            parser("https://mvnrepository.com/artifact/"+usage,max_depth,depth,lookForDependency = module)
-                            print('Returned to', module)
+                        getUsages(MVNp, module, root_link+version+'/usages', page = currentPage)
+                        verifyDependencies(MVNp, module, max_depth, depth)
+                        verifyUsages(MVNp, module, max_depth, depth)
 
                     else:
                         print("Depth too high")
@@ -203,27 +227,8 @@ def parser(root_link,max_depth,depth, target_version = None, lookForDependency =
                         currentDependency = mod[3]
                         print('Current dependency: {}' .format(currentDependency))
 
-                        dependencies = save.getDependencies(module)
-                        for dep in dependencies:
-                            if dep[1] == currentDependency:
-                                currentIndex = dependencies.index(dep)
-                                break
-                        remainingDependencies = dependencies[currentIndex:]
-
-                        for dependency in remainingDependencies: #status verifying dependencies
-                            print('Opening', dependency[0])
-                            save.setCurrent(module, 'd', dependency[1])
-                            parser("https://mvnrepository.com/artifact/"+dependency[0],max_depth,depth,target_version = dependency[1])
-                            print('Returned to', module)
-
-                        usages = save.getUsages(module)
-
-                        for usage in usages: #status verifying usage
-                            usage = usage[0]
-                            print('Opening', usage)
-                            save.setCurrent(module, 'u', usage)
-                            parser("https://mvnrepository.com/artifact/"+usage,max_depth,depth,lookForDependency = module)
-                            print('Returned to', module)
+                        verifyDependencies(MVNp, module, max_depth, depth, current = currentDependency)
+                        verifyUsages(MVNp, module, max_depth, depth)
 
                     else:
                         print("Depth too high")
@@ -239,36 +244,19 @@ def parser(root_link,max_depth,depth, target_version = None, lookForDependency =
                         currentUsage = mod[3]
                         print('Current usage: {}' .format(currentUsage))
 
-                        usages = save.getUsages(module)
-                        currentIndex = usages.index([currentUsage])
-                        remainingUsages = usages[currentIndex:]
-
-                        for usage in remainingUsages: #status verifying usage
-                            usage = usage[0]
-
-                            print('Opening', usage)
-                            save.setCurrent(module, 'u', usage)
-                            parser("https://mvnrepository.com/artifact/"+usage,max_depth,depth,lookForDependency = module)
-                            print('Returned to', module)
+                        verifyUsages(MVNp, module, max_depth, depth, current = currentUsage)
 
                     else:
                         print("Depth too high")
 
                     save.setState(module, 'Complete')
                     return
-
             else:
                 print(module, ' already open')
-
         else:
             print(module,'Already Veryfied')
 
-try:
-    save.defaultStatus()
-    print('All status to closed')
-except:
-    print('First Run')
-    os.mkdir('files')
-    os.mkdir('files/modules')
 
-parser(root,max_depth,0,target_version=version)
+verifyFiles()
+parser(MVNp, root,max_depth,0,target_version=version)
+input()
