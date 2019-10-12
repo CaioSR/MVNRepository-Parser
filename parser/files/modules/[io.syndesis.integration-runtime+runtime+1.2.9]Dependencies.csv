@@ -1,7 +1,0 @@
-com.fasterxml.jackson.core/jackson-databind,com.fasterxml.jackson.core/jackson-databind/2.8.10
-com.fasterxml.jackson.core/jackson-core,com.fasterxml.jackson.core/jackson-core/2.8.10
-com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3
-io.syndesis.integration-runtime/model,io.syndesis.integration-runtime/model/1.2.9
-io.syndesis.integration-runtime/runtime-api,io.syndesis.integration-runtime/runtime-api/1.2.9
-org.apache.camel/camel-core,org.apache.camel/camel-core/2.20.1
-org.slf4j/slf4j-api,org.springframework.boot

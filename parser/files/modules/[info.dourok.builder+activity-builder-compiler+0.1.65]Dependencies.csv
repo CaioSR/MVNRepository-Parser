@@ -1,9 +1,0 @@
-com.google.android/android,com.google.android/android/4.1.1.4
-com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3
-com.squareup/javapoet,com.squareup/javapoet/1.9.0
-info.dourok.builder/activity-builder-annotations,info.dourok.builder/activity-builder-annotations/0.1.65
-com.google.testing.compile/compile-testing,com.google.testing.compile/compile-testing/0.12
-com.google.truth/truth,com.google.truth/truth/0.36
-com.nagternal/spock-genesis,com.nagternal/spock-genesis/0.6.0
-org.codehaus.groovy/groovy-all,org.codehaus.groovy/groovy-all/2.4.12
-org.spockframework/spock-core,org.spockframework/spock-core/1.1-groovy-2.4

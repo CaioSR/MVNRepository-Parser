@@ -1,6 +1,0 @@
-javax.servlet/javax.servlet-api,javax.servlet/javax.servlet-api/3.0.1
-org.springframework/spring-test,org.springframework/spring-test/4.3.16.RELEASE
-org.codehaus.groovy/groovy,org.codehaus.groovy/groovy/2.4.15
-org.grails/grails-web-common,org.grails/grails-web-common/3.3.5
-org.slf4j/slf4j-api,org.slf4j/slf4j-api/1.7.25
-org.slf4j/jcl-over-slf4j,org.slf4j/jcl-over-slf4j/1.7.25

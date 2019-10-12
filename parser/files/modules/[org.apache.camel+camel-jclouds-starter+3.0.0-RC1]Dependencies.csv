@@ -1,9 +1,0 @@
-org.apache.camel/camel-jclouds,org.apache.camel/camel-jclouds/3.0.0-RC1
-org.apache.camel/camel-core-starter,org.apache.camel/camel-core-starter/3.0.0-RC1
-org.apache.camel/camel-spring-boot-starter,org.apache.camel/camel-spring-boot-starter/3.0.0-RC1
-org.springframework.boot/spring-boot-starter,org.springframework.boot/spring-boot-starter/2.1.7.RELEASE
-org.springframework.boot/spring-boot-autoconfigure-processor,org.springframework.boot/spring-boot-autoconfigure-processor/2.1.7.RELEASE
-org.apache.camel/camel-spring-boot-dependencies,org.apache.camel/camel-spring-boot-dependencies/3.0.0-RC1
-org.springframework.boot/spring-boot,org.springframework.boot/spring-boot/2.1.7.RELEASE
-org.springframework.boot/spring-boot-autoconfigure,org.springframework.boot/spring-boot-autoconfigure/2.1.7.RELEASE
-org.springframework.boot/spring-boot-configuration-processor,org.springframework.boot/spring-boot-configuration-processor/2.1.7.RELEASE

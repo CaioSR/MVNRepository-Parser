@@ -1,7 +1,0 @@
-com.google.auto.value/auto-value,com.google.auto.value/auto-value/1.0-rc1
-com.google.code.findbugs/jsr305,com.google.code.findbugs/jsr305/2.0.1
-com.google.guava/guava,com.google.guava/guava/17.0
-com.google.gwt/gwt-user,com.google.gwt/gwt-user/2.6.1
-junit/junit,junit/junit/4.10
-com.google.guava/guava-gwt,com.google.guava/guava-gwt/17.0
-com.google.testing.compile/compile-testing,com.google.testing.compile/compile-testing/0.6

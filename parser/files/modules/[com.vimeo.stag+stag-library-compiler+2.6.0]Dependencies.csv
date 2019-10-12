@@ -1,6 +1,0 @@
-com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3
-com.google.code.gson/gson,com.google.code.gson/gson/2.8.2
-com.google.guava/guava,com.google.guava/guava/23.5-jre
-com.squareup/javapoet,com.squareup/javapoet/1.11.1
-com.vimeo.stag/stag-library,com.vimeo.stag/stag-library/2.6.0
-org.jetbrains/annotations-java5,org.jetbrains/annotations-java5/16.0.2

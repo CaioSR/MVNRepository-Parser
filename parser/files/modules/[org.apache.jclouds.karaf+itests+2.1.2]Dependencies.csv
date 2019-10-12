@@ -1,7 +1,0 @@
-org.apache.jclouds/jclouds-compute,org.apache.jclouds/jclouds-compute/2.1.2
-org.apache.geronimo.specs/geronimo-atinject_1.0_spec,org.apache.geronimo.specs/geronimo-atinject_1.0_spec/1.0
-org.apache.karaf/apache-karaf-minimal,org.apache.karaf/apache-karaf-minimal/4.0.8
-org.apache.karaf.itests/itests,org.apache.karaf.itests/itests/4.0.8
-org.ops4j.pax.exam/pax-exam-container-karaf,org.ops4j.pax.exam/pax-exam-container-karaf/4.9.1
-org.ops4j.pax.exam/pax-exam-junit4,org.ops4j.pax.exam/pax-exam-junit4/4.9.1
-org.osgi/org.osgi.core,org.osgi/org.osgi.core/6.0.0

@@ -1,8 +1,0 @@
-com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3
-com.gwtplatform/gwtp-all,com.gwtplatform/gwtp-all/1.6
-jaxen/jaxen,jaxen/jaxen/1.1.6
-org.jboss.auto/apt-tools,org.jboss.auto/apt-tools/0.0.3
-org.jboss.hal/hal-spi,org.jboss.hal/hal-spi/0.9.3
-org.jdom/jdom,org.jdom/jdom/2.0.2
-org.jboss.hal/hal-ballroom,org.jboss.hal/hal-ballroom/0.9.3
-org.jboss.hal/hal-core,org.jboss.hal/hal-core/0.9.3

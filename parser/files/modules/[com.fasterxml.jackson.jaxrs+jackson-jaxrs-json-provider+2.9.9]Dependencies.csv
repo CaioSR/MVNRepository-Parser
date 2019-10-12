@@ -1,4 +1,0 @@
-com.fasterxml.jackson.jaxrs/jackson-jaxrs-base,com.fasterxml.jackson.jaxrs/jackson-jaxrs-base/2.9.9
-com.fasterxml.jackson.module/jackson-module-jaxb-annotations,com.fasterxml.jackson.module/jackson-module-jaxb-annotations/2.9.9
-org.jboss.resteasy/resteasy-jackson2-provider,org.jboss.resteasy/resteasy-jackson2-provider/3.0.17.Final
-org.jboss.resteasy/resteasy-jaxrs,org.jboss.resteasy/resteasy-jaxrs/3.0.17.Final

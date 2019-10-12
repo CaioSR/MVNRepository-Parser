@@ -1,6 +1,0 @@
-org.springframework/spring-web,org.springframework/spring-web/5.2.0.RC1
-org.springframework/spring-webmvc,org.springframework/spring-webmvc/5.2.0.RC1
-org.springframework.boot/spring-boot-starter,org.springframework.boot/spring-boot-starter/2.2.0.M5
-org.springframework.boot/spring-boot-starter-json,org.springframework.boot/spring-boot-starter-json/2.2.0.M5
-org.springframework.boot/spring-boot-starter-tomcat,org.springframework.boot/spring-boot-starter-tomcat/2.2.0.M5
-org.springframework.boot/spring-boot-starter-validation,org.springframework.boot/spring-boot-starter-validation/2.2.0.M5

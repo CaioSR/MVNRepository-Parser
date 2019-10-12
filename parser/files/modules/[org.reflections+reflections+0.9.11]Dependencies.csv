@@ -1,9 +1,0 @@
-com.google.code.gson/gson,com.google.code.gson/gson/2.8.0
-com.google.guava/guava,com.google.guava/guava/20.0
-dom4j/dom4j,dom4j/dom4j/1.6.1
-org.javassist/javassist,org.javassist/javassist/3.21.0-GA
-org.slf4j/slf4j-api,org.slf4j/slf4j-api/1.7.24
-org.slf4j/slf4j-simple,org.slf4j/slf4j-simple/1.7.24
-com.google.code.findbugs/jsr305,com.google.code.findbugs/jsr305/3.0.1
-javax.servlet/servlet-api,javax.servlet/servlet-api/2.5
-junit/junit,junit/junit/4.12

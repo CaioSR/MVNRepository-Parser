@@ -1,5 +1,0 @@
-org.apache.jclouds.provider/rackspace-cloudloadbalancers-us
-org.apache.jclouds.provider/rackspace-cloudloadbalancers-uk
-org.apache.jclouds.api/rackspace-cloudloadbalancers
-org.apache.jclouds.labs/elb
-org.apache.jclouds.labs/aws-elb

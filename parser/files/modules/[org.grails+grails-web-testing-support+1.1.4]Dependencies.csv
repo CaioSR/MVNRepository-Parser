@@ -1,7 +1,0 @@
-javax.servlet/javax.servlet-api,javax.servlet/javax.servlet-api/3.1.0
-org.codehaus.groovy/groovy,org.codehaus.groovy/groovy/2.4.12
-org.grails/grails-plugin-rest,org.grails/grails-plugin-rest/3.3.0
-org.grails/grails-plugin-interceptors,org.grails/grails-plugin-interceptors/3.3.0
-org.grails/grails-testing-support,org.grails/grails-testing-support/1.1.4
-org.grails.plugins/gsp,org.grails.plugins/gsp/3.3.0
-org.slf4j/slf4j-api,org.slf4j/slf4j-api/1.7.22
