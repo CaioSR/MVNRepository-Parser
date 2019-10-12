@@ -1,8 +1,0 @@
-com.beust/jcommander,com.beust/jcommander/1.69
-com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3
-com.squareup/javapoet,com.squareup/javapoet/1.9.0
-net.je2sh/asciitable,net.je2sh/asciitable/1.0.0
-org.jetbrains.kotlin/kotlin-stdlib-jre8,org.jetbrains.kotlin/kotlin-stdlib-jre8/1.1.2-5
-org.jline/jline,org.jline/jline/3.3.1
-org.slf4j/slf4j-api,org.slf4j/slf4j-api/1.7.25
-org.spockframework/spock-core,org.spockframework/spock-core/1.1-groovy-2.4

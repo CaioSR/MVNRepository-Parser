@@ -1,6 +1,0 @@
-io.hekate/hekate-core,io.hekate/hekate-core/3.5.0
-javax.xml.bind/jaxb-api,javax.xml.bind/jaxb-api/2.3.1
-org.apache.jclouds/jclouds-core,org.apache.jclouds/jclouds-core/2.1.2
-org.apache.jclouds/jclouds-compute,org.apache.jclouds/jclouds-compute/2.1.2
-org.apache.jclouds/jclouds-blobstore,org.apache.jclouds/jclouds-blobstore/2.1.2
-org.apache.jclouds.driver/jclouds-slf4j,org.apache.jclouds.driver/jclouds-slf4j/2.1.2

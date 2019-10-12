@@ -1,8 +1,0 @@
-com.hierynomus/sshj,com.hierynomus/sshj/0.20.0
-com.jcraft/jsch.agentproxy.sshj,com.jcraft/jsch.agentproxy.sshj/0.0.9
-com.jcraft/jsch.agentproxy.connector-factory,com.jcraft/jsch.agentproxy.connector-factory/0.0.9
-org.apache.jclouds/jclouds-compute,org.apache.jclouds/jclouds-compute/2.1.2
-org.apache.jclouds/jclouds-core,org.apache.jclouds/jclouds-core/2.1.2
-org.apache.jclouds.driver/jclouds-slf4j,org.apache.jclouds.driver/jclouds-slf4j/2.1.2
-org.apache.jclouds.driver/jclouds-bouncycastle,org.apache.jclouds.driver/jclouds-bouncycastle/2.1.2
-ch.qos.logback/logback-classic,ch.qos.logback/logback-classic/1.1.2

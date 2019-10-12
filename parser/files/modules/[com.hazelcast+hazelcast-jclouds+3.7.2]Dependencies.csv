@@ -1,8 +1,0 @@
-com.hazelcast/hazelcast,com.hazelcast/hazelcast/3.9
-org.apache.jclouds/jclouds-allcompute,org.apache.jclouds/jclouds-allcompute/2.0.2
-org.apache.jclouds.labs/google-compute-engine,org.apache.jclouds.labs/google-compute-engine/1.9.3
-junit/junit,junit/junit/4.12
-log4j/log4j,log4j/log4j/1.2.17
-net.bytebuddy/byte-buddy,net.bytebuddy/byte-buddy/1.6.12
-net.bytebuddy/byte-buddy-agent,net.bytebuddy/byte-buddy-agent/1.6.12
-org.mockito/mockito-all,org.mockito/mockito-all/1.10.19

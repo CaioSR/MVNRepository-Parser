@@ -1,8 +1,0 @@
-com.google.auto.service/auto-service,com.google.auto.service/auto-service/1.0-rc3
-org.apache.jclouds.api/s3,org.apache.jclouds.api/s3/2.1.2
-com.squareup.okhttp/mockwebserver,com.squareup.okhttp/mockwebserver/2.2.0
-org.apache.jclouds/jclouds-core,org.apache.jclouds/jclouds-core/2.1.2
-org.apache.jclouds/jclouds-blobstore,org.apache.jclouds/jclouds-blobstore/2.1.2
-org.apache.jclouds.driver/jclouds-log4j,org.apache.jclouds.driver/jclouds-log4j/2.1.2
-org.apache.jclouds.driver/jclouds-apachehc,org.apache.jclouds.driver/jclouds-apachehc/2.1.2
-org.apache.jclouds.driver/jclouds-enterprise,org.apache.jclouds.driver/jclouds-enterprise/2.1.2
