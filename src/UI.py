@@ -1,5 +1,5 @@
 from tkinter import *
-import MVNparser
+from mvnScrapper import MVNscrapper
 import os
 
 class Interface:
@@ -114,17 +114,17 @@ class Interface:
 
         progress_file_dir = Label(self.ui, anchor='e', width=20, text="Progress files directory: ")
         progress_file_dir.grid(row=3, column=0, padx=5, pady=5)
-        #progress_dir_input = StringVar(value = os.getcwd() + '/prog-manag/')
+        progress_dir_input = StringVar(value = os.getcwd() + '/prog-manag/')
         progress_dir_input = StringVar(value = 'D:/path/to/current/directory/prog-manag/')
-        #progress_dir_input = progress_dir_input.replace('\\', '/')
+        progress_dir_input = progress_dir_input.replace('\\', '/')
         progress_dir_input = Entry(self.ui, width=50, textvariable=progress_dir_input)
         progress_dir_input.grid(row=3, column=1, sticky='w', padx=5, pady=5)
 
         final_file_dir = Label(self.ui, anchor='e', width=20, text="Progress files directory: ")
         final_file_dir.grid(row=4, column=0, padx=5, pady=5)
-        #final_dir_input = StringVar(value = os.getcwd() + '/final/')
+        final_dir_input = StringVar(value = os.getcwd() + '/final/')
         final_dir_input = StringVar(value = 'D:/path/to/current/directory/final/')
-        #final_dir_input = final_dir_input.replace('\\', '/')
+        final_dir_input = final_dir_input.replace('\\', '/')
         final_dir_input = Entry(self.ui, width=50, textvariable=final_dir_input)
         final_dir_input.grid(row=4, column=1, sticky='w', padx=5, pady=5)
 
@@ -155,7 +155,7 @@ class Interface:
         self.final_dir = final_dir
 
     def initiateOP(self):
-        parse = MVNparser.MVNrepo(self.project_link, self.max_depth, self.final_dir, self.progress_dir)
+        mvn_scrapper = MVNscrapper(self.project_link, self.max_depth, self.final_dir, self.progress_dir)
 
     def finalize(self, project, depth, prog_dir, final_dir):
         self.setProject(project.get())
