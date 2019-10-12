@@ -1,0 +1,8 @@
+0,org.apache.jclouds/jclouds-compute/2.1.2,Verifying usage,org.apache.jclouds.api/ec2,open
+1,com.google.auto.service/auto-service/1.0-rc3,Complete,Null,open
+1,org.apache.jclouds/jclouds-scriptbuilder/2.1.2,Complete,Null,open
+1,org.apache.jclouds/jclouds-core/2.1.2,Complete,Null,open
+1,org.apache.jclouds.driver/jclouds-sshj,Error,Null,open
+1,org.apache.jclouds.provider/aws-ec2,Error,Null,open
+1,org.apache.jclouds.api/openstack-nova,Error,Null,open
+1,org.apache.jclouds.api/elasticstack,Error,Null,open

@@ -1,0 +1,5 @@
+com.google.auto/auto-common,com.google.auto/auto-common/0.3
+com.google.guava/guava,com.google.guava/guava/19.0
+com.google.testing.compile/compile-testing,com.google.testing.compile/compile-testing/0.6
+com.google.truth/truth,com.google.truth/truth/0.24
+junit/junit,junit/junit/4.11
