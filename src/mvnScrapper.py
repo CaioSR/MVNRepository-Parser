@@ -1,202 +1,135 @@
-from urllib.request import urlopen #biblioteca para abrir e ler um url
-from html.parser import HTMLParser
-# from bs4 import BeautifulSoup #biblioteca para realizar o parse
-import time
+import requests
+from urllib.request import urlopen
+from bs4 import BeautifulSoup, SoupStrainer
+from time import sleep
 from fileManager import FileManager
 
-class MyHTMLParser(HTMLParser):
-    links = []
-
-    def handle_starttag(self, tag, attrs):
-        if tag == 'a':
-            for inAttr in attrs:
-                if inAttr[0] == 'href':
-                    self.links.append(inAttr[1])
 
 class MVNscrapper():
 
-    parser = MyHTMLParser()
-
     def __init__(self, project, max_depth, f_dir, p_dir):
-        p = self.separateV(project, getModule = True)
+        p = self.separateV(project, getRoot = True, getVersion = True, getModule = True)
         self.project = p[0]
         self.version = p[1]
         self.max_depth = max_depth
-        self.f_manager = FileManager(f_dir, p_dir, self.project[2])
+        self.f_manager = FileManager(f_dir, p_dir, p[2])
         self.scrap(self.project, self.max_depth, 0, target_version = self.version)
         
 
-    def getHtml(self, link):
-        self.parser.links.clear()
-        page = urlopen(link)
-        time.sleep(2)
-        html = page.read()
-        page.close()
-        html = html.decode('utf-8')
-        self.parser.feed(html)
+    def getSoup(self, url):
+        # Set headers  
+        headers = requests.utils.default_headers()
+        headers.update({ 'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0'})
+        req = requests.get(url, headers)
+        soup = BeautifulSoup(req.content, 'html.parser', parse_only=SoupStrainer('a'))
+        sleep(2)
 
-        return self.parser.links
+        return soup
 
-    def separateV(self, project, getModule = False):
+    def separateV(self, project, getRoot = True, getVersion = True, getModule = False):
         aux1 = project[project.find('/artifact'):][10:] #return project/module/version
         aux2 = aux1[aux1.find('/'):][1:] #return module/version
         version = aux2[aux2.find('/'):] #return /version
         root = project[:project.find(version)]
 
-        if getModule:
-            return [root, version, aux1]
-        else:
-            return [root, version]
-       
+        response = []
 
-    def fetchVersions(self, html):
+        if getRoot:
+            response.append(root)
+        if getVersion:
+            response.append(version)
+        if getModule:
+            response.append(aux1)
+
+        return response
+
+    def fetchVersions(self, soup):
 
         versions = []
-        for link in html:
-            if 'repos/' in link:
-                versions.append(previous)
+        multiple_versions = False
+        for tag in soup.find_all('a'):
+            if tag.get('class') and tag.get('class')[0] == 'vsc':
+                multiple_versions = True
+                break
 
-            previous = link
+        if multiple_versions:
+            for tag in soup.find_all('a', class_='vsc'):
+                versions.append(tag.get('href'))
+        else:
+            for tag in soup.find_all('a', class_='vbtn'):
+                versions.append(tag.get('href'))
 
-        del html
         return versions
 
-    def searchDependency(self, link, dependency):
-        html = self.getHtml(link)
+    def searchDependency(self, url, dependency):
+        soup = self.getSoup(url)
 
-        for link in html:
+        for tag in soup.find_all('a'):
+            link = tag.get('href')
             if link[10:] == dependency:
-                del html
                 return True
-        del html
+
         return False
 
-    #essa função verifica se o atual link é de uma versão ou não
-    def isVersion(self, href):
-        #return re.compile(r"[+-]?\d+(?:\.\d+)?").search(href) #procura por números no link
-        if href.count('/') == 4:
-            return True
-        else:
-            return False
-
-    def fetchDependencies(self, module, link):
-        html = self.getHtml(link)
+    def fetchDependencies(self, module, url):
+        soup = self.getSoup(url)
 
         self.f_manager.setState(module, 'Getting dependencies')
 
-        dependency = [] #lista para salvar vários links de uma mesma dependencia (página principal, de versão específica, etc
-        dependencies = [] #lista com todas as listas de dependencias
-        scope = 0 #variavel para definir o inicio da leitura das dependencias
-        previous = 'non-version' #armazena se o link anterior foi de uma versão de uma dependencia
-        count = 0
-        for link in html: #procura por tags 'a'
+        found = False
+        scope = False
+        dependencies = []
 
-            if scope == 1:
-                if 'artifact' in link:
-                    #verifica se o link anterior foi uma versão
-                    if previous == 'version':
-                        #verifica se o atual link é de uma versão
-                        if self.isVersion(link):
-                            #acrescenta o link na lista da dependência
-                            dependency.append(link[10:])
-                            #acrescenta a lista da dependência na lista de dependências
-                            if dependency not in dependencies:
-                                dependencies.append(dependency)
+        for tag in soup.find_all('a'):
+            link = tag.get('href')
+            
+            if scope:
+                if 'twitter' in link:
+                    scope = False
+                if '/artifact' in link:
+                    if not tag.get('class'):
+                        found = False
+                    if not found and tag.get('class') and len(tag.get('class')) > 1 and tag.get('class')[0] == 'vbtn':
+                        dependencies.append(link[10:])
+                        self.f_manager.setDependency(module, link[10:])
+                        found = True
 
-
-                                self.f_manager.setDependency(module, dependency)
-
-                            #zera a lista da dependência
-                            dependency = []
-                            count=0
-
-                        else:
-                            #verifica se a lista não está vazia.
-                            #(Sempre que o link passa nos dois ifs anteriores, ao chegar nesse
-                            #a lista ainda estará vazia. Caso ela esteja vazia, ele não poderá
-                            #passar por aqui.
-                            if dependency != []:
-                                #acrescenta a lista da dependência na lista de dependências
-                                if dependency not in dependencies:
-                                    dependencies.append(dependency)
-
-
-                                    self.f_manager.setDependency(module, dependency)
-                                #zera a lista da dependência
-                                dependency = []
-                                count=0
-                                #acrescenta o link na lista da dependência
-                                dependency.append(link[10:])
-                            else:
-                                dependency.append(link[10:])
-                    else:
-                        #acrescenta o link na lista da dependência
-                        dependency.append(link[10:])
-
-                    #se o link for uma versão, define previous como version
-                    if self.isVersion(link): previous = 'version'
-                    #senão define como non-version
-                    else:
-                        count += 1
-                        if count == 3:
-                            if len(dependency) == 3:
-                                dependency = [dependency[2]] #não salva dependencia sem versão
-                            else:
-                                dependency = []
-                            count = 1
-                        previous = 'non-version'
-
-                else:
-                    if 'twitter' in link:
-                        if dependency not in dependencies and dependency != []:
-                            if len(dependency) > 2:
-                                dependencies.append(dependency)
-
-                                self.f_manager.setDependency(module, dependency)
-
-                        scope = 0
-                        break
-
-
-            #se o link lido conter #buildr o escopo é ativado pois
-            #ele é o último link antes das dependências
             if '#buildr' in link:
-                scope = 1
+                scope = True
 
-        del html
         return dependencies
 
-    def fetchUsages(self, module, root_usages, page=None):
-        html = self.getHtml(root_usages)
+    def fetchUsages(self, module, url, page=None):
+        soup = self.getSoup(url)
 
-        aux = module[module.find('/'):][1:]
-        version = aux[aux.find('/'):][1:]
-        module_link = module[:module.find(version)-1]
+        module_root = self.separateV(module, getModule = True)[0]
 
         self.f_manager.setState(module, 'Getting usages')
+
         if not page:
             print('Page 1')
 
         usages = []
         previous = ''
-        scope = 0
+        scope = False
+        end = False
         next_page = 0
         current_page = 0
-        end = 0
-
+        
         while not end:
 
-            for link in html:
+            for tag in soup.find_all('a'):
+                link = tag.get('href')
 
                 if page:
-                    usages_page_link = root_usages + '?p=' + page
+                    usages_page_link = url + '?p=' + page
                     print("Continued on page " + page)
-                    soup = self.getHtml(usages_page_link)
+                    soup = self.getSoup(usages_page_link)
                     current_page = int(page)
                     self.f_manager.setCurrentPage(module, page)
                     page = None
 
-                if scope == 1:
+                if scope:
 
                     if 'artifact' in link:
                         if link == previous:
@@ -210,39 +143,52 @@ class MVNscrapper():
                         next_page = int(link[3:])
 
                         if next_page > current_page:
-                            scope = 0
-                            usages_page_link = root_usages + link
-                            soup = self.getHtml(usages_page_link)
+                            scope = False
+                            usages_page_link = url + link
+                            soup = self.getSoup(usages_page_link)
                             current_page = int(link[3:])
                             print('Page',current_page)
                             self.f_manager.setCurrentPage(module, current_page)
                             break
 
                     elif '/tags' in link:
-                        end = 1
-                        scope = 0
+                        end = True
+                        scope = False
 
                         break
 
-                if module_link in link:
-                    scope = 1
+                if module_root in link:
+                    scope = True
 
         self.f_manager.setState(module, 'Done usages')
-        del html
+
         return usages
 
     def getUsageVersion(self, root_link, target_version, lookForDependency):
-        root_html = self.getHtml(root_link)
+        root_soup = self.getSoup(root_link)
         module_root = root_link[root_link.find('/artifact'):][10:]
 
         version = None
-        versions = self.fetchVersions(root_html)
-        del root_html
-        for vers in versions:
+        versions = self.fetchVersions(root_soup)
 
-            vers = vers[vers.find('/'):]
+        multiple_versions = False
+        if '/artifact' in versions[0]:
+            multiple_versions = True
+        
+        for vers in versions:
+            #if multiple /artifact/abc/xyz/123
+            #if not xyz/123
+
+            if multiple_versions:
+                vers = vers[10:]
+                module = vers
+            
+            vers = vers[vers.find('/'):] 
             print("Currently on {}" .format(vers))
-            module = module_root + vers
+
+            if not multiple_versions:
+                module = module_root + vers
+
             result = self.searchDependency("https://mvnrepository.com/artifact/"+module, lookForDependency)
 
             if result:
@@ -287,7 +233,7 @@ class MVNscrapper():
                     print('Opening dependency:', dependency)
                     self.f_manager.setCurrent(module, 'd', dependency)
                     dep_link = 'https://mvnrepository.com/artifact/' + dependency
-                    dep_root, dep_version = self.separateV(dep_link)
+                    dep_root, dep_version = self.separateV(dep_link, getRoot = True, getVersion = True)
                     self.scrap(dep_root,max_depth,depth,target_version = dep_version)
                     print('Returned to', module)
         else:
@@ -300,7 +246,7 @@ class MVNscrapper():
                         print('Opening dependency:', dependency)
                         self.f_manager.setCurrent(module, 'd', dependency)
                         dep_link = 'https://mvnrepository.com/artifact/' + dependency
-                        dep_root, dep_version = self.separateV(dep_link)
+                        dep_root, dep_version = self.separateV(dep_link, getRoot = True, getVersion = True)
                         self.scrap(dep_root,max_depth,depth,target_version = dep_version)
                         print('Returned to', module)
 
