@@ -5,7 +5,7 @@ from mvnScrapper import MVNscrapper
 root = "https://mvnrepository.com/artifact/org.apache.shiro/shiro-web/1.4.1"
 max_depth = 3
 
-path = "E:/Caminho/Pra/Salvar"
+path = "E:/1. Caio Shimada/TCC/test_files"
 
 f_dir = path+"/mvn_scrapper"
 p_dir = path+"/scrap_management"
