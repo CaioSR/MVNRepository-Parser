@@ -87,7 +87,7 @@ class FileManager:
             reader = csv.reader(readFile)
             writer = csv.writer(writeFile)
             for line in reader:
-                if module == line[1]:
+                if line[1] == module:
                     line[2] = state
                     line[3] = 'Null'
                     writer.writerow(line)
@@ -105,7 +105,7 @@ class FileManager:
             reader = csv.reader(readFile)
             writer = csv.writer(writeFile)
             for line in reader:
-                if module == line[1]:
+                if line[1] == module:
                     line[3] = page
                     writer.writerow(line)
                 else:
@@ -122,7 +122,7 @@ class FileManager:
             reader = csv.reader(readFile)
             writer = csv.writer(writeFile)
             for line in reader:
-                if module == line[1]:
+                if line[1] == module:
                     if relation == 'd':
                         line[2] = 'Verifying dependency'
                     elif relation == 'u':
@@ -146,7 +146,7 @@ class FileManager:
             found = False
             with open(file, 'r') as readFile:
                 for line in readFile:
-                    if usage == line:
+                    if line[0] == usage:
                         found = True
                         break
 
@@ -168,9 +168,6 @@ class FileManager:
 
     def setDependency(self, module, dependency):
 
-        if dependency != 'None':
-            dependency = dependency[2]
-
         file = module.replace('/','+')
         file = self.p_dir + '/Modules/['+file+']Dependencies.csv'
 
@@ -178,7 +175,7 @@ class FileManager:
             found = False
             with open(file, 'r') as readFile:
                 for line in readFile:
-                    if dependency == line:
+                    if line[0] == dependency:
                         found = True
                         break
 
@@ -204,7 +201,7 @@ class FileManager:
             with open(self.p_dir + '/Progress.csv', 'r') as readFile:
                 reader = csv.reader(readFile)
                 for line in reader:
-                    if module == line[1]:
+                    if line[1] == module:
                         return True
                 return False
         except:
@@ -215,7 +212,7 @@ class FileManager:
         with open(self.p_dir + '/Progress.csv', 'r') as readFile:
             reader = csv.reader(readFile)
             for line in reader:
-                if module == line[1]:
+                if line[1] == module:
                     return line
 
         readFile.close()
@@ -247,7 +244,7 @@ class FileManager:
             reader = csv.reader(readFile)
             writer = csv.writer(writeFile)
             for line in reader:
-                if module == line[1]:
+                if line[1] == module:
                     if line[4] == 'closed':
                         line[4] = 'open'
                     else:
