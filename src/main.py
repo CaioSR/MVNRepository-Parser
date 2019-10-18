@@ -6,7 +6,7 @@ import os
 root = "https://mvnrepository.com/artifact/org.apache.shiro/shiro-web/1.4.1"
 max_depth = 3
 
-path = os.cwd() + "/test_files"
+path = os.getcwd() + "/test_files"
 
 f_dir = path+"/mvn_scrapper"
 p_dir = path+"/scrap_management"
