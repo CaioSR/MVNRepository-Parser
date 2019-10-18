@@ -168,7 +168,6 @@ class MVNscrapper():
         root_soup = self.getSoup(root_link)
         module_root = root_link[root_link.find('/artifact'):][10:]
 
-        version = None
         versions = self.fetchVersions(root_soup)
 
         multiple_versions = False

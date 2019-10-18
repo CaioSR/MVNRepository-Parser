@@ -4,7 +4,7 @@ import os
 #root = "https://mvnrepository.com/artifact/org.springframework.security/spring-security-web"
 #version = "/5.1.6.RELEASE"
 root = "https://mvnrepository.com/artifact/org.apache.shiro/shiro-web/1.4.1"
-max_depth = 3
+max_depth = 5
 
 path = os.getcwd() + "/test_files"
 
