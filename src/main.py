@@ -1,11 +1,12 @@
 from mvnScrapper import MVNscrapper
+import os
 
 #root = "https://mvnrepository.com/artifact/org.springframework.security/spring-security-web"
 #version = "/5.1.6.RELEASE"
 root = "https://mvnrepository.com/artifact/org.apache.shiro/shiro-web/1.4.1"
 max_depth = 3
 
-path = "E:/1. Caio Shimada/TCC/test_files"
+path = os.cwd() + "/test_files"
 
 f_dir = path+"/mvn_scrapper"
 p_dir = path+"/scrap_management"
