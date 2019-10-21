@@ -13,7 +13,16 @@ class MVNscrapper():
         self.version = p[1]
         self.max_depth = max_depth
         self.f_manager = FileManager(f_dir, p_dir, p[2])
-        self.scrap(self.project, self.max_depth, 0, target_version = self.version)
+
+        done = False
+        while not done:
+            try:
+                self.scrap(self.project, self.max_depth, 0, target_version = self.version)
+                self.f_manager.copyToFinal()
+                done = True
+            except:
+                done = False
+
         
 
     def getSoup(self, url):
@@ -413,7 +422,3 @@ class MVNscrapper():
             else:
                 print(module,'Already Veryfied')
                 return
-        
-        self.f_manager.copyToFinal()
-
-       

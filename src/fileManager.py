@@ -1,5 +1,6 @@
 import csv
 import os
+import shutil
 
 class FileManager:
     f_dir = None
@@ -275,5 +276,5 @@ class FileManager:
         os.rename(p_dir + '/Progress_temp.csv', p_dir + '/Progress.csv')
 
     def copyToFinal(self):
-        shutil.copy(self.p_dir + '/Nodes.csv', self.f_dir)
-        shutil.copy(self.p_dir + '/Links.csv', self.f_dir)
+        shutil.copy2(self.p_dir + '/Nodes.csv', self.f_dir)
+        shutil.copy2(self.p_dir + '/Links.csv', self.f_dir)
