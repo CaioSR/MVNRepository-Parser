@@ -19,19 +19,37 @@ class FileManager:
         else:
             self.p_dir = p_dir + '/'
 
-        self.verifyDirectories(proj)
+        self.verifyDirectories(proj)        
         
     def verifyDirectories(self, proj):
+        print(proj)
+
+        if '/' in proj:
+            proj = proj.replace('/', '+')
+
+        index = self.p_dir.find(proj)
+        if index != -1:
+            self.p_dir = self.p_dir[:index]
+
+        index = self.f_dir.find(proj)
+        if index != -1:
+            self.f_dir = self.f_dir[:index]
+
+        try:
+            os.mkdir(self.p_dir)
+            os.mkdir(self.f_dir)
+        except FileExistsError:
+            pass
+
         try:
             self.defaultStatus(proj)
             print('All status to closed')
-        except:
+
+        except FileNotFoundError:
             print('First Run')
 
-            os.mkdir(self.p_dir)
             os.mkdir(self.p_dir + proj)
             os.mkdir(self.p_dir + proj + '/modules')
-            os.mkdir(self.f_dir)
             os.mkdir(self.f_dir + proj)
 
         self.p_dir = self.p_dir + proj

@@ -2,6 +2,7 @@ import requests
 from urllib.request import urlopen
 from bs4 import BeautifulSoup, SoupStrainer
 from time import sleep
+import random
 from fileManager import FileManager
 
 
@@ -14,24 +15,24 @@ class MVNscrapper():
         self.max_depth = max_depth
         self.f_manager = FileManager(f_dir, p_dir, p[2])
 
-        done = False
-        while not done:
+        while True:
             try:
                 self.scrap(self.project, self.max_depth, 0, target_version = self.version)
                 self.f_manager.copyToFinal()
-                done = True
-            except:
-                done = False
-
-        
+                break
+            except requests.exceptions.ConnectionError:
+                print('Essa internet eh top')
+                sleep(30)
+                self.f_manager.verifyDirectories(p[2])
 
     def getSoup(self, url):
         # Set headers  
         headers = requests.utils.default_headers()
-        headers.update({ 'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0'})
+        #headers.update({ 'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0'})
         req = requests.get(url, headers)
         soup = BeautifulSoup(req.content, 'html.parser', parse_only=SoupStrainer('a'))
-        sleep(2)
+        timeout = random.randrange(3,5)
+        sleep(timeout)
 
         return soup
 
@@ -169,8 +170,6 @@ class MVNscrapper():
                 if module_root in link:
                     scope = True
 
-        self.f_manager.setState(module, 'Done usages')
-
         return usages
 
     def getUsageVersion(self, root_link, target_version, lookForDependency):
@@ -220,17 +219,16 @@ class MVNscrapper():
         if len(dependencies) == 0:
             self.f_manager.setDependency(module, 'None')
 
+        self.saveDependencies(module, dependencies)
         print('There are {} dependencies in the module {}' .format(len(dependencies), module))
 
-        self.saveDependencies(module, dependencies)
-
     def getUsages(self, module, link, page = None):
-
-        usages = self.fetchUsages(module, link)
+        usages = self.fetchUsages(module, link, page = page)
 
         if len(usages) == 0:
             self.f_manager.setUsage(module, 'None')
 
+        self.f_manager.setState(module, 'Done usages')
         print('There are {} usages in the module {}' .format(len(usages), module))
 
     def verifyDependencies(self, module, max_depth, depth, current = None):
@@ -292,7 +290,7 @@ class MVNscrapper():
 
             try:
                 version = self.getUsageVersion(root_link, target_version, lookForDependency)
-            except Exception as e:
+            except requests.exceptions.HTTPError as e:
                 self.f_manager.initialize(module_root,depth)
                 print("---------ERRO--------\n",e,"\n---------------------\nSetting {} to Error Status" .format(module_root))
                 self.f_manager.setState(module_root, 'Error')
@@ -313,7 +311,7 @@ class MVNscrapper():
 
             try:
                 self.getDependencies(module, root_link+version)
-            except Exception as e:
+            except requests.exceptions.HTTPError as e:
                 print("---------ERRO--------\n",e,"\n---------------------\nSetting {} to Error Status" .format(module))
                 self.f_manager.setState(module, 'Error')
                 return
