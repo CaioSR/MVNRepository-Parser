@@ -1,5 +1,4 @@
 import requests
-from urllib.request import urlopen
 from bs4 import BeautifulSoup, SoupStrainer
 from time import sleep
 import random
@@ -28,10 +27,17 @@ class MVNscrapper():
     def getSoup(self, url):
         # Set headers  
         headers = requests.utils.default_headers()
-        #headers.update({ 'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0'})
-        req = requests.get(url, headers)
+        headers.update({ 'User-Agent' : 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.2 Safari/605.1.15'})
+        try:
+            req = requests.get(url, headers)
+            req.raise_for_status()
+        except requests.exceptions.HTTPError as e:
+            if e.response.status_code == 403: 
+                print('\n\nFORBIDDEN\n\n')
+                exit()
         soup = BeautifulSoup(req.content, 'html.parser', parse_only=SoupStrainer('a'))
-        timeout = random.randrange(3,5)
+
+        timeout = random.randrange(5,10)
         sleep(timeout)
 
         return soup
