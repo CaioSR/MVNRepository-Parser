@@ -9,14 +9,21 @@ class MVNScrapper():
 
     def __init__(self, project, max_depth, f_dir, p_dir):
         p = self.separateV(project, getRoot = True, getVersion = True, getModule = True)
-        self.project = p[0]
+        self.link = p[0]
         self.version = p[1]
+        self.module = p[2]
         self.max_depth = max_depth
         self.f_manager = FileManager(f_dir, p_dir, p[2])
+        self.f_manager.verifyConfig('mvnrepository', self.link, self.max_depth, f_dir)
 
+    def scrapper(self):
         while True:
             try:
+<<<<<<< HEAD
                 self.scrap(self.project, 0, target_version = self.version)
+=======
+                self.scrap(self.link, self.max_depth, 0, target_version = self.version)
+>>>>>>> added config file and modified mvnScrapper constructor
                 self.f_manager.copyToFinal()
                 break
             except requests.exceptions.ConnectionError:

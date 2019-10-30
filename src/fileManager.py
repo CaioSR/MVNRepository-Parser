@@ -1,4 +1,5 @@
 import csv
+import configparser 
 import os
 import shutil
 
@@ -19,7 +20,7 @@ class FileManager:
         else:
             self.p_dir = p_dir + '/'
 
-        self.verifyDirectories(proj)        
+        self.verifyDirectories(proj)
         
     def verifyDirectories(self, proj):
         print(proj)
@@ -54,6 +55,18 @@ class FileManager:
 
         self.p_dir = self.p_dir + proj
         self.f_dir = self.f_dir + proj
+
+    def verifyConfig(self, repo, proj, depth, f_dir):
+        config = configparser.ConfigParser()
+        config.read('config.ini')
+        config.add_section('Operation Atributes')
+        config.set('Operation Atributes', 'repository', repo)
+        config.set('Operation Atributes', 'project link', proj)
+        config.set('Operation Atributes', 'maximum depth', depth)
+        config.set('Operation Atributes', 'end directory', f_dir)
+
+        with open(self.p_dir + '/config.ini', 'w', newline='') as writeConfig:
+            config.write(writeConfig)
 
     def addLinks(self, module, dependencies):
 

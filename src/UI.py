@@ -6,7 +6,6 @@ import os
 class Interface:
     repo = None
     project_link = None
-    version = None
     max_depth = None
     progress_dir = None
     final_dir = None
@@ -106,7 +105,18 @@ class Interface:
         ui.mainloop()
 
     def loadOP(self, ui):
-        ui.filename = filedialog.askopenfilename(initialdir = "./", title = "Select file", filetypes=[("python files","*.py"),("all files", "*.*")])
+        opDirectory = filedialog.askdirectory(initialdir = "./", title = "Select desired operation progress management folder")
+        #askopenfilename(filetypes=[("python files","*.py"),("all files", "*.*")])
+        folders = opDirectory.split('/')
+        search = folders[-1]
+        project = search[:len(search-3)].replace('+','/')
+        depth = search[-1]
+        self.project_link = 'http://mvnrepository.com/artifact/'+project
+        self.max_depth = int(depth)
+        self.final_dir = 
+        self.progress_dir = opDirectory[:2]
+        mvn_scrapper = MVNscrapper(self.project_link, self.max_depth, self.final_dir, self.progress_dir)
+        
 
     def setRepo(self, *args):
         self.repo = self.repository_input.get()
@@ -126,14 +136,19 @@ class Interface:
     def setFinalDir(self, final_dir):
         self.final_dir = final_dir
 
+    def setAttributes(self, project, depth, final, progress):
+        self.project_link = project
+        self.max_depth = depth
+        self.final_dir = final
+        self.progress_dir = progress
+        if self.repo == 'mvnrepository':
+            self.mvn_scrapper = MVNscrapper(self.project_link, self.max_depth, self.final_dir, self.progress_dir)
+
     def initiateOP(self):
-        mvn_scrapper = MVNscrapper(self.project_link, self.max_depth, self.final_dir, self.progress_dir)
+        self.mvn_scrapper.scrapper()
 
     def finalize(self, ui, project, depth, prog_dir, final_dir):
-        self.setProject(project.get())
-        self.setMaxDepth(depth.get())
-        self.setProgressDir(prog_dir.get())
-        self.setFinalDir(final_dir.get())
+        self.setAttributes(project.get(), depth.get(), prog_dir.get(), final_dir.get())
         self.printAll()
         ui.destroy()
         self.initiateOP()
