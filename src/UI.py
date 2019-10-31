@@ -124,11 +124,11 @@ class Interface:
     def setRepo(self, *args):
         self.repo = self.repository_input.get()
 
-    def setAttributes(self, project, depth, final, progress):
-        self.project_link = project.get
-        self.max_depth = depth.get
-        self.final_dir = final.get
-        self.progress_dir = progress.get
+    def setAttributes(self, project, depth, progress, final):
+        self.project_link = project.get()
+        self.max_depth = int(depth.get())
+        self.final_dir = final.get()
+        self.progress_dir = progress.get()
 
     def initiateOP(self, scrapper):
         scrapper.scrapper()
