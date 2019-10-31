@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import filedialog
 from mvnScrapper import MVNscrapper
+import configparser
 import os
 
 class Interface:
@@ -108,50 +109,37 @@ class Interface:
         opDirectory = filedialog.askdirectory(initialdir = "./", title = "Select desired operation progress management folder")
         #askopenfilename(filetypes=[("python files","*.py"),("all files", "*.*")])
         folders = opDirectory.split('/')
-        search = folders[-1]
-        project = search[:len(search-3)].replace('+','/')
-        depth = search[-1]
-        self.project_link = 'http://mvnrepository.com/artifact/'+project
-        self.max_depth = int(depth)
-        self.final_dir = 
-        self.progress_dir = opDirectory[:2]
-        mvn_scrapper = MVNscrapper(self.project_link, self.max_depth, self.final_dir, self.progress_dir)
+        config = configparser.ConfigParser()
+        config.read('config.ini')
+        self.repo = config.get('Operation Atributes', 'repo')
+        self.project_link = config.get('Operation Atributes', 'project_link')
+        self.max_depth = int(config.get('Operation Atributes', 'depth'))
+        self.final_dir = config.get('Operation Atributes', 'f_dir')
+        self.progress_dir = folders[:-1]
+        if self.repo == 'mvnrepository':
+            scrapper = MVNscrapper(self.project_link, self.max_depth, self.final_dir, self.progress_dir)
         
+        self.initiateOP(scrapper)
 
     def setRepo(self, *args):
         self.repo = self.repository_input.get()
 
-    def setProject(self, project):
-        self.project_link = project
-
-    def setVersion(self, version):
-        self.version = version
-
-    def setMaxDepth(self, depth):
-        self.max_depth = int(depth)
-
-    def setProgressDir(self, prog_dir):
-        self.progress_dir = prog_dir
-
-    def setFinalDir(self, final_dir):
-        self.final_dir = final_dir
-
     def setAttributes(self, project, depth, final, progress):
-        self.project_link = project
-        self.max_depth = depth
-        self.final_dir = final
-        self.progress_dir = progress
-        if self.repo == 'mvnrepository':
-            self.mvn_scrapper = MVNscrapper(self.project_link, self.max_depth, self.final_dir, self.progress_dir)
+        self.project_link = project.get
+        self.max_depth = depth.get
+        self.final_dir = final.get
+        self.progress_dir = progress.get
 
-    def initiateOP(self):
-        self.mvn_scrapper.scrapper()
+    def initiateOP(self, scrapper):
+        scrapper.scrapper()
 
     def finalize(self, ui, project, depth, prog_dir, final_dir):
-        self.setAttributes(project.get(), depth.get(), prog_dir.get(), final_dir.get())
-        self.printAll()
         ui.destroy()
-        self.initiateOP()
+        self.setAttributes(project, depth, prog_dir, final_dir)
+        self.printAll()
+        if self.repo == 'mvnrepository':
+            scrapper = MVNscrapper(self.project_link, self.max_depth, self.final_dir, self.progress_dir)
+        self.initiateOP(scrapper)
 
     def printAll(self):
         print('Repository: ',self.repo)
