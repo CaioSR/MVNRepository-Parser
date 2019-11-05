@@ -16,7 +16,7 @@ class MVNscrapper():
 
         while True:
             try:
-                self.scrap(self.project, self.max_depth, 0, target_version = self.version)
+                self.scrap(self.project, 0, target_version = self.version)
                 self.f_manager.copyToFinal()
                 break
             except requests.exceptions.ConnectionError:
@@ -50,7 +50,7 @@ class MVNscrapper():
             aux1 = project[project.find('/artifact/'):][10:] #return project/module/version
         aux2 = aux1[aux1.find('/'):][1:] #return module/version
         version = aux2[aux2.find('/'):] #return /version
-        root = project[:project.find(version)]
+        root = project[:project.find(version)] #return project/module
 
         response = []
 
@@ -63,7 +63,8 @@ class MVNscrapper():
 
         return response
 
-    def fetchVersions(self, soup):
+    def fetchVersions(self, url):
+        soup = self.getSoup(url)
 
         versions = []
         multiple_versions = False
@@ -91,7 +92,7 @@ class MVNscrapper():
 
         return False
 
-    def fetchDependencies(self, module, url):
+    def fetchDependencies(self, url, module):
         soup = self.getSoup(url)
 
         self.f_manager.setState(module, 'Getting dependencies')
@@ -119,7 +120,7 @@ class MVNscrapper():
 
         return dependencies
 
-    def fetchUsages(self, module, url, page=None):
+    def fetchUsages(self, url, module, page=None):
         soup = self.getSoup(url)
 
         module_root = self.separateV(module, getModule = True)[0]
@@ -181,13 +182,11 @@ class MVNscrapper():
 
         return usages
 
-    #não precisa de target_version
-    def getUsageVersion(self, root_link, target_version, lookForDependency):
-        root_soup = self.getSoup(root_link)
-        module_root = root_link[root_link.find('/artifact/'):][10:]
+    def getUsageVersion(self, url, lookForDependency):
+        module_root = url[url.find('/artifact/'):][10:]
 
         #passar só o  link
-        versions = self.fetchVersions(root_soup)
+        versions = self.fetchVersions(url)
         
         if len(versions) == 0:
             return None
@@ -227,9 +226,8 @@ class MVNscrapper():
 
             print('Updated nodes ans links')
 
-    #renomear link para url
-    def getDependencies(self, module, link):
-        dependencies = self.fetchDependencies(module, link)
+    def getDependencies(self, url, module):
+        dependencies = self.fetchDependencies(url, module)
 
         if len(dependencies) == 0:
             self.f_manager.setDependency(module, 'None')
@@ -237,9 +235,8 @@ class MVNscrapper():
         self.saveDependencies(module, dependencies)
         print('There are {} dependencies in the module {}' .format(len(dependencies), module))
 
-    #renomear link para url
-    def getUsages(self, module, link, page = None):
-        usages = self.fetchUsages(module, link, page = page)
+    def getUsages(self, url, module, page = None):
+        usages = self.fetchUsages(url, module, page = page)
 
         if len(usages) == 0:
             self.f_manager.setUsage(module, 'None')
@@ -247,16 +244,16 @@ class MVNscrapper():
         self.f_manager.setState(module, 'Done usages')
         print('There are {} usages in the module {}' .format(len(usages), module))
 
-    def verifyDependencies(self, module, max_depth, depth, current = None):
+    def verifyDependencies(self, module, depth, current = None):
 
         if not current:
             for dependency in self.f_manager.getDependencies(module):
                 if dependency != 'None':
                     print('Opening dependency:', dependency)
                     self.f_manager.setCurrent(module, 'd', dependency)
-                    dep_link = 'https://mvnrepository.com/artifact/' + dependency
-                    dep_root, dep_version = self.separateV(dep_link, getRoot = True, getVersion = True)
-                    self.scrap(dep_root,max_depth,depth,target_version = dep_version)
+                    dep_url = 'https://mvnrepository.com/artifact/' + dependency
+                    dep_root, dep_version = self.separateV(dep_url, getRoot = True, getVersion = True)
+                    self.scrap(dep_root,depth,target_version = dep_version)
                     print('Returned to', module)
         else:
             toDo = False
@@ -267,20 +264,20 @@ class MVNscrapper():
                     if toDo:
                         print('Opening dependency:', dependency)
                         self.f_manager.setCurrent(module, 'd', dependency)
-                        dep_link = 'https://mvnrepository.com/artifact/' + dependency
-                        dep_root, dep_version = self.separateV(dep_link, getRoot = True, getVersion = True)
-                        self.scrap(dep_root,max_depth,depth,target_version = dep_version)
+                        dep_url = 'https://mvnrepository.com/artifact/' + dependency
+                        dep_root, dep_version = self.separateV(dep_url, getRoot = True, getVersion = True)
+                        self.scrap(dep_root,depth,target_version = dep_version)
                         print('Returned to', module)
 
 
-    def verifyUsages(self, module, max_depth, depth, current = None):
+    def verifyUsages(self, module, depth, current = None):
 
         if not current:
             for usage in self.f_manager.getUsages(module):
                 if usage != 'None':
                     print('Opening usage:', usage)
                     self.f_manager.setCurrent(module, 'u', usage)
-                    self.scrap('https://mvnrepository.com/artifact/' + usage,max_depth,depth,lookForDependency = module)
+                    self.scrap('https://mvnrepository.com/artifact/' + usage,depth,lookForDependency = module)
                     print('Returned to', module)
         else:
             toDo = False
@@ -291,22 +288,21 @@ class MVNscrapper():
                     if toDo:
                         print('Opening usage:', usage)
                         self.f_manager.setCurrent(module, 'u', usage)
-                        self.scrap('https://mvnrepository.com/artifact/' + usage,max_depth,depth,lookForDependency = module)
+                        self.scrap('https://mvnrepository.com/artifact/' + usage,depth,lookForDependency = module)
                         print('Returned to', module)
 
-    #max_depth já é atributo da classe
-    def scrap(self, root_link, max_depth,depth, target_version = None, lookForDependency = None):
+    def scrap(self, root_url, depth, target_version = None, lookForDependency = None):
 
         if target_version:
             version = target_version
 
-        module_root = root_link[root_link.find('/artifact'):][10:]
+        module_root = root_url[root_url.find('/artifact'):][10:]
 
         if not target_version:
             print("Looking for correct usage version")
 
             try:
-                version = self.getUsageVersion(root_link, target_version, lookForDependency)
+                version = self.getUsageVersion(root_url, lookForDependency)
 
             except requests.exceptions.HTTPError as e:
                 self.f_manager.initialize(module_root,depth)
@@ -317,8 +313,8 @@ class MVNscrapper():
             if not version:
                 return
             elif version.count('/') == 2:
-                root_link = root_link.split('/')
-                root_link = '/'.join(root_link[:-1])
+                root_url = root_url.split('/')
+                root_url = '/'.join(root_url[:-1])
                 module_root = module_root[:module_root.find('/')]
 
         module = module_root+version
@@ -332,18 +328,18 @@ class MVNscrapper():
             self.f_manager.initialize(module,depth) #Status Initialized !! MUDAR !!!
 
             try:
-                self.getDependencies(module, root_link+version)
+                self.getDependencies(root_url+version, module)
             except requests.exceptions.HTTPError as e:
                 print("---------ERRO--------\n",e,"\n---------------------\nSetting {} to Error Status" .format(module))
                 self.f_manager.setState(module, 'Error')
                 return
 
             depth+=1
-            if depth < max_depth:
+            if depth < self.max_depth:
 
-                self.getUsages(module,  root_link+version+'/usages')
-                self.verifyDependencies(module, max_depth, depth)
-                self.verifyUsages(module, max_depth, depth)
+                self.getUsages(root_url+version+'/usages', module)
+                self.verifyDependencies(module, depth)
+                self.verifyUsages(module, depth)
 
             else:
                 print("Depth too high")
@@ -367,14 +363,14 @@ class MVNscrapper():
                     if progress == 'Getting dependencies' or progress == 'Initialized':
                         print('Returned to get dependencies')
 
-                        self.getDependencies(module, root_link+version)
+                        self.getDependencies(root_url+version, module)
 
                         depth+=1
-                        if depth < max_depth:
+                        if depth < self.max_depth:
 
-                            self.getUsages(module,  root_link+version+'/usages')
-                            self.verifyDependencies(module, max_depth, depth)
-                            self.verifyUsages(module, max_depth, depth)
+                            self.getUsages(root_url+version+'/usages', module)
+                            self.verifyDependencies(module, depth)
+                            self.verifyUsages(module, depth)
 
                         else:
                             print("Depth too high")
@@ -384,7 +380,7 @@ class MVNscrapper():
 
                     if progress == 'Getting usages' or progress == 'Done dependencies':
                         depth+=1
-                        if depth < max_depth:
+                        if depth < self.max_depth:
 
                             print('Returned to getting usages')
                             currentPage = mod[3]
@@ -394,9 +390,9 @@ class MVNscrapper():
                             else:
                                 print('Current usage page: {}' .format(currentPage))
 
-                            self.getUsages(module, root_link+version+'/usages', page = currentPage)
-                            self.verifyDependencies(module, max_depth, depth)
-                            self.verifyUsages(module, max_depth, depth)
+                            self.getUsages(root_url+version+'/usages', module, page = currentPage)
+                            self.verifyDependencies(module, depth)
+                            self.verifyUsages(module, depth)
 
                         else:
                             print("Depth too high")
@@ -406,14 +402,14 @@ class MVNscrapper():
 
                     if progress == 'Verifying dependency' or progress == 'Done usages':
                         depth+=1
-                        if depth < max_depth:
+                        if depth < self.max_depth:
 
                             print('Returned to verifying dependencies')
                             currentDependency = mod[3]
                             print('Current dependency: {}' .format(currentDependency))
 
-                            self.verifyDependencies(module, max_depth, depth, current = currentDependency)
-                            self.verifyUsages(module, max_depth, depth)
+                            self.verifyDependencies(module, depth, current = currentDependency)
+                            self.verifyUsages(module, depth)
 
                         else:
                             print("Depth too high")
@@ -423,13 +419,13 @@ class MVNscrapper():
 
                     if progress == 'Verifying usage':
                         depth+=1
-                        if depth < max_depth:
+                        if depth < self.max_depth:
 
                             print('Returned to verifying usages')
                             currentUsage = mod[3]
                             print('Current usage: {}' .format(currentUsage))
 
-                            self.verifyUsages(module, max_depth, depth, current = currentUsage)
+                            self.verifyUsages(module, depth, current = currentUsage)
 
                         else:
                             print("Depth too high")
