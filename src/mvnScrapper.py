@@ -9,27 +9,23 @@ class MVNScrapper():
 
     def __init__(self, project, max_depth, f_dir, p_dir):
         p = self.separateV(project, getRoot = True, getVersion = True, getModule = True)
-        self.link = p[0]
+        self.project_url = p[0]
         self.version = p[1]
         self.module = p[2]
         self.max_depth = max_depth
-        self.f_manager = FileManager(f_dir, p_dir, p[2])
-        self.f_manager.verifyConfig('mvnrepository', self.link, self.max_depth, f_dir)
+        self.f_manager = FileManager(f_dir, p_dir, self.module)
+        self.f_manager.verifyConfig('MVNRepository', self.project_url+self.version, self.max_depth, f_dir)
 
     def scrapper(self):
         while True:
             try:
-<<<<<<< HEAD
-                self.scrap(self.project, 0, target_version = self.version)
-=======
-                self.scrap(self.link, self.max_depth, 0, target_version = self.version)
->>>>>>> added config file and modified mvnScrapper constructor
+                self.scrap(self.project_url, 0, target_version = self.version)
                 self.f_manager.copyToFinal()
                 break
             except requests.exceptions.ConnectionError:
                 print('Essa internet eh top')
                 sleep(30)
-                self.f_manager.verifyDirectories(p[2])
+                self.f_manager.verifyDirectories(self.module)
 
     def getSoup(self, url):
         # Set headers  

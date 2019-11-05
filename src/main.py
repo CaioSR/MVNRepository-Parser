@@ -4,7 +4,6 @@ import UI
 
 ui = UI.Interface()
 
-<<<<<<< HEAD
 
 #root = "https://mvnrepository.com/artifact/org.picketbox/picketbox/5.1.0.Final"
 #root = "https://mvnrepository.com/artifact/org.springframework.security/spring-security-core/5.2.0.RELEASE"
@@ -13,22 +12,9 @@ root = 'https://mvnrepository.com/artifact/org.apache.shiro/shiro-core/1.4.1'
 #root = "https://mvnrepository.com/artifact/org.acegisecurity/acegi-security/1.0.7"
 
 path = os.getcwd().replace('\\', '/') + "/test_files"
-<<<<<<< HEAD
-=======
-=======
-=======
->>>>>>> added config file and modified mvnScrapper constructor
-#root = "https://mvnrepository.com/artifact/org.springframework.security/spring-security-web"
-#version = "/5.1.6.RELEASE"
-# root = "https://mvnrepository.com/artifact/org.apache.shiro/shiro-web/1.4.1"
-# max_depth = 4
 
-# path = os.getcwd() + "/test_files"
->>>>>>> add fileopener
->>>>>>> added config file and modified mvnScrapper constructor
-
-# f_dir = path+"/mvn_scrapper"
-# p_dir = path+"/scrap_management"
+f_dir = path+"/mvn_scrapper"
+p_dir = path+"/scrap_management"
 
 mvn_scrapper = MVNScrapper(root, max_depth, f_dir, p_dir)
 input()

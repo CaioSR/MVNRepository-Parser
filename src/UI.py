@@ -3,6 +3,7 @@ from tkinter import filedialog
 from mvnScrapper import MVNscrapper
 import configparser
 import os
+import time
 
 class Interface:
     repo = None
@@ -14,9 +15,9 @@ class Interface:
     available_repo = ['MVNRepository']
 
     def __init__(self):
-        self.home(None)
+        self.home()
 
-    def home(self, ui):
+    def home(self, ui = None):
         try:
             ui.destroy()
         except:
@@ -110,13 +111,13 @@ class Interface:
         #askopenfilename(filetypes=[("python files","*.py"),("all files", "*.*")])
         folders = opDirectory.split('/')
         config = configparser.ConfigParser()
-        config.read('config.ini')
-        self.repo = config.get('Operation Atributes', 'repo')
-        self.project_link = config.get('Operation Atributes', 'project_link')
-        self.max_depth = int(config.get('Operation Atributes', 'depth'))
-        self.final_dir = config.get('Operation Atributes', 'f_dir')
+        config.read(opDirectory+'/config.ini')
+        self.repo = config.get('Operation Atributes', 'repository')
+        self.project_link = config.get('Operation Atributes', 'project link')
+        self.max_depth = int(config.get('Operation Atributes', 'maximum depth'))
+        self.final_dir = config.get('Operation Atributes', 'end directory')
         self.progress_dir = folders[:-1]
-        if self.repo == 'mvnrepository':
+        if self.repo == 'MVNRepository':
             scrapper = MVNscrapper(self.project_link, self.max_depth, self.final_dir, self.progress_dir)
         
         self.initiateOP(scrapper)
@@ -127,17 +128,17 @@ class Interface:
     def setAttributes(self, project, depth, progress, final):
         self.project_link = project.get()
         self.max_depth = int(depth.get())
-        self.final_dir = final.get()
         self.progress_dir = progress.get()
+        self.final_dir = final.get()
 
     def initiateOP(self, scrapper):
         scrapper.scrapper()
 
     def finalize(self, ui, project, depth, prog_dir, final_dir):
-        ui.destroy()
         self.setAttributes(project, depth, prog_dir, final_dir)
+        ui.destroy()
         self.printAll()
-        if self.repo == 'mvnrepository':
+        if self.repo == 'MVNRepository':
             scrapper = MVNscrapper(self.project_link, self.max_depth, self.final_dir, self.progress_dir)
         self.initiateOP(scrapper)
 
@@ -147,6 +148,3 @@ class Interface:
         print('Maximum Depth Search: ', self.max_depth)
         print('Directory to progress files: ', self.progress_dir)
         print('Directory to final files: ', self.final_dir)
-
-    def retrievePrevious(self):
-        pass

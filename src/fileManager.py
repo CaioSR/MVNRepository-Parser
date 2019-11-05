@@ -57,13 +57,13 @@ class FileManager:
 
     def verifyConfig(self, repo, proj, depth, f_dir):
 
-        if not os.path.exists('config.ini'):
+        if not os.path.exists(self.p_dir + '/config.ini'):
             config = configparser.ConfigParser()
             config.read('config.ini')
             config.add_section('Operation Atributes')
             config.set('Operation Atributes', 'repository', repo)
             config.set('Operation Atributes', 'project link', proj)
-            config.set('Operation Atributes', 'maximum depth', depth)
+            config.set('Operation Atributes', 'maximum depth', str(depth))
             config.set('Operation Atributes', 'end directory', f_dir)
 
             with open(self.p_dir + '/config.ini', 'w', newline='') as writeConfig:
@@ -292,7 +292,6 @@ class FileManager:
 
     def defaultStatus(self,proj):
         p_dir = self.p_dir + proj
-        f_dir = self.f_dir + proj
 
         with open(p_dir + '/Progress.csv', 'r') as readFile, open(p_dir + '/Progress_temp.csv', 'w', newline='') as writeFile:
             reader = csv.reader(readFile)
