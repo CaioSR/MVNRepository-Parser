@@ -256,6 +256,8 @@ class MVNscrapper():
                     dep_root, dep_version = urlNversion[0], urlNversion[1]
                     self.scrap(dep_root,depth,target_version = dep_version)
                     print('Returned to', module)
+                else: 
+                    break
         else:
             toDo = False
             for dependency in self.f_manager.getDependencies(module):
@@ -270,6 +272,8 @@ class MVNscrapper():
                         dep_root, dep_version = urlNversion[0], urlNversion[1]
                         self.scrap(dep_root,depth,target_version = dep_version)
                         print('Returned to', module)
+                else:
+                    break
 
 
     def verifyUsages(self, module, depth, current = None):
@@ -281,6 +285,8 @@ class MVNscrapper():
                     self.f_manager.setCurrent(module, 'u', usage)
                     self.scrap('https://mvnrepository.com/artifact/' + usage,depth,lookForDependency = module)
                     print('Returned to', module)
+                else:
+                    break
         else:
             toDo = False
             for usage in self.f_manager.getUsages(module):
@@ -292,6 +298,8 @@ class MVNscrapper():
                         self.f_manager.setCurrent(module, 'u', usage)
                         self.scrap('https://mvnrepository.com/artifact/' + usage,depth,lookForDependency = module)
                         print('Returned to', module)
+                else:
+                    break
 
     def scrap(self, root_url, depth, target_version = None, lookForDependency = None):
 
