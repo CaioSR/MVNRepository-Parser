@@ -1,12 +1,11 @@
 from mvnScrapper import MVNscrapper
 import os
 
-#root = "https://mvnrepository.com/artifact/org.springframework.security/spring-security-web"
-#version = "/5.1.6.RELEASE"
-root = "https://mvnrepository.com/artifact/org.apache.shiro/shiro-web/1.4.1"
+#root = "https://mvnrepository.com/artifact/org.picketbox/picketbox/5.1.0.Final"
+root = "https://mvnrepository.com/artifact/org.springframework.security/spring-security-core/5.2.0.RELEASE"
 max_depth = 4
 
-path = os.getcwd() + "/test_files"
+path = os.getcwd().replace('\\', '/') + "/test_files"
 
 f_dir = path+"/mvn_scrapper"
 p_dir = path+"/scrap_management"

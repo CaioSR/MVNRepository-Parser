@@ -37,13 +37,14 @@ class MVNscrapper():
                 exit()
         soup = BeautifulSoup(req.content, 'html.parser', parse_only=SoupStrainer('a'))
 
-        timeout = random.randrange(5,10)
+        timeout = random.randrange(3,5)
         sleep(timeout)
 
         return soup
 
+    #mudar para string de tres bits, "001" retorna só o modulo, por exemplo.
     def separateV(self, project, getRoot = True, getVersion = True, getModule = False):
-        aux1 = project[project.find('/artifact'):][10:] #return project/module/version
+        aux1 = project[project.find('/artifact/'):][10:] #return project/module/version
         aux2 = aux1[aux1.find('/'):][1:] #return module/version
         version = aux2[aux2.find('/'):] #return /version
         root = project[:project.find(version)]
@@ -102,7 +103,7 @@ class MVNscrapper():
             if scope:
                 if 'twitter' in link:
                     scope = False
-                if '/artifact' in link:
+                if '/artifact/' in link:
                     if not tag.get('class'):
                         found = False
                     if not found and tag.get('class') and len(tag.get('class')) > 1 and tag.get('class')[0] == 'vbtn':
@@ -122,40 +123,31 @@ class MVNscrapper():
 
         self.f_manager.setState(module, 'Getting usages')
 
-        if not page:
-            print('Page 1')
-
         usages = []
         previous = ''
         scope = False
         end = False
         next_page = 0
         current_page = 0
-        
+
+        if not page:
+            print('Page 1')
+        else:
+            usages_page_link = url + '?p=' + page
+            print("Continued on page " + page)
+            soup = self.getSoup(usages_page_link)
+            current_page = int(page)
+            self.f_manager.setCurrentPage(module, page)
+            page = None
+
         while not end:
 
             for tag in soup.find_all('a'):
                 link = tag.get('href')
 
-                if page:
-                    usages_page_link = url + '?p=' + page
-                    print("Continued on page " + page)
-                    soup = self.getSoup(usages_page_link)
-                    current_page = int(page)
-                    self.f_manager.setCurrentPage(module, page)
-                    page = None
-
                 if scope:
 
-                    if 'artifact' in link:
-                        if link == previous:
-                            if link not in usages:
-                                usages.append(link[10:])
-                                self.f_manager.setUsage(module,link[10:])
-
-                        previous = link
-
-                    elif '?p=' in link:
+                    if '?p=' in link:
                         next_page = int(link[3:])
 
                         if next_page > current_page:
@@ -170,25 +162,37 @@ class MVNscrapper():
                     elif '/tags' in link:
                         end = True
                         scope = False
+                        print('ending')
 
                         break
 
+                    elif '/artifact/' in link:
+                        if link == previous:
+                            if link not in usages:
+                                usages.append(link[10:])
+                                self.f_manager.setUsage(module,link[10:])
+
+                        previous = link
+
                 if module_root in link:
                     scope = True
+                    print('found scope')
 
         return usages
 
+    #não precisa de target_version
     def getUsageVersion(self, root_link, target_version, lookForDependency):
         root_soup = self.getSoup(root_link)
-        module_root = root_link[root_link.find('/artifact'):][10:]
+        module_root = root_link[root_link.find('/artifact/'):][10:]
 
+        #passar só o  link
         versions = self.fetchVersions(root_soup)
         
         if len(versions) == 0:
             return None
 
         multiple_versions = False
-        if '/artifact' in versions[0]:
+        if '/artifact/' in versions[0]:
             multiple_versions = True
         
         for vers in versions:
@@ -222,6 +226,7 @@ class MVNscrapper():
 
             print('Updated nodes ans links')
 
+    #renomear link para url
     def getDependencies(self, module, link):
         dependencies = self.fetchDependencies(module, link)
 
@@ -231,6 +236,7 @@ class MVNscrapper():
         self.saveDependencies(module, dependencies)
         print('There are {} dependencies in the module {}' .format(len(dependencies), module))
 
+    #renomear link para url
     def getUsages(self, module, link, page = None):
         usages = self.fetchUsages(module, link, page = page)
 
@@ -287,6 +293,7 @@ class MVNscrapper():
                         self.scrap('https://mvnrepository.com/artifact/' + usage,max_depth,depth,lookForDependency = module)
                         print('Returned to', module)
 
+    #max_depth já é atributo da classe
     def scrap(self, root_link, max_depth,depth, target_version = None, lookForDependency = None):
 
         if target_version:
@@ -299,6 +306,7 @@ class MVNscrapper():
 
             try:
                 version = self.getUsageVersion(root_link, target_version, lookForDependency)
+
             except requests.exceptions.HTTPError as e:
                 self.f_manager.initialize(module_root,depth)
                 print("---------ERRO--------\n",e,"\n---------------------\nSetting {} to Error Status" .format(module_root))
@@ -307,6 +315,10 @@ class MVNscrapper():
 
             if not version:
                 return
+            elif version.count('/') == 2:
+                root_link = root_link.split('/')
+                root_link = '/'.join(root_link[:-1])
+                module_root = module_root[:module_root.find('/')]
 
         module = module_root+version
         print("Current module:", module)
