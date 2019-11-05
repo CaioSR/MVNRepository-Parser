@@ -50,12 +50,12 @@ class MVNscrapper():
             aux1 = project[project.find('/artifact/'):][10:] #return project/module/version
         aux2 = aux1[aux1.find('/'):][1:] #return module/version
         version = aux2[aux2.find('/'):] #return /version
-        root = project[:project.find(version)] #return project/module
+        root_url = project[:project.find(version)] #return all before /artifact/
 
         response = []
 
         if getRoot:
-            response.append(root)
+            response.append(root_url)
         if getVersion:
             response.append(version)
         if getModule:
@@ -123,7 +123,7 @@ class MVNscrapper():
     def fetchUsages(self, url, module, page=None):
         soup = self.getSoup(url)
 
-        module_root = self.separateV(module, getModule = True)[0]
+        module_root = self.separateV(module, getRoot = True)[0]
 
         self.f_manager.setState(module, 'Getting usages')
 
@@ -252,7 +252,8 @@ class MVNscrapper():
                     print('Opening dependency:', dependency)
                     self.f_manager.setCurrent(module, 'd', dependency)
                     dep_url = 'https://mvnrepository.com/artifact/' + dependency
-                    dep_root, dep_version = self.separateV(dep_url, getRoot = True, getVersion = True)
+                    urlNversion = self.separateV(dep_url, getRoot = True, getVersion = True)
+                    dep_root, dep_version = urlNversion[0], urlNversion[1]
                     self.scrap(dep_root,depth,target_version = dep_version)
                     print('Returned to', module)
         else:
@@ -265,7 +266,8 @@ class MVNscrapper():
                         print('Opening dependency:', dependency)
                         self.f_manager.setCurrent(module, 'd', dependency)
                         dep_url = 'https://mvnrepository.com/artifact/' + dependency
-                        dep_root, dep_version = self.separateV(dep_url, getRoot = True, getVersion = True)
+                        urlNversion = self.separateV(dep_url, getRoot = True, getVersion = True)
+                        dep_root, dep_version = urlNversion[0], urlNversion[1]
                         self.scrap(dep_root,depth,target_version = dep_version)
                         print('Returned to', module)
 
