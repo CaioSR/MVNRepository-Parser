@@ -37,14 +37,17 @@ class MVNscrapper():
                 exit()
         soup = BeautifulSoup(req.content, 'html.parser', parse_only=SoupStrainer('a'))
 
-        timeout = random.randrange(3,5)
+        timeout = random.randrange(5,10)
         sleep(timeout)
 
         return soup
 
     #mudar para string de tres bits, "001" retorna só o modulo, por exemplo.
-    def separateV(self, project, getRoot = True, getVersion = True, getModule = False):
-        aux1 = project[project.find('/artifact/'):][10:] #return project/module/version
+    def separateV(self, project, getRoot = False, getVersion = False, getModule = False):
+        if project.find('/artifact/') == -1:
+            aux1 = project
+        else:
+            aux1 = project[project.find('/artifact/'):][10:] #return project/module/version
         aux2 = aux1[aux1.find('/'):][1:] #return module/version
         version = aux2[aux2.find('/'):] #return /version
         root = project[:project.find(version)]
@@ -162,7 +165,6 @@ class MVNscrapper():
                     elif '/tags' in link:
                         end = True
                         scope = False
-                        print('ending')
 
                         break
 
@@ -176,7 +178,6 @@ class MVNscrapper():
 
                 if module_root in link:
                     scope = True
-                    print('found scope')
 
         return usages
 
