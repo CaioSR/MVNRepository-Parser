@@ -1,12 +1,15 @@
 import tkinter as tk
-from mvnScrapper import MVNscrapper
+import tkinter.filedialog
+from MVNScrapper import MVNScrapper
+from Addons import Addons
 import configparser
+import threading
 import os
 import time
 
 class Home:
     def __init__(self, root):
-        self.root = tk.Tk()
+        self.root = root
         self.root.title("Deps Ahoy")
 
         description_frame = tk.Frame(self.root)
@@ -33,19 +36,18 @@ class Home:
 
         buttons_frame = tk.Frame(self.root)
         buttons_frame.grid(row=0, column=0, sticky=tk.N)
-        new_op_button = tk.Button(buttons_frame, anchor='nw', width=20, text="New operation", command=lambda : self._open_new_operation_window())
+        new_op_button = tk.Button(buttons_frame, anchor='nw', width=20, text="New operation", command=lambda : self._openNewOperationWindow())
         new_op_button.grid(row=0, column=0, padx=5, pady=5)
-        load_op_button = tk.Button(buttons_frame, anchor='nw', width=20, text="Load operation", command=lambda : self._load_operation())
+        load_op_button = tk.Button(buttons_frame, anchor='nw', width=20, text="Load operation", command=lambda : self._loadOperation())
         load_op_button.grid(row=1, column=0, padx=5, pady=5)
-        alter_file_button = tk.Button(buttons_frame, anchor='nw', width=20, text="Alter files")
-        alter_file_button.grid(row=2, column=0, padx=5, pady=5)
+        merge_button = tk.Button(buttons_frame, anchor='nw', width=20, text="Merge files", command=lambda : self._mergeFiles())
+        merge_button.grid(row=2, column=0, padx=5, pady=5)
 
-    def _open_new_operation_window(self):
-        newOp = NewOperation(self._finalize)
-        pass
+    def _openNewOperationWindow(self):
+        _ = NewOperation(self.root)
 
-    def _load_operation(self):
-        opDirectory = tk.filedialog.askdirectory(initialdir = "./", title = "Select desired operation progress management folder")
+    def _loadOperation(self):
+        opDirectory = tk.filedialog.askdirectory(initialdir = "./", title="Select desired operation progress management folder")
         #askopenfilename(filetypes=[("python files","*.py"),("all files", "*.*")])
         folders = opDirectory.split('/')
         config = configparser.ConfigParser()
@@ -56,27 +58,27 @@ class Home:
         final_dir = config.get('Operation Atributes', 'end directory')
         progress_dir = '/'.join(folders[:-1])
 
-        self._finalize(project_url, max_depth, progress_dir, final_dir, repo = repo)
+        ScrapperCaller.callScrapper(project_url, max_depth, progress_dir, final_dir, repo)
 
-    def _finalize(self, project_url, max_depth, prog_dir, final_dir, repo = None):
-        # self.setAttributes(project, max_depth, prog_dir, final_dir, repo)
-        # self.printAll()
-        if repo == 'MVNRepository':
-            scrapper = MVNscrapper(project_url, max_depth, final_dir, prog_dir)
-        scrapper.scrapper()
+    def _mergeFiles(self):
+        _ = MergeOperation(self.root)
 
+    def _addId(self):
+        idDirectory = tk.filedialog.askdirectory(initialdir = "./", title="Select the folder to add id to Nodes and Links files")
+        utils = Addons()
+        utils.addId(idDirectory)
 
 class NewOperation:
     _repo = None
     _available_repo = ['MVNRepository']
 
-    def __init__(self, _finalize):
-        self.root = tk.Tk()
+    def __init__(self, root):
+        self.root = tk.Toplevel(root)
         self.root.title("Deps Ahoy")
 
         self.repository_input = tk.StringVar()
         self.repository_input.set('MVNRepository')
-        self.repo = self.repository_input.get()
+        self._repo = self.repository_input.get()
 
         repository_confirm_label = tk.Label(self.root, anchor='e', width=20, text="Repository: ")
         repository_confirm_label.grid(row=0, column=0, padx=5, pady=5)
@@ -98,41 +100,69 @@ class NewOperation:
 
         progress_file_dir = tk.Label(self.root, anchor='e', width=20, text="Progress files directory: ")
         progress_file_dir.grid(row=3, column=0, padx=5, pady=5)
-        progress_dir_input = tk.StringVar(value = os.getcwd().replace('\\', '/') + '/prog-manag/')
+        progress_dir_input = tk.StringVar(value = os.getcwd().replace('\\', '/') + '/test_files/prog-manag/')
         progress_dir_input = tk.Entry(self.root, width=50, textvariable=progress_dir_input)
         progress_dir_input.grid(row=3, column=1, sticky='w', padx=5, pady=5)
 
         final_file_dir = tk.Label(self.root, anchor='e', width=20, text="Progress files directory: ")
         final_file_dir.grid(row=4, column=0, padx=5, pady=5)
-        final_dir_input = tk.StringVar(value = os.getcwd().replace('\\', '/') + '/final/')
+        final_dir_input = tk.StringVar(value = os.getcwd().replace('\\', '/') + '/test_files/final/')
         final_dir_input = tk.Entry(self.root, width=50, textvariable=final_dir_input)
         final_dir_input.grid(row=4, column=1, sticky='w', padx=5, pady=5)
 
-        previous_screen_button = tk.Button(self.root, width=20, text="Return to home", command=lambda : self.home())
+        previous_screen_button = tk.Button(self.root, width=20, text="Return to home", command=lambda : self._closeWindow())
         previous_screen_button.grid(row=5, column=0, sticky='w', padx=5, pady=5)
 
-        confirm_button = tk.Button(self.root, width=20, text="Begin Parse", command=lambda : home._finalize(project_input.get(), int(depth_input.get()), progress_dir_input.get(), final_dir_input.get(), repo = self._repo))
+        confirm_button = tk.Button(self.root, width=20, text="Begin Parse", command=lambda : ScrapperCaller.callScrapper(project_input.get(), 
+                                                                                            int(depth_input.get()),
+                                                                                            progress_dir_input.get(),
+                                                                                            final_dir_input.get(),
+                                                                                            self._repo))
         confirm_button.grid(row=5, column=1, sticky='e', padx=5, pady=5)
 
     def _setRepo(self, *args):
         self._repo = self.repository_input.get()
 
-    # def setAttributes(self, project, depth, progress, final, repo = None):
-    #     if repo:
-    #         self.repo = repo
-    #     self.project_link = project
-    #     self.max_depth = depth
-    #     self.progress_dir = progress
-    #     self.final_dir = final
+    def _closeWindow(self):
+        self.root.destroy()
 
+class MergeOperation:
+    def __init__(self, root):
+        self.root = tk.Toplevel(root)
+        instructions = tk.Label(self.root, text="""Choose the directory that contains the projects with the files generated at the end of the search procedure.
+        Each project folder must have the Nodes.csv, Links.csv and Config.ini files.
+        This will merge each Nodes.csv and Links.csv file, and create a new directory with the 'merge' prefix.
+        For now, the projects must have been scrapped from the same repository.""")
+        instructions.pack(padx=5,pady=5)
 
+        choose_directory = tk.Button(self.root, text="Choose directory", command=lambda : self._chooseDirectory())
+        choose_directory.pack(padx=5,pady=5)
 
-    # def printAll(self):
-    #     print('Repository: ',self.repo)
-    #     print('Project:', self.project_link)
-    #     print('Maximum Depth Search: ', self.max_depth)
-    #     print('Directory to progress files: ', self.progress_dir)
-    #     print('Directory to final files: ', self.final_dir)
+    def _chooseDirectory(self):
+        mgDirectory = tk.filedialog.askdirectory(initialdir = "./", title="Select the folder that contains the projects to merge")
+        directories = []
+        for (_, dirnames, _) in os.walk(mgDirectory):
+            directories.extend(dirnames)
+            break
+
+        utils = Addons()
+        utils.merge(mgDirectory, directories)
+
+        self._closeWindow()
+    
+    def _closeWindow(self):
+        self.root.destroy()
+
+class ScrapperCaller:
+
+    @staticmethod
+    def callScrapper(project_url, max_depth, prog_dir, final_dir, repo):
+        if repo == 'MVNRepository':
+            scrapper = MVNScrapper(project_url, max_depth, final_dir, prog_dir)
+        opThread = threading.Thread(target=scrapper.scrapper)
+        opThread.daemon = True
+        opThread.start()
+
 
 if __name__ == '__main__':
     root = tk.Tk()

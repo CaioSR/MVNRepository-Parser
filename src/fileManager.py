@@ -42,7 +42,7 @@ class FileManager:
             pass
 
         try:
-            self.defaultStatus(proj)
+            self.resetStatus(proj)
             print('All status to closed')
 
         except FileNotFoundError:
@@ -148,7 +148,7 @@ class FileManager:
         os.remove(self.p_dir + '/Progress.csv')
         os.rename(self.p_dir + '/Progress_temp.csv', self.p_dir + '/Progress.csv')
 
-    def setCurrent(self, module, relation, current):
+    def setCurrentModule(self, module, relation, current):
 
         with open(self.p_dir + '/Progress.csv', 'r') as readFile, open(self.p_dir + '/Progress_temp.csv', 'w', newline='') as writeFile:
             reader = csv.reader(readFile)
@@ -169,7 +169,7 @@ class FileManager:
         os.remove(self.p_dir + '/Progress.csv')
         os.rename(self.p_dir + '/Progress_temp.csv', self.p_dir + '/Progress.csv')
 
-    def setUsage(self, module, usage):
+    def writeUsage(self, module, usage):
 
         file = module.replace('/','+')
         file = self.p_dir + '/Modules/['+file+']Usages.csv'
@@ -198,7 +198,7 @@ class FileManager:
 
             writeFile.close()
 
-    def setDependency(self, module, dependency):
+    def writeDependency(self, module, dependency):
 
         file = module.replace('/','+')
         file = self.p_dir + '/Modules/['+file+']Dependencies.csv'
@@ -249,7 +249,7 @@ class FileManager:
 
         readFile.close()
 
-    def getDependencies(self, module):
+    def readDependencies(self, module):
         file = module.replace('/','+')
         file = self.p_dir + '/Modules/['+file+']Dependencies.csv'
 
@@ -259,7 +259,7 @@ class FileManager:
 
         return
 
-    def getUsages(self, module):
+    def readUsages(self, module):
 
         file = module.replace('/','+')
         file = self.p_dir + '/Modules/['+file+']Usages.csv'
@@ -290,7 +290,7 @@ class FileManager:
         os.remove(self.p_dir + '/Progress.csv')
         os.rename(self.p_dir + '/Progress_temp.csv', self.p_dir + '/Progress.csv')
 
-    def defaultStatus(self,proj):
+    def resetStatus(self,proj):
         p_dir = self.p_dir + proj
 
         with open(p_dir + '/Progress.csv', 'r') as readFile, open(p_dir + '/Progress_temp.csv', 'w', newline='') as writeFile:

@@ -2,9 +2,7 @@ from mvnScrapper import MVNScrapper
 import os
 import UI
 
-ui = UI.Interface()
-
-
+#ui = UI.Home()
 #root = "https://mvnrepository.com/artifact/org.picketbox/picketbox/5.1.0.Final"
 #root = "https://mvnrepository.com/artifact/org.springframework.security/spring-security-core/5.2.0.RELEASE"
 max_depth = 4
