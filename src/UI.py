@@ -1,11 +1,11 @@
-import tkinter as tk
-import tkinter.filedialog
-from mvnScrapper import MVNScrapper
+from MVNScrapper import MVNScrapper
 from Addons import Addons
-import configparser
-import threading
 import os
 import time
+import threading
+import configparser
+import tkinter as tk
+import tkinter.filedialog
 
 class Home:
     def __init__(self, root):
@@ -174,13 +174,7 @@ class ScrapperCaller:
     @staticmethod
     def callScrapper(project_url, max_depth, prog_dir, final_dir, repo):
         if repo == 'MVNRepository':
-            scrapper = MVNScrapper(project_url, max_depth, final_dir, prog_dir)
-        opThread = threading.Thread(target=scrapper.scrapper)
+            scrapper = MVNScrapper()
+        opThread = threading.Thread(target=scrapper.scrapper, args=(project_url, max_depth, final_dir, prog_dir))
         opThread.daemon = True
         opThread.start()
-
-
-if __name__ == '__main__':
-    root = tk.Tk()
-    deps = Home(root)
-    root.mainloop()

@@ -1,7 +1,8 @@
-import csv
-import configparser 
+from Status import StatusTypes
 import os
+import csv
 import shutil
+import configparser 
 
 class FileManager:
     f_dir = None
@@ -42,14 +43,14 @@ class FileManager:
             pass
 
         try:
-            self.resetStatus(proj)
+            self._resetState(proj)
             print('All status to closed')
 
         except FileNotFoundError:
             print('First Run')
 
             os.mkdir(self.p_dir + proj)
-            os.mkdir(self.p_dir + proj + '/modules')
+            os.mkdir(self.p_dir + proj + '/artifacts')
             os.mkdir(self.f_dir + proj)
 
         self.p_dir = self.p_dir + proj
@@ -70,23 +71,23 @@ class FileManager:
                 config.write(writeConfig)
             writeConfig.close()
 
-    def addLinks(self, module, dependencies):
+    def addLinks(self, artifact, dependencies):
 
         with open(self.p_dir + '/Links.csv', 'a', newline='') as writeFile:
             writer = csv.writer(writeFile)
             for dependency in dependencies:
-                link = [module, dependency]
+                link = [artifact, dependency]
                 writer.writerow(link)
 
         writeFile.close()
 
-    def addModule(self, module):
+    def addartifact(self, artifact):
 
         try:
             found = False
             with open(self.p_dir + '/Nodes.csv', 'r', newline='') as readFile:
                 for line in readFile:
-                    if line[0] == module:
+                    if line[0] == artifact:
                         found = True
                         break
 
@@ -95,32 +96,32 @@ class FileManager:
             if not found:
                 with open(self.p_dir + '/Nodes.csv', 'a', newline='') as writeFile:
                     writer  = csv.writer(writeFile)
-                    writer.writerow([module])
+                    writer.writerow([artifact])
 
                 writeFile.close()
         except:
             with open(self.p_dir + '/Nodes.csv', 'w', newline='') as writeFile:
                 writer  = csv.writer(writeFile)
-                writer.writerow([module])
+                writer.writerow([artifact])
 
             writeFile.close()
 
-    def initialize(self, module,depth):
+    def initialize(self, artifact,depth):
 
         with open(self.p_dir + '/Progress.csv', 'a', newline='') as writeFile:
             writer = csv.writer(writeFile)
-            writer.writerow([depth,module,'Initialized','Null','open'])
+            writer.writerow([depth,artifact,'Initialized','Null','open'])
 
         writeFile.close()
 
-    def setState(self, module, state):
+    def setStatus(self, artifact, status):
 
         with open(self.p_dir + '/Progress.csv', 'r') as readFile, open(self.p_dir + '/Progress_temp.csv', 'w', newline='') as writeFile:
             reader = csv.reader(readFile)
             writer = csv.writer(writeFile)
             for line in reader:
-                if line[1] == module:
-                    line[2] = state
+                if line[1] == artifact:
+                    line[2] = status
                     line[3] = 'Null'
                     writer.writerow(line)
                 else:
@@ -131,13 +132,13 @@ class FileManager:
         os.remove(self.p_dir + '/Progress.csv')
         os.rename(self.p_dir + '/Progress_temp.csv', self.p_dir + '/Progress.csv')
 
-    def setCurrentPage(self, module, page):
+    def setCurrentPage(self, artifact, page):
 
         with open(self.p_dir + '/Progress.csv', 'r') as readFile, open(self.p_dir + '/Progress_temp.csv', 'w', newline='') as writeFile:
             reader = csv.reader(readFile)
             writer = csv.writer(writeFile)
             for line in reader:
-                if line[1] == module:
+                if line[1] == artifact:
                     line[3] = page
                     writer.writerow(line)
                 else:
@@ -148,17 +149,17 @@ class FileManager:
         os.remove(self.p_dir + '/Progress.csv')
         os.rename(self.p_dir + '/Progress_temp.csv', self.p_dir + '/Progress.csv')
 
-    def setCurrentModule(self, module, relation, current):
+    def setCurrentArtifact(self, artifact, relation, current):
 
         with open(self.p_dir + '/Progress.csv', 'r') as readFile, open(self.p_dir + '/Progress_temp.csv', 'w', newline='') as writeFile:
             reader = csv.reader(readFile)
             writer = csv.writer(writeFile)
             for line in reader:
-                if line[1] == module:
+                if line[1] == artifact:
                     if relation == 'd':
-                        line[2] = 'Verifying dependency'
+                        line[2] = StatusTypes.verifyingDependency
                     elif relation == 'u':
-                        line[2] = 'Verifying usage'
+                        line[2] = StatusTypes.verifyingUsage
                     line[3] = current
                     writer.writerow(line)
                 else:
@@ -169,10 +170,10 @@ class FileManager:
         os.remove(self.p_dir + '/Progress.csv')
         os.rename(self.p_dir + '/Progress_temp.csv', self.p_dir + '/Progress.csv')
 
-    def writeUsage(self, module, usage):
+    def writeUsage(self, artifact, usage):
 
-        file = module.replace('/','+')
-        file = self.p_dir + '/Modules/['+file+']Usages.csv'
+        file = artifact.replace('/','+')
+        file = self.p_dir + '/artifacts/['+file+']Usages.csv'
 
         try:
             found = False
@@ -198,10 +199,10 @@ class FileManager:
 
             writeFile.close()
 
-    def writeDependency(self, module, dependency):
+    def writeDependency(self, artifact, dependency):
 
-        file = module.replace('/','+')
-        file = self.p_dir + '/Modules/['+file+']Dependencies.csv'
+        file = artifact.replace('/','+')
+        file = self.p_dir + '/artifacts/['+file+']Dependencies.csv'
 
         try:
             found = False
@@ -227,31 +228,31 @@ class FileManager:
 
             writeFile.close()
 
-    def checkProgress(self, module):
+    def checkProgress(self, artifact):
 
         try:
             with open(self.p_dir + '/Progress.csv', 'r') as readFile:
                 reader = csv.reader(readFile)
                 for line in reader:
-                    if line[1] == module:
+                    if line[1] == artifact:
                         return True
                 return False
         except:
             return False
 
-    def getProgress(self, module):
+    def getProgress(self, artifact):
 
         with open(self.p_dir + '/Progress.csv', 'r') as readFile:
             reader = csv.reader(readFile)
             for line in reader:
-                if line[1] == module:
+                if line[1] == artifact:
                     return line
 
         readFile.close()
 
-    def readDependencies(self, module):
-        file = module.replace('/','+')
-        file = self.p_dir + '/Modules/['+file+']Dependencies.csv'
+    def readDependencies(self, artifact):
+        file = artifact.replace('/','+')
+        file = self.p_dir + '/artifacts/['+file+']Dependencies.csv'
 
         with open(file, 'r') as readFile:
             for line in readFile:
@@ -259,10 +260,10 @@ class FileManager:
 
         return
 
-    def readUsages(self, module):
+    def readUsages(self, artifact):
 
-        file = module.replace('/','+')
-        file = self.p_dir + '/Modules/['+file+']Usages.csv'
+        file = artifact.replace('/','+')
+        file = self.p_dir + '/artifacts/['+file+']Usages.csv'
 
         with open(file, 'r') as readFile:
             for line in readFile:
@@ -270,13 +271,13 @@ class FileManager:
 
         return
 
-    def switchStatus(self, module):
+    def switchState(self, artifact):
 
         with open(self.p_dir + '/Progress.csv', 'r') as readFile, open(self.p_dir + '/Progress_temp.csv', 'w', newline='') as writeFile:
             reader = csv.reader(readFile)
             writer = csv.writer(writeFile)
             for line in reader:
-                if line[1] == module:
+                if line[1] == artifact:
                     if line[4] == 'closed':
                         line[4] = 'open'
                     else:
@@ -290,7 +291,7 @@ class FileManager:
         os.remove(self.p_dir + '/Progress.csv')
         os.rename(self.p_dir + '/Progress_temp.csv', self.p_dir + '/Progress.csv')
 
-    def resetStatus(self,proj):
+    def _resetState(self,proj):
         p_dir = self.p_dir + proj
 
         with open(p_dir + '/Progress.csv', 'r') as readFile, open(p_dir + '/Progress_temp.csv', 'w', newline='') as writeFile:
@@ -305,6 +306,6 @@ class FileManager:
         os.remove(p_dir + '/Progress.csv')
         os.rename(p_dir + '/Progress_temp.csv', p_dir + '/Progress.csv')
 
-    def copyToFinal(self):
-        shutil.copy2(self.p_dir + '/Nodes.csv', self.f_dir)
-        shutil.copy2(self.p_dir + '/Links.csv', self.f_dir)
+    def moveToFinal(self):
+        shutil.move(self.p_dir + '/Nodes.csv', self.f_dir)
+        shutil.move(self.p_dir + '/Links.csv', self.f_dir)
