@@ -5,7 +5,7 @@ import random
 from fileManager import FileManager
 
 
-class MVNscrapper():
+class MVNScrapper():
 
     def __init__(self, project, max_depth, f_dir, p_dir):
         p = self.separateV(project, getRoot = True, getVersion = True, getModule = True)
