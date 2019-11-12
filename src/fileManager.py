@@ -57,13 +57,11 @@ class FileManager:
 
     def addLinks(self, module, dependencies):
 
-        modules = [module]
-        for dependency in dependencies:
-            modules.append(dependency[2])
-
         with open(self.p_dir + '/Links.csv', 'a', newline='') as writeFile:
             writer = csv.writer(writeFile)
-            writer.writerow(modules)
+            for dependency in dependencies:
+                link = [module, dependency]
+                writer.writerow(link)
 
         writeFile.close()
 

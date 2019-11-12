@@ -220,7 +220,7 @@ class MVNscrapper():
     def saveDependencies(self, module, dependencies):
             self.f_manager.addModule(module)
             for dependency in dependencies:
-                self.f_manager.addModule(dependency[2])
+                self.f_manager.addModule(dependency)
             self.f_manager.addLinks(module, dependencies)
             self.f_manager.setState(module, 'Done Dependencies')
 
