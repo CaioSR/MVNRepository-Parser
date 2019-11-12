@@ -55,9 +55,9 @@ class Home:
         config = configparser.ConfigParser()
         config.read(opDirectory+'/config.ini')
         repo = config.get('Operation Atributes', 'repository')
-        project_url = config.get('Operation Atributes', 'project link')
-        max_depth = int(config.get('Operation Atributes', 'maximum depth'))
-        final_dir = config.get('Operation Atributes', 'end directory')
+        project_url = config.get('Operation Atributes', 'project_link')
+        max_depth = int(config.get('Operation Atributes', 'maximum_depth'))
+        final_dir = config.get('Operation Atributes', 'end_directory')
         progress_dir = '/'.join(folders[:-1])
 
         ScrapperCaller.callScrapper(project_url, max_depth, progress_dir, final_dir, repo)
@@ -103,13 +103,13 @@ class NewOperation:
         project_input_box = tk.Entry(self.root, width=50, textvariable=project_input)
         project_input_box.grid(row=2, column=1, sticky='w', padx=5, pady=5)
 
-        progress_file_dir = tk.Label(self.root, anchor='e', width=20, text="Progress files directory: ")
+        progress_file_dir = tk.Label(self.root, anchor='e', width=20, text="Progress management directory: ")
         progress_file_dir.grid(row=3, column=0, padx=5, pady=5)
         progress_dir_input = tk.StringVar(value = os.getcwd().replace('\\', '/') + '/test_files/prog-manag/')
         progress_dir_input = tk.Entry(self.root, width=50, textvariable=progress_dir_input)
         progress_dir_input.grid(row=3, column=1, sticky='w', padx=5, pady=5)
 
-        final_file_dir = tk.Label(self.root, anchor='e', width=20, text="Progress files directory: ")
+        final_file_dir = tk.Label(self.root, anchor='e', width=20, text="Final directory: ")
         final_file_dir.grid(row=4, column=0, padx=5, pady=5)
         final_dir_input = tk.StringVar(value = os.getcwd().replace('\\', '/') + '/test_files/final/')
         final_dir_input = tk.Entry(self.root, width=50, textvariable=final_dir_input)

@@ -63,9 +63,9 @@ class FileManager:
             config.read('config.ini')
             config.add_section('Operation Atributes')
             config.set('Operation Atributes', 'repository', repo)
-            config.set('Operation Atributes', 'project link', proj)
-            config.set('Operation Atributes', 'maximum depth', str(depth))
-            config.set('Operation Atributes', 'end directory', f_dir)
+            config.set('Operation Atributes', 'project_link', proj)
+            config.set('Operation Atributes', 'maximum_depth', str(depth))
+            config.set('Operation Atributes', 'end_directory', f_dir)
 
             with open(self.p_dir + '/config.ini', 'w', newline='') as writeConfig:
                 config.write(writeConfig)

@@ -6,16 +6,17 @@ import requests
 class MVNScrapper:
 
     def __init__(self):
-        pass
+        self._fileManager = None
+        self._maxDepth = None
 
     def scrapper(self, project, max_depth, f_dir, p_dir):
-        p = self._separateV(project, getRoot = True, getVersion = True, getartifact = True)
+        p = self._separateV(project, getRoot = True, getVersion = True, getArtifact = True)
         project_url = p[0]
         version = p[1]
         artifact = p[2]
-        self.max_depth = max_depth
-        self.f_manager = FileManager(f_dir, p_dir, artifact)
-        self.f_manager.verifyConfig('MVNRepository', project_url+version, max_depth, f_dir)
+        self._maxDepth = max_depth
+        self._fileManager = FileManager(f_dir, p_dir, artifact)
+        self._fileManager.verifyConfig('MVNRepository', project_url+version, max_depth, f_dir)
         self._scrap(project_url, 0, target_version = version)
 
     def fetchDependencies(self, url, artifact):
@@ -36,7 +37,8 @@ class MVNScrapper:
                         found = False
                     if not found and tag.get('class') and len(tag.get('class')) > 1 and tag.get('class')[0] == 'vbtn':
                         dependencies.append(link[10:])
-                        self.f_manager.writeDependency(artifact, link[10:])
+                        if self._fileManager:
+                            self._fileManager.writeDependency(artifact, link[10:])
                         found = True
 
             if '#buildr' in link:
@@ -62,7 +64,8 @@ class MVNScrapper:
             print("Continued on page " + page)
             soup = UrlHandler.getSoup(usages_page_link)
             current_page = int(page)
-            self.f_manager.setCurrentPage(artifact, page)
+            if self._fileManager:
+                self._fileManager.setCurrentPage(artifact, page)
             page = None
 
         while not end:
@@ -81,7 +84,8 @@ class MVNScrapper:
                             soup = UrlHandler.getSoup(usages_page_link)
                             current_page = int(link[3:])
                             print('Page',current_page)
-                            self.f_manager.setCurrentPage(artifact, current_page)
+                            if self._fileManager:
+                                self._fileManager.setCurrentPage(artifact, current_page)
                             break
 
                     elif '/tags' in link:
@@ -94,7 +98,8 @@ class MVNScrapper:
                         if link == previous:
                             if link not in usages:
                                 usages.append(link[10:])
-                                self.f_manager.writeUsage(artifact,link[10:])
+                                if self._fileManager:
+                                    self._fileManager.writeUsage(artifact,link[10:])
 
                         previous = link
 
@@ -172,9 +177,9 @@ class MVNScrapper:
                 version = self.getUsageVersion(root_url, lookForDependency)
 
             except requests.exceptions.HTTPError as e:
-                self.f_manager.initialize(artifact_root,depth)
+                self._fileManager.initialize(artifact_root,depth)
                 print("---------ERRO--------\n",e,"\n---------------------\nSetting {} to Error Status" .format(artifact_root))
-                self.f_manager.setStatus(artifact_root, StatusTypes.error)
+                self._fileManager.setStatus(artifact_root, StatusTypes.error)
                 return
 
             if not version:
@@ -187,22 +192,22 @@ class MVNScrapper:
         artifact = artifact_root+version
         print("Current artifact:", artifact)
 
-        inProgress = self.f_manager.checkProgress(artifact)
+        inProgress = self._fileManager.checkProgress(artifact)
 
         if not inProgress:
             print('New artifact')
 
-            self.f_manager.initialize(artifact,depth) #Status Initialized !! MUDAR !!!
+            self._fileManager.initialize(artifact,depth) #Status Initialized !! MUDAR !!!
 
             try:
                 self._getDependencies(root_url+version, artifact)
             except requests.exceptions.HTTPError as e:
                 print("---------ERRO--------\n",e,"\n---------------------\nSetting {} to Error Status" .format(artifact))
-                self.f_manager.setStatus(artifact, StatusTypes.error)
+                self._fileManager.setStatus(artifact, StatusTypes.error)
                 return
 
             depth+=1
-            if depth < self.max_depth:
+            if depth < self._maxDepth:
 
                 self._getUsages(root_url+version+'/usages', artifact)
                 self._verifyDependencies(artifact, depth)
@@ -211,13 +216,13 @@ class MVNScrapper:
             else:
                 print("Depth too high")
 
-            self.f_manager.setStatus(artifact, StatusTypes.complete)
+            self._fileManager.setStatus(artifact, StatusTypes.complete)
             return
 
         elif inProgress:
             print('artifact in progress')
 
-            mod = self.f_manager.getProgress(artifact)
+            mod = self._fileManager.getProgress(artifact)
             progress = mod[2]
             depth = int(mod[0])
             state = mod[4]
@@ -225,7 +230,7 @@ class MVNScrapper:
             if progress != StatusTypes.complete and progress != StatusTypes.error:
                 if state == 'closed':
 
-                    self.f_manager.switchState(artifact)
+                    self._fileManager.switchState(artifact)
 
                     if progress == StatusTypes.gettingDependencies or progress == StatusTypes.initialized:
                         print('Returned to get dependencies')
@@ -233,7 +238,7 @@ class MVNScrapper:
                         self._getDependencies(root_url+version, artifact)
 
                         depth+=1
-                        if depth < self.max_depth:
+                        if depth < self._maxDepth:
 
                             self._getUsages(root_url+version+'/usages', artifact)
                             self._verifyDependencies(artifact, depth)
@@ -242,12 +247,12 @@ class MVNScrapper:
                         else:
                             print("Depth too high")
 
-                        self.f_manager.setStatus(artifact, StatusTypes.complete)
+                        self._fileManager.setStatus(artifact, StatusTypes.complete)
                         return
 
                     if progress == StatusTypes.gettingUsages or progress == StatusTypes.doneDependencies:
                         depth+=1
-                        if depth < self.max_depth:
+                        if depth < self._maxDepth:
 
                             print('Returned to getting usages')
                             currentPage = mod[3]
@@ -264,12 +269,12 @@ class MVNScrapper:
                         else:
                             print("Depth too high")
 
-                        self.f_manager.setStatus(artifact, StatusTypes.complete)
+                        self._fileManager.setStatus(artifact, StatusTypes.complete)
                         return
 
                     if progress == StatusTypes.verifyingDependency or progress == StatusTypes.doneUsages:
                         depth+=1
-                        if depth < self.max_depth:
+                        if depth < self._maxDepth:
 
                             print('Returned to verifying dependencies')
                             currentDependency = mod[3]
@@ -281,12 +286,12 @@ class MVNScrapper:
                         else:
                             print("Depth too high")
 
-                        self.f_manager.setStatus(artifact, StatusTypes.complete)
+                        self._fileManager.setStatus(artifact, StatusTypes.complete)
                         return
 
                     if progress == StatusTypes.verifyingUsage:
                         depth+=1
-                        if depth < self.max_depth:
+                        if depth < self._maxDepth:
 
                             print('Returned to verifying usages')
                             currentUsage = mod[3]
@@ -297,7 +302,7 @@ class MVNScrapper:
                         else:
                             print("Depth too high")
 
-                        self.f_manager.setStatus(artifact, StatusTypes.complete)
+                        self._fileManager.setStatus(artifact, StatusTypes.complete)
                         return
                 else:
                     print(artifact, ' already open')
@@ -307,7 +312,7 @@ class MVNScrapper:
                 return
 
         print('Procedure is done')
-        self.f_manager.moveToFinal()
+        self._fileManager.moveToFinal()
         return
 
     def _searchDependency(self, url, dependency):
@@ -321,40 +326,40 @@ class MVNScrapper:
         return False
 
     def _saveDependencies(self, artifact, dependencies):
-        self.f_manager.addartifact(artifact)
+        self._fileManager.addartifact(artifact)
         for dependency in dependencies:
-            self.f_manager.addartifact(dependency)
-        self.f_manager.addLinks(artifact, dependencies)
+            self._fileManager.addartifact(dependency)
+        self._fileManager.addLinks(artifact, dependencies)
 
         print('Updated nodes ans links')
 
     def _getDependencies(self, url, artifact):
-        self.f_manager.setStatus(artifact, StatusTypes.gettingDependencies)
+        self._fileManager.setStatus(artifact, StatusTypes.gettingDependencies)
         dependencies = self.fetchDependencies(url, artifact)
 
         if len(dependencies) == 0:
-            self.f_manager.writeDependency(artifact, 'None')
+            self._fileManager.writeDependency(artifact, 'None')
 
         self._saveDependencies(artifact, dependencies)
-        self.f_manager.setStatus(artifact, StatusTypes.doneDependencies)
+        self._fileManager.setStatus(artifact, StatusTypes.doneDependencies)
         print('There are {} dependencies in the artifact {}' .format(len(dependencies), artifact))
 
     def _getUsages(self, url, artifact, page = None):
-        self.f_manager.setStatus(artifact, StatusTypes.gettingUsages)
+        self._fileManager.setStatus(artifact, StatusTypes.gettingUsages)
         usages = self.fetchUsages(url, artifact, page = page)
 
         if len(usages) == 0:
-            self.f_manager.writeUsage(artifact, 'None')
+            self._fileManager.writeUsage(artifact, 'None')
 
-        self.f_manager.setStatus(artifact, StatusTypes.doneUsages)
+        self._fileManager.setStatus(artifact, StatusTypes.doneUsages)
         print('There are {} usages in the artifact {}' .format(len(usages), artifact))
 
     def _verifyDependencies(self, artifact, depth, current = None):
         if not current:
-            for dependency in self.f_manager.readDependencies(artifact):
+            for dependency in self._fileManager.readDependencies(artifact):
                 if dependency != 'None':
                     print('Opening dependency:', dependency)
-                    self.f_manager.setCurrentArtifact(artifact, 'd', dependency)
+                    self._fileManager.setCurrentArtifact(artifact, 'd', dependency)
                     dep_url = 'https://mvnrepository.com/artifact/' + dependency
                     urlNversion = self._separateV(dep_url, getRoot = True, getVersion = True)
                     dep_root, dep_version = urlNversion[0], urlNversion[1]
@@ -364,13 +369,13 @@ class MVNScrapper:
                     break
         else:
             toDo = False
-            for dependency in self.f_manager.readDependencies(artifact):
+            for dependency in self._fileManager.readDependencies(artifact):
                 if dependency != 'None':
                     if dependency == current:
                         toDo = True
                     if toDo:
                         print('Opening dependency:', dependency)
-                        self.f_manager.setCurrentArtifact(artifact, 'd', dependency)
+                        self._fileManager.setCurrentArtifact(artifact, 'd', dependency)
                         dep_url = 'https://mvnrepository.com/artifact/' + dependency
                         urlNversion = self._separateV(dep_url, getRoot = True, getVersion = True)
                         dep_root, dep_version = urlNversion[0], urlNversion[1]
@@ -382,30 +387,30 @@ class MVNScrapper:
 
     def _verifyUsages(self, artifact, depth, current = None):
         if not current:
-            for usage in self.f_manager.readUsages(artifact):
+            for usage in self._fileManager.readUsages(artifact):
                 if usage != 'None':
                     print('Opening usage:', usage)
-                    self.f_manager.setCurrentArtifact(artifact, 'u', usage)
+                    self._fileManager.setCurrentArtifact(artifact, 'u', usage)
                     self._scrap('https://mvnrepository.com/artifact/' + usage,depth,lookForDependency = artifact)
                     print('Returned to', artifact)
                 else:
                     break
         else:
             toDo = False
-            for usage in self.f_manager.readUsages(artifact):
+            for usage in self._fileManager.readUsages(artifact):
                 if usage != 'None':
                     if usage == current:
                         toDo = True
                     if toDo:
                         print('Opening usage:', usage)
-                        self.f_manager.setCurrentArtifact(artifact, 'u', usage)
+                        self._fileManager.setCurrentArtifact(artifact, 'u', usage)
                         self._scrap('https://mvnrepository.com/artifact/' + usage,depth,lookForDependency = artifact)
                         print('Returned to', artifact)
                 else:
                     break
 
 
-    def _separateV(self, project, getRoot = False, getVersion = False, getartifact = False):
+    def _separateV(self, project, getRoot = False, getVersion = False, getArtifact = False):
         if project.find('/artifact/') == -1:
             aux1 = project
         else:
@@ -420,7 +425,7 @@ class MVNScrapper:
             response.append(root_url)
         if getVersion:
             response.append(version)
-        if getartifact:
+        if getArtifact:
             response.append(aux1)
 
         return response
