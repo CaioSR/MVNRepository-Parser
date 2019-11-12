@@ -47,15 +47,15 @@ for i in range(len(projects)):
 
     else:
 
-        with open(path+'/merged/Nodes.csv', 'r') as rf, open(projects[i]+'/Nodes.csv', 'r') as p2, open(path+'/merged/Nodes_temp.csv', 'w', newline='') as wf:
-            reader = csv.reader(rf)
+        with open(projects[i]+'/Nodes.csv', 'r') as p2, open(path+'/merged/Nodes.csv', 'r') as rTemp, open(path+'/merged/Nodes_temp.csv', 'w', newline='') as wf:
+            rTe = csv.reader(rTemp)
             rp2 = csv.reader(p2)
             writer = csv.writer(wf)
 
-            listed_reader = list(reader)
+            listed_rTe = list(rTe)
             listed_rp2 = list(rp2)
 
-            for line in listed_reader:
+            for line in listed_rTe:
                 if [line[0]] in listed_rp2:
                     l_common = string2list(line[1])
                     l_common.append(projects[i])
@@ -63,14 +63,14 @@ for i in range(len(projects)):
                 else:
                     writer.writerow(line)
 
-            for j in range(len(listed_reader)):
-                listed_reader[j] = listed_reader[j][0]
+            for j in range(len(listed_rTe)):
+                listed_rTe[j] = listed_rTe[j][0]
 
             for line in listed_rp2:
-                if line[0] not in listed_reader:
+                if line[0] not in listed_rTe:
                     writer.writerow([line[0],[projects[i]]])
 
-        rf.close()
+        rTemp.close()
         p2.close()
         wf.close()
 
@@ -97,6 +97,9 @@ for i in range(len(projects)):
         p2.close()
         rTemp.close()
         wf.close()
+
+        os.remove(path+'/merged/Links.csv')
+        os.rename(path+'/merged/Links_temp.csv', path+'/merged/Links.csv')
 
        
 nodes_dict = {}

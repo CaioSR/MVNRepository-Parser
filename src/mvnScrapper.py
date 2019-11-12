@@ -9,20 +9,23 @@ class MVNScrapper():
 
     def __init__(self, project, max_depth, f_dir, p_dir):
         p = self.separateV(project, getRoot = True, getVersion = True, getModule = True)
-        self.project = p[0]
+        self.project_url = p[0]
         self.version = p[1]
+        self.module = p[2]
         self.max_depth = max_depth
-        self.f_manager = FileManager(f_dir, p_dir, p[2])
+        self.f_manager = FileManager(f_dir, p_dir, self.module)
+        self.f_manager.verifyConfig('MVNRepository', self.project_url+self.version, self.max_depth, f_dir)
 
+    def scrapper(self):
         while True:
             try:
-                self.scrap(self.project, 0, target_version = self.version)
+                self.scrap(self.project_url, 0, target_version = self.version)
                 self.f_manager.copyToFinal()
                 break
             except requests.exceptions.ConnectionError:
                 print('Essa internet eh top')
                 sleep(30)
-                self.f_manager.verifyDirectories(p[2])
+                self.f_manager.verifyDirectories(self.module)
 
     def getSoup(self, url):
         # Set headers  
@@ -112,7 +115,7 @@ class MVNScrapper():
                         found = False
                     if not found and tag.get('class') and len(tag.get('class')) > 1 and tag.get('class')[0] == 'vbtn':
                         dependencies.append(link[10:])
-                        self.f_manager.setDependency(module, link[10:])
+                        self.f_manager.writeDependency(module, link[10:])
                         found = True
 
             if '#buildr' in link:
@@ -173,7 +176,7 @@ class MVNScrapper():
                         if link == previous:
                             if link not in usages:
                                 usages.append(link[10:])
-                                self.f_manager.setUsage(module,link[10:])
+                                self.f_manager.writeUsage(module,link[10:])
 
                         previous = link
 
@@ -230,7 +233,7 @@ class MVNScrapper():
         dependencies = self.fetchDependencies(url, module)
 
         if len(dependencies) == 0:
-            self.f_manager.setDependency(module, 'None')
+            self.f_manager.writeDependency(module, 'None')
 
         self.saveDependencies(module, dependencies)
         print('There are {} dependencies in the module {}' .format(len(dependencies), module))
@@ -239,7 +242,7 @@ class MVNScrapper():
         usages = self.fetchUsages(url, module, page = page)
 
         if len(usages) == 0:
-            self.f_manager.setUsage(module, 'None')
+            self.f_manager.writeUsage(module, 'None')
 
         self.f_manager.setState(module, 'Done usages')
         print('There are {} usages in the module {}' .format(len(usages), module))
@@ -247,10 +250,10 @@ class MVNScrapper():
     def verifyDependencies(self, module, depth, current = None):
 
         if not current:
-            for dependency in self.f_manager.getDependencies(module):
+            for dependency in self.f_manager.readDependencies(module):
                 if dependency != 'None':
                     print('Opening dependency:', dependency)
-                    self.f_manager.setCurrent(module, 'd', dependency)
+                    self.f_manager.setCurrentModule(module, 'd', dependency)
                     dep_url = 'https://mvnrepository.com/artifact/' + dependency
                     urlNversion = self.separateV(dep_url, getRoot = True, getVersion = True)
                     dep_root, dep_version = urlNversion[0], urlNversion[1]
@@ -260,13 +263,13 @@ class MVNScrapper():
                     break
         else:
             toDo = False
-            for dependency in self.f_manager.getDependencies(module):
+            for dependency in self.f_manager.readDependencies(module):
                 if dependency != 'None':
                     if dependency == current:
                         toDo = True
                     if toDo:
                         print('Opening dependency:', dependency)
-                        self.f_manager.setCurrent(module, 'd', dependency)
+                        self.f_manager.setCurrentModule(module, 'd', dependency)
                         dep_url = 'https://mvnrepository.com/artifact/' + dependency
                         urlNversion = self.separateV(dep_url, getRoot = True, getVersion = True)
                         dep_root, dep_version = urlNversion[0], urlNversion[1]
@@ -279,23 +282,23 @@ class MVNScrapper():
     def verifyUsages(self, module, depth, current = None):
 
         if not current:
-            for usage in self.f_manager.getUsages(module):
+            for usage in self.f_manager.readUsages(module):
                 if usage != 'None':
                     print('Opening usage:', usage)
-                    self.f_manager.setCurrent(module, 'u', usage)
+                    self.f_manager.setCurrentModule(module, 'u', usage)
                     self.scrap('https://mvnrepository.com/artifact/' + usage,depth,lookForDependency = module)
                     print('Returned to', module)
                 else:
                     break
         else:
             toDo = False
-            for usage in self.f_manager.getUsages(module):
+            for usage in self.f_manager.readUsages(module):
                 if usage != 'None':
                     if usage == current:
                         toDo = True
                     if toDo:
                         print('Opening usage:', usage)
-                        self.f_manager.setCurrent(module, 'u', usage)
+                        self.f_manager.setCurrentModule(module, 'u', usage)
                         self.scrap('https://mvnrepository.com/artifact/' + usage,depth,lookForDependency = module)
                         print('Returned to', module)
                 else:

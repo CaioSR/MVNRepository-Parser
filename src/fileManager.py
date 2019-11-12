@@ -1,4 +1,5 @@
 import csv
+import configparser 
 import os
 import shutil
 
@@ -19,10 +20,9 @@ class FileManager:
         else:
             self.p_dir = p_dir + '/'
 
-        self.verifyDirectories(proj)        
+        self.verifyDirectories(proj)
         
     def verifyDirectories(self, proj):
-        print(proj)
 
         if '/' in proj:
             proj = proj.replace('/', '+')
@@ -42,7 +42,7 @@ class FileManager:
             pass
 
         try:
-            self.defaultStatus(proj)
+            self.resetStatus(proj)
             print('All status to closed')
 
         except FileNotFoundError:
@@ -54,6 +54,21 @@ class FileManager:
 
         self.p_dir = self.p_dir + proj
         self.f_dir = self.f_dir + proj
+
+    def verifyConfig(self, repo, proj, depth, f_dir):
+
+        if not os.path.exists(self.p_dir + '/config.ini'):
+            config = configparser.ConfigParser()
+            config.read('config.ini')
+            config.add_section('Operation Atributes')
+            config.set('Operation Atributes', 'repository', repo)
+            config.set('Operation Atributes', 'project link', proj)
+            config.set('Operation Atributes', 'maximum depth', str(depth))
+            config.set('Operation Atributes', 'end directory', f_dir)
+
+            with open(self.p_dir + '/config.ini', 'w', newline='') as writeConfig:
+                config.write(writeConfig)
+            writeConfig.close()
 
     def addLinks(self, module, dependencies):
 
@@ -133,7 +148,7 @@ class FileManager:
         os.remove(self.p_dir + '/Progress.csv')
         os.rename(self.p_dir + '/Progress_temp.csv', self.p_dir + '/Progress.csv')
 
-    def setCurrent(self, module, relation, current):
+    def setCurrentModule(self, module, relation, current):
 
         with open(self.p_dir + '/Progress.csv', 'r') as readFile, open(self.p_dir + '/Progress_temp.csv', 'w', newline='') as writeFile:
             reader = csv.reader(readFile)
@@ -154,7 +169,7 @@ class FileManager:
         os.remove(self.p_dir + '/Progress.csv')
         os.rename(self.p_dir + '/Progress_temp.csv', self.p_dir + '/Progress.csv')
 
-    def setUsage(self, module, usage):
+    def writeUsage(self, module, usage):
 
         file = module.replace('/','+')
         file = self.p_dir + '/Modules/['+file+']Usages.csv'
@@ -183,7 +198,7 @@ class FileManager:
 
             writeFile.close()
 
-    def setDependency(self, module, dependency):
+    def writeDependency(self, module, dependency):
 
         file = module.replace('/','+')
         file = self.p_dir + '/Modules/['+file+']Dependencies.csv'
@@ -234,7 +249,7 @@ class FileManager:
 
         readFile.close()
 
-    def getDependencies(self, module):
+    def readDependencies(self, module):
         file = module.replace('/','+')
         file = self.p_dir + '/Modules/['+file+']Dependencies.csv'
 
@@ -244,7 +259,7 @@ class FileManager:
 
         return
 
-    def getUsages(self, module):
+    def readUsages(self, module):
 
         file = module.replace('/','+')
         file = self.p_dir + '/Modules/['+file+']Usages.csv'
@@ -275,9 +290,8 @@ class FileManager:
         os.remove(self.p_dir + '/Progress.csv')
         os.rename(self.p_dir + '/Progress_temp.csv', self.p_dir + '/Progress.csv')
 
-    def defaultStatus(self,proj):
+    def resetStatus(self,proj):
         p_dir = self.p_dir + proj
-        f_dir = self.f_dir + proj
 
         with open(p_dir + '/Progress.csv', 'r') as readFile, open(p_dir + '/Progress_temp.csv', 'w', newline='') as writeFile:
             reader = csv.reader(readFile)
