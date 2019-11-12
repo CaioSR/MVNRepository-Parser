@@ -103,12 +103,12 @@ class NewOperation:
         project_input_box = tk.Entry(self.root, width=50, textvariable=project_input)
         project_input_box.grid(row=2, column=1, sticky='w', padx=5, pady=5)
 
-        progress_file_dir = tk.Label(self.root, anchor='e', width=20, text="Progress management directory: ")
+        progress_file_dir = tk.Label(self.root, anchor='e', width=20, text="Management directory: ")
         progress_file_dir.grid(row=3, column=0, padx=5, pady=5)
         progress_dir_input = tk.StringVar(value = os.getcwd().replace('\\', '/') + '/test_files/prog-manag/')
         progress_dir_input = tk.Entry(self.root, width=50, textvariable=progress_dir_input)
         progress_dir_input.grid(row=3, column=1, sticky='w', padx=5, pady=5)
-        progress_dir_choose = tk.Button(self.root, width=10, text="...", command=lambda : self._chooseDirectory())
+        progress_dir_choose = tk.Button(self.root, width=3, text="...", command=lambda : self._chooseDirectory())
         progress_dir_choose.grid(row=3, column=2, sticky='w', padx=5, pady=5)
 
         final_file_dir = tk.Label(self.root, anchor='e', width=20, text="Final directory: ")
@@ -116,6 +116,8 @@ class NewOperation:
         final_dir_input = tk.StringVar(value = os.getcwd().replace('\\', '/') + '/test_files/final/')
         final_dir_input = tk.Entry(self.root, width=50, textvariable=final_dir_input)
         final_dir_input.grid(row=4, column=1, sticky='w', padx=5, pady=5)
+        final_dir_choose = tk.Button(self.root, width=3, text="...", command=lambda : self._chooseDirectory())
+        final_dir_choose.grid(row=4, column=2, sticky='w', padx=5, pady=5)
 
         previous_screen_button = tk.Button(self.root, width=20, text="Return to home", command=lambda : self._closeWindow())
         previous_screen_button.grid(row=5, column=0, sticky='w', padx=5, pady=5)
@@ -129,6 +131,9 @@ class NewOperation:
 
     def _setRepo(self, *args):
         self._repo = self.repository_input.get()
+
+    def _chooseDirectory(self):
+        chosenDirectory = tk.filedialog.askdirectory(initialdir="./", title="Choose directory to save")
 
     def _closeWindow(self):
         self.root.destroy()
