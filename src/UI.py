@@ -1,6 +1,6 @@
 import tkinter as tk
 import tkinter.filedialog
-from MVNScrapper import MVNScrapper
+from mvnScrapper import MVNScrapper
 from Addons import Addons
 import configparser
 import threading
@@ -29,8 +29,8 @@ class Home:
       This tool does not display the graph. You must import
   the files generated to a visualization tool of your choice.
   You'll have the option to adapt the resulting files to a
-  format accepted by Gephi (which is a visualization tool),
-  when starting a new operation or after one is already
+  format accepted by Gephi (which is a visualization tool)
+  by clicking on the Add Ids option after a search is already
   finished, should you choose to do so.""", font='arial 10', justify=tk.LEFT)
         description_label.pack(padx=5,pady=5)
 
@@ -42,6 +42,8 @@ class Home:
         load_op_button.grid(row=1, column=0, padx=5, pady=5)
         merge_button = tk.Button(buttons_frame, anchor='nw', width=20, text="Merge files", command=lambda : self._mergeFiles())
         merge_button.grid(row=2, column=0, padx=5, pady=5)
+        addId_button = tk.Button(buttons_frame, anchor='nw', width=20, text="Add IDs", command=lambda : self._addId())
+        addId_button.grid(row=3, column=0, padx=5, pady=5)
 
     def _openNewOperationWindow(self):
         _ = NewOperation(self.root)
@@ -66,7 +68,10 @@ class Home:
     def _addId(self):
         idDirectory = tk.filedialog.askdirectory(initialdir = "./", title="Select the folder to add id to Nodes and Links files")
         utils = Addons()
-        utils.addId(idDirectory)
+        idThread = threading.Thread(target=utils.addId, args=(idDirectory,))
+        idThread.daemon = True
+        idThread.start()
+        print('Adding ids...')
 
 class NewOperation:
     _repo = None
@@ -132,6 +137,7 @@ class MergeOperation:
         instructions = tk.Label(self.root, text="""Choose the directory that contains the projects with the files generated at the end of the search procedure.
         Each project folder must have the Nodes.csv, Links.csv and Config.ini files.
         This will merge each Nodes.csv and Links.csv file, and create a new directory with the 'merge' prefix.
+        These 'merged' folders will be ignored by the tool.
         For now, the projects must have been scrapped from the same repository.""")
         instructions.pack(padx=5,pady=5)
 
@@ -140,16 +146,26 @@ class MergeOperation:
 
     def _chooseDirectory(self):
         mgDirectory = tk.filedialog.askdirectory(initialdir = "./", title="Select the folder that contains the projects to merge")
-        directories = []
+        dirs = []
         for (_, dirnames, _) in os.walk(mgDirectory):
-            directories.extend(dirnames)
+            dirs.extend(dirnames)
             break
 
+        directories = []
+        for dir in dirs:
+            if 'merged_' not in dir:
+                directories.append(dir)
+        
+        print(directories)
+
         utils = Addons()
-        utils.merge(mgDirectory, directories)
+        mgThread = threading.Thread(target=utils.merge, args=(mgDirectory,directories))
+        mgThread.daemon = True
+        mgThread.start()
+        print('Merging...')
 
         self._closeWindow()
-    
+
     def _closeWindow(self):
         self.root.destroy()
 

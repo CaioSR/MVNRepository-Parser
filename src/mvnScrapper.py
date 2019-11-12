@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup, SoupStrainer
 from time import sleep
 import random
-from FileManager import FileManager
+from fileManager import FileManager
 
 
 class MVNScrapper():
