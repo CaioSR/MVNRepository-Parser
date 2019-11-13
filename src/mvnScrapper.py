@@ -2,6 +2,7 @@ from UrlHandler import UrlHandler
 from FileManager import FileManager
 from Status import StatusTypes
 import requests
+import re
 
 class MVNScrapper:
 
@@ -50,6 +51,9 @@ class MVNScrapper:
         soup = UrlHandler.getSoup(url)
 
         artifact_root = self._separateV(artifact, getRoot = True)[0]
+        scala = re.search(r'_[0-9]\.[0-9][0-9]', artifact_root)
+        if scala:
+            artifact_root = artifact_root[:-5]
         usages = []
         previous = ''
         scope = False
@@ -305,10 +309,10 @@ class MVNScrapper:
                         self._fileManager.setStatus(artifact, StatusTypes.complete)
                         return
                 else:
-                    print(artifact, ' already open')
+                    print('Artifact', artifact, 'Already Open')
                     return
             else:
-                print(artifact,'Already Veryfied')
+                print('Artifact', artifact, 'Already Veryfied')
                 return
 
         print('Procedure is done')
@@ -331,7 +335,7 @@ class MVNScrapper:
             self._fileManager.addartifact(dependency)
         self._fileManager.addLinks(artifact, dependencies)
 
-        print('Updated nodes ans links')
+        print('Updated nodes and links')
 
     def _getDependencies(self, url, artifact):
         self._fileManager.setStatus(artifact, StatusTypes.gettingDependencies)
