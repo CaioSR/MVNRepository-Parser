@@ -1,8 +1,6 @@
-Requires BeautifulSoup, and Requests.
-The library is already in this project, but if you want to install it, use this command:
+Deps Ahoy is an extracting tool used on MVNRepository to extract dependencies graphs.
+
+Requires BeautifulSoup and Requests.
 
 --pip install beautifulsoup4
-
-For the Requests:
-
 --pip install requests
