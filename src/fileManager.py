@@ -71,23 +71,13 @@ class FileManager:
                 config.write(writeConfig)
             writeConfig.close()
 
-    def addLinks(self, artifact, dependencies):
-
-        with open(self.p_dir + '/Links.csv', 'a', newline='') as writeFile:
-            writer = csv.writer(writeFile)
-            for dependency in dependencies:
-                link = [artifact, dependency]
-                writer.writerow(link)
-
-        writeFile.close()
-
-    def addartifact(self, artifact):
+    def addArtifact(self, artifact):
 
         try:
             found = False
             with open(self.p_dir + '/Nodes.csv', 'r', newline='') as readFile:
                 for line in readFile:
-                    if line[0] == artifact:
+                    if line[0] == artifact: #line ****
                         found = True
                         break
 
@@ -105,6 +95,16 @@ class FileManager:
                 writer.writerow([artifact])
 
             writeFile.close()
+
+    def addLinks(self, artifact, dependencies):
+
+        with open(self.p_dir + '/Links.csv', 'a', newline='') as writeFile:
+            writer = csv.writer(writeFile)
+            for dependency in dependencies:
+                link = [artifact, dependency]
+                writer.writerow(link)
+
+        writeFile.close()
 
     def initialize(self, artifact,depth):
 
@@ -170,35 +170,6 @@ class FileManager:
         os.remove(self.p_dir + '/Progress.csv')
         os.rename(self.p_dir + '/Progress_temp.csv', self.p_dir + '/Progress.csv')
 
-    def writeUsage(self, artifact, usage):
-
-        file = artifact.replace('/','+')
-        file = self.p_dir + '/artifacts/['+file+']Usages.csv'
-
-        try:
-            found = False
-            with open(file, 'r') as readFile:
-                for line in readFile:
-                    if line[0] == usage:
-                        found = True
-                        break
-
-            readFile.close()
-
-            if not found:
-                with open(file, 'a', newline='') as writeFile:
-                    writer = csv.writer(writeFile)
-                    writer.writerow([usage])
-
-                writeFile.close()
-
-        except:
-            with open(file, 'w', newline='') as writeFile:
-                writer = csv.writer(writeFile)
-                writer.writerow([usage])
-
-            writeFile.close()
-
     def writeDependency(self, artifact, dependency):
 
         file = artifact.replace('/','+')
@@ -225,6 +196,35 @@ class FileManager:
             with open(file, 'w', newline='') as writeFile:
                 writer = csv.writer(writeFile)
                 writer.writerow([dependency])
+
+            writeFile.close()
+
+    def writeUsage(self, artifact, usage):
+
+        file = artifact.replace('/','+')
+        file = self.p_dir + '/artifacts/['+file+']Usages.csv'
+
+        try:
+            found = False
+            with open(file, 'r') as readFile:
+                for line in readFile:
+                    if line[0] == usage:
+                        found = True
+                        break
+
+            readFile.close()
+
+            if not found:
+                with open(file, 'a', newline='') as writeFile:
+                    writer = csv.writer(writeFile)
+                    writer.writerow([usage])
+
+                writeFile.close()
+
+        except:
+            with open(file, 'w', newline='') as writeFile:
+                writer = csv.writer(writeFile)
+                writer.writerow([usage])
 
             writeFile.close()
 

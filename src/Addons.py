@@ -4,16 +4,15 @@ import shutil
 from datetime import datetime
 
 class Addons:
-    def __init__(self):
-        pass
 
-    def merge(self, path, projects):
+    @staticmethod
+    def merge(path, projects):
         directories = []
         for dir in projects:
             directories.append(path+'/'+dir)
 
         #create a new folder to save the merged result
-        creationTime = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
+        creationTime = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
         final = '/merged_'+ creationTime
         os.mkdir(path+final)
 
@@ -51,7 +50,7 @@ class Addons:
                     for line in listed_rTe:
                         #if the node is in the current file, write with the current project id added
                         if [line[0]] in listed_rp2:
-                            l_common = self._string2list(line[1])
+                            l_common = Addons._string2list(line[1])
                             l_common.append(projects[i])
                             writer.writerow([line[0],l_common])
                         #if not, write as it is
@@ -97,18 +96,27 @@ class Addons:
 
                 os.remove(path+final+'/Links.csv')
                 os.rename(path+final+'/Links_temp.csv', path+final+'/Links.csv')
+        
+        print('Merged')
 
-    def addId(self, path):
+    @staticmethod
+    def addId(path):
         nodes_dict = {}
-        with open(path+'/Nodes.csv', 'r') as rf, open (path+'/idNodes.csv', 'w', newline='') as wf:
+        with open(path+'/Nodes.csv', 'r') as rf, open(path+'/idNodes.csv', 'w', newline='') as wf:
             reader = csv.reader(rf)
             writer = csv.writer(wf)
 
-            writer.writerow(['id', 'label', 'project'])
+            if 'merged_' in path:
+                writer.writerow(['id', 'label', 'projects'])
+            else:
+                writer.writerow(['id', 'label'])
             
             id=0
             for line in reader:
-                writer.writerow([id,line[0],line[1]])
+                if 'merged_' in path:
+                    writer.writerow([id,line[0],line[1]])
+                else:
+                    writer.writerow([id,line[0]])
                 nodes_dict[line[0]] = id
                 id+=1
 
@@ -130,8 +138,10 @@ class Addons:
         rLinks.close()
         wF.close()
 
+        print('Added ids')
 
-    def _string2list(self, string):
+    @staticmethod
+    def _string2list(string):
         li = []
         done = False
         while not done:

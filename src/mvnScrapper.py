@@ -19,6 +19,8 @@ class MVNScrapper:
         self._fileManager = FileManager(f_dir, p_dir, artifact)
         self._fileManager.verifyConfig('MVNRepository', project_url+version, max_depth, f_dir)
         self._scrap(project_url, 0, target_version = version)
+        print('Procedure is done')
+        self._fileManager.moveToFinal()
 
     def fetchDependencies(self, url, artifact):
         soup = UrlHandler.getSoup(url)
@@ -144,7 +146,9 @@ class MVNScrapper:
         if '/artifact/' in versions[0]:
             multiple_versions = True
         
+        iteration = 0
         for vers in versions:
+            iteration+=1
             #if multiple /artifact/abc/xyz/123
             #if not xyz/123
 
@@ -163,6 +167,9 @@ class MVNScrapper:
             if result:
                 print("Correct version is {}" .format(vers))
                 return vers
+
+            if iteration == 100:
+                return None
 
         return None
 
@@ -315,9 +322,7 @@ class MVNScrapper:
                 print('Artifact', artifact, 'Already Veryfied')
                 return
 
-        print('Procedure is done')
-        self._fileManager.moveToFinal()
-        return
+
 
     def _searchDependency(self, url, dependency):
         soup = UrlHandler.getSoup(url)
@@ -330,9 +335,9 @@ class MVNScrapper:
         return False
 
     def _saveDependencies(self, artifact, dependencies):
-        self._fileManager.addartifact(artifact)
+        self._fileManager.addArtifact(artifact)
         for dependency in dependencies:
-            self._fileManager.addartifact(dependency)
+            self._fileManager.addArtifact(dependency)
         self._fileManager.addLinks(artifact, dependencies)
 
         print('Updated nodes and links')
