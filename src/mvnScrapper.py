@@ -5,12 +5,17 @@ import requests
 import re
 
 class MVNScrapper:
-
+    """
+    This class implements the methods needed to scrap dependencies graphs from MVNRepository
+    """
     def __init__(self):
         self._fileManager = None
         self._maxDepth = None
 
     def scrapper(self, project, max_depth, f_dir, p_dir):
+        """
+        Called by the ScrapperCaller class. It handles the overall execution.
+        """
         p = self._separateV(project, getRoot = True, getVersion = True, getArtifact = True)
         project_url = p[0]
         version = p[1]
@@ -18,11 +23,14 @@ class MVNScrapper:
         self._maxDepth = max_depth
         self._fileManager = FileManager(f_dir, p_dir, artifact)
         self._fileManager.verifyConfig('MVNRepository', project_url+version, max_depth, f_dir)
-        self._scrap(project_url, 0, target_version = version)
+        self._scrap(project_url, 0, target_version = version) #it doesn't exit after its finished.
         print('Procedure is done')
         self._fileManager.moveToFinal()
 
     def fetchDependencies(self, url, artifact):
+        """
+        With the given url, looks for the artifacts dependencies
+        """
         soup = UrlHandler.getSoup(url)
 
         found = False
@@ -50,6 +58,9 @@ class MVNScrapper:
         return dependencies
 
     def fetchUsages(self, url, artifact, page=None):
+        """
+        With the given url, looks for the artifacts usages while handling pages
+        """
         soup = UrlHandler.getSoup(url)
 
         artifact_root = self._separateV(artifact, getRoot = True)[0]
@@ -115,6 +126,9 @@ class MVNScrapper:
         return usages
 
     def fetchVersions(self, url):
+        """
+        Get the artifacts version (or versions if there are multiple)
+        """
         soup = UrlHandler.getSoup(url)
 
         versions = []
@@ -134,9 +148,12 @@ class MVNScrapper:
         return versions
 
     def getUsageVersion(self, url, lookForDependency):
+        """
+        Open each usage's versions to check if one of their dependencies have the source artifact with 
+        the given version that stated that this usage is using it
+        """
         artifact_root = url[url.find('/artifact/'):][10:]
 
-        #passar só o  link
         versions = self.fetchVersions(url)
         
         if len(versions) == 0:
@@ -169,13 +186,18 @@ class MVNScrapper:
                 return vers
 
             if iteration == 100:
+                """
+                After checking 100 versions, it gives up to save time.
+                """
                 return None
 
         return None
 
 
     def _scrap(self, root_url, depth, target_version = None, lookForDependency = None):
-
+        """
+        This is the main recursive method to handle the scrapping
+        """
         if target_version:
             version = target_version
 
@@ -238,11 +260,14 @@ class MVNScrapper:
             depth = int(mod[0])
             state = mod[4]
 
+            #if Not Complete and No Error
             if progress != StatusTypes.complete and progress != StatusTypes.error:
                 if state == 'closed':
-
+                    
+                    #Its now Open
                     self._fileManager.switchState(artifact)
 
+                    #If Getting Depencies or was only Initialized
                     if progress == StatusTypes.gettingDependencies or progress == StatusTypes.initialized:
                         print('Returned to get dependencies')
 
@@ -261,6 +286,7 @@ class MVNScrapper:
                         self._fileManager.setStatus(artifact, StatusTypes.complete)
                         return
 
+                    #If Getting usages or was only done with looking for Dependencies
                     if progress == StatusTypes.gettingUsages or progress == StatusTypes.doneDependencies:
                         depth+=1
                         if depth < self._maxDepth:
@@ -283,6 +309,7 @@ class MVNScrapper:
                         self._fileManager.setStatus(artifact, StatusTypes.complete)
                         return
 
+                    #if Verifying Dependencies or was only done with looking Usages
                     if progress == StatusTypes.verifyingDependency or progress == StatusTypes.doneUsages:
                         depth+=1
                         if depth < self._maxDepth:
@@ -300,6 +327,7 @@ class MVNScrapper:
                         self._fileManager.setStatus(artifact, StatusTypes.complete)
                         return
 
+                    #If Verifying Usages
                     if progress == StatusTypes.verifyingUsage:
                         depth+=1
                         if depth < self._maxDepth:
@@ -316,15 +344,20 @@ class MVNScrapper:
                         self._fileManager.setStatus(artifact, StatusTypes.complete)
                         return
                 else:
+                    #If its closed, then its already open. Close artifact
                     print('Artifact', artifact, 'Already Open')
                     return
             else:
+                #If its complete, then close.
                 print('Artifact', artifact, 'Already Veryfied')
                 return
 
 
 
     def _searchDependency(self, url, dependency):
+        """
+        It looks for the dependency in an artifact's page
+        """
         soup = UrlHandler.getSoup(url)
 
         for tag in soup.find_all('a'):
@@ -335,6 +368,9 @@ class MVNScrapper:
         return False
 
     def _saveDependencies(self, artifact, dependencies):
+        """
+        Writes the dependencies (Nodes and Links)
+        """
         self._fileManager.addArtifact(artifact)
         for dependency in dependencies:
             self._fileManager.addArtifact(dependency)
@@ -343,6 +379,9 @@ class MVNScrapper:
         print('Updated nodes and links')
 
     def _getDependencies(self, url, artifact):
+        """
+        Opens the URL and retrieves the dependencies
+        """
         self._fileManager.setStatus(artifact, StatusTypes.gettingDependencies)
         dependencies = self.fetchDependencies(url, artifact)
 
@@ -354,6 +393,9 @@ class MVNScrapper:
         print('There are {} dependencies in the artifact {}' .format(len(dependencies), artifact))
 
     def _getUsages(self, url, artifact, page = None):
+        """
+        Opens the URL and retrieves the usages
+        """
         self._fileManager.setStatus(artifact, StatusTypes.gettingUsages)
         usages = self.fetchUsages(url, artifact, page = page)
 
@@ -364,6 +406,10 @@ class MVNScrapper:
         print('There are {} usages in the artifact {}' .format(len(usages), artifact))
 
     def _verifyDependencies(self, artifact, depth, current = None):
+        """
+        For each dependency writen in file, read it and get its dependencies
+        """
+        #if its the first execution for this dependency
         if not current:
             for dependency in self._fileManager.readDependencies(artifact):
                 if dependency != 'None':
@@ -376,6 +422,7 @@ class MVNScrapper:
                     print('Returned to', artifact)
                 else: 
                     break
+        #if the progress was halted
         else:
             toDo = False
             for dependency in self._fileManager.readDependencies(artifact):
@@ -395,6 +442,10 @@ class MVNScrapper:
 
 
     def _verifyUsages(self, artifact, depth, current = None):
+        """
+        For each usage writen in file, read it and get its usages
+        """
+        #if its the first execution for this usages
         if not current:
             for usage in self._fileManager.readUsages(artifact):
                 if usage != 'None':
@@ -404,6 +455,7 @@ class MVNScrapper:
                     print('Returned to', artifact)
                 else:
                     break
+        #if progress was halted
         else:
             toDo = False
             for usage in self._fileManager.readUsages(artifact):
@@ -420,6 +472,9 @@ class MVNScrapper:
 
 
     def _separateV(self, project, getRoot = False, getVersion = False, getArtifact = False):
+        """
+        This method receives an url and breaks it in many ways for manipulation
+        """
         if project.find('/artifact/') == -1:
             aux1 = project
         else:

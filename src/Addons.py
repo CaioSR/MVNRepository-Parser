@@ -4,9 +4,14 @@ import shutil
 from datetime import datetime
 
 class Addons:
-
+    """
+    This class implements 2 methods to manipulate the Nodes and Links files
+    """
     @staticmethod
     def merge(path, projects):
+        """
+        Merges the folders with their results present in the given folder
+        """
         directories = []
         for dir in projects:
             directories.append(path+'/'+dir)
@@ -101,6 +106,9 @@ class Addons:
 
     @staticmethod
     def addId(path):
+        """
+        Adds a header line in the Nodes and Links files
+        """
         nodes_dict = {}
         with open(path+'/Nodes.csv', 'r') as rf, open(path+'/idNodes.csv', 'w', newline='') as wf:
             reader = csv.reader(rf)

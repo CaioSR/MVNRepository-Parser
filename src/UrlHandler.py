@@ -4,9 +4,14 @@ from random import randrange
 from bs4 import BeautifulSoup, SoupStrainer
 
 class UrlHandler:
-
+    """
+    This class handles the urls calls
+    """
     @staticmethod
     def getSoup(url):
+        """
+        Tries to connect to the given url and returns the Soup object for scrapping
+        """
         # Set headers  
         headers = requests.utils.default_headers()
         

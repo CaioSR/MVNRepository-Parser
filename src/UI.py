@@ -46,9 +46,15 @@ class Home:
         addId_button.grid(row=3, column=0, padx=5, pady=5)
 
     def _openNewOperationWindow(self):
+        """
+        Calls the NewOperationWindow class
+        """
         self._newOpWindow = NewOperationWindow(self._root)
 
     def _loadOperation(self):
+        """
+        If operation is in progress, loads the config file arguments and begin scrap
+        """
         opDirectory = tk.filedialog.askdirectory(initialdir = "./", title="Select desired operation progress management folder")
         #askopenfilename(filetypes=[("python files","*.py"),("all files", "*.*")])
         folders = opDirectory.split('/')
@@ -63,9 +69,15 @@ class Home:
         ScrapperCaller.callScrapper(project_url, max_depth, progress_dir, final_dir, repo)
 
     def _openMergeWindow(self):
+        """
+        Calls the MergeOperationWindow class
+        """
         self._mergeWindow = MergeOperationWindow(self._root)
 
     def _addId(self):
+        """
+        Calls the AddIdOperationWindow class
+        """
         self._addIdWindow = AddIdOperationWindow(self._root)
 
 class NewOperationWindow:
@@ -149,6 +161,10 @@ class MergeOperationWindow:
         choose_directory.grid(row=1, column=1, sticky='e', padx=5, pady=5)
 
     def _mergeArtifacts(self):
+        """
+        This method receives a folder in which several other folder are. Each of these must have a Nodes and Links files
+        which will be merged with the other folders files
+        """
         mgDirectory = tk.filedialog.askdirectory(initialdir = "./", title="Select the folder that contains the projects to merge")
         dirs = []
         for (_, dirnames, _) in os.walk(mgDirectory):
@@ -204,7 +220,9 @@ to add the Ids to the Nodes and replace the artifacts names
         self._parent.deiconify()
 
 class ScrapperCaller:
-
+    """
+    Starts the scrap with another thread
+    """
     @staticmethod
     def callScrapper(project_url, max_depth, prog_dir, final_dir, repo):
         if repo == 'MVNRepository':
